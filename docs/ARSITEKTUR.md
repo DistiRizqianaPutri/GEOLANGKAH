@@ -85,11 +85,37 @@ trapezoidArea(a, b, t)           // 0.5 * (a + b) * t
 offsetX(a, b, kind)              // 'isosceles' → (a - b) / 2, 'right' → a - b
 heightFromLeg(s, x)              // Math.sqrt(s*s - x*x); lempar error bila s <= x
 legFromHeight(t, x)              // Math.sqrt(t*t + x*x)
-checkAnswer(value, unit, expected) // toleransi ±0,01 + cek satuan
-diagnose(problem, value, unit)   // → kode kesalahan dari KONTEN.md §7
+checkAnswer(value, unit, expected) // → { correct, valueOk, unitOk }; toleransi ±0,01 + cek satuan
+diagnose(problem, value, unit)   // → null bila benar, atau kode kesalahan dari KONTEN.md §7
 ```
 
-Tes minimal (`geometry.test.js`): semua kunci jawaban di `KONTEN.md`, setiap kode kesalahan di §7, dan kasus tidak wajar (s ≤ x).
+`offsetX` melempar error untuk jenis selain `isosceles`/`right`.
+
+**Objek `problem`** untuk `diagnose()` (ditulis di konten langkah):
+
+```js
+{ shape: 'rect' | 'trapezoid',
+  kind: 'isosceles' | 'right' | 'scalene',   // trapesium; boleh kosong bila tidak relevan
+  ask: 'perimeter' | 'area' | 'height' | 'offset',
+  unit: 'cm' | 'm',                          // satuan luas otomatis: unit + '²'
+  p, l,                                      // persegi panjang
+  a, b, t, s1, s2 }                          // trapesium; siku-siku: s1 = sisi tegak, s2 = kaki miring
+```
+
+Data yang tidak tertulis di soal dilengkapi otomatis jika bisa diturunkan. Contoh: t dari kaki (sama kaki/siku-siku), kaki miring dari t, atau sisi tegak = t. Pola yang datanya tidak lengkap dilewati.
+
+**Urutan prioritas `diagnose()`** (diputuskan 26-11-2026, "spesifik dulu"):
+1. Angka dan satuan benar → `null`
+2. Angka benar, satuan salah atau kosong → `E_SATUAN`
+3. Pola "cara salah" sesuai `ask` (satuan diabaikan), dicek berurutan:
+   - luas: `E_LUPA_SETENGAH` → `E_KAKI_SBG_TINGGI` → `E_SATU_SISI` → `E_KL_TERTUKAR`
+   - keliling: `E_SETENGAH_KELILING` (persegi panjang) → `E_TINGGI_DI_KELILING` (bukan siku-siku) → `E_SISI_KURANG` (4 kombinasi 3 sisi) → `E_KL_TERTUKAR`
+   - tinggi: `E_X_TIDAK_DIBAGI` (√(s² − (a − b)²), sama kaki) → `E_PYTHA_TAMBAH`
+   - x: `E_X_TIDAK_DIBAGI` (a − b, sama kaki)
+4. `E_TIDAK_WAJAR`: hasil ≤ 0, atau tinggi ≥ kaki miring
+5. `E_LAIN`
+
+Tes (`geometry.test.js`): semua kunci jawaban di `KONTEN.md`, setiap kode kesalahan di §7, kunci dan pengecoh Tantangan Pos §10, dan kasus tidak wajar (s ≤ x).
 
 ## 4. Skema database (draf `supabase/migrations/0001_init.sql`)
 
