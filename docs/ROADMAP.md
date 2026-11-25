@@ -24,14 +24,15 @@ Legenda: ☐ belum · ☑ selesai
 **Cek selesai:** tidak ada pertanyaan terbuka yang menghalangi M1.
 
 ## M1 — Kerangka proyek
-- [ ] `git init` (sebelum file lain dibuat)
-- [ ] Vite + React + Tailwind v4 (`@tailwindcss/vite`) + React Router + Vitest terpasang
-- [ ] Struktur folder sesuai `ARSITEKTUR.md` §2 (boleh berisi file kosong)
-- [ ] Token warna & tipografi dari `DESIGN.md` §2 dimasukkan ke blok `@theme` di `src/styles/index.css`
-- [ ] `.env.example`, `.gitignore` (termasuk `.env`), README singkat
-- [ ] Repo GitHub + deploy pertama ke Vercel (halaman "Halo GeoLangkah")
+- [x] `git init` (sebelum file lain dibuat)
+- [x] Vite + React + Tailwind v4 (`@tailwindcss/vite`) + React Router + Vitest terpasang
+- [x] Struktur folder sesuai `ARSITEKTUR.md` §2 (boleh berisi file kosong)
+- [x] Token warna & tipografi dari `DESIGN.md` §2 dimasukkan ke blok `@theme` di `src/styles/index.css`
+- [x] `.env.example`, `.gitignore` (termasuk `.env`), README singkat
+- [x] Repo GitHub + deploy pertama ke Vercel (halaman "Halo GeoLangkah")
 
 **Cek selesai:** `npm run dev`, `npm test`, `npm run build` sukses; URL Vercel terbuka di HP.
+*Selesai 26-11-2026:* lint bersih, 25 tes lulus, build sukses; repo `github.com/DistiRizqianaPutri/GEOLANGKAH`; deploy `https://geolangkah.vercel.app` dibuka di Chrome Android tanpa geser horizontal.
 
 ## M2 — Logika matematika (tes dulu)
 - [ ] Tulis `geometry.test.js` berisi **semua kunci** di `KONTEN.md` dan semua kode kesalahan §7 → tes gagal dulu
