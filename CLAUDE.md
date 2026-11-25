@@ -11,6 +11,7 @@ Aplikasi web *mobile-first* (Chrome Android) untuk belajar **keliling & luas per
 - `docs/ROADMAP.md` — milestone M0–M10; kerjakan berurutan
 
 ## Cara kerja
+- Selalu jawab pengembang dalam **Bahasa Indonesia**.
 - IMPORTANT: **Rencanakan dulu, jangan langsung menulis kode.** Setiap milestone: baca dokumen terkait → tulis rencana (file yang diubah, langkah, cara cek) → tunggu persetujuan.
 - Satu milestone per sesi. Selesai → jalankan "Cek selesai" di ROADMAP, tunjukkan buktinya (keluaran tes/build), centang ROADMAP, ringkas perubahan, lalu berhenti.
 - Jika dokumen bertentangan atau belum jelas, **tanya**; jangan menebak. Jika keputusan berubah, perbarui dokumen `docs/` yang terkait.
