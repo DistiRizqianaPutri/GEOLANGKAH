@@ -197,7 +197,20 @@ const pos = {
   p4Luas: { shape: 'trapezoid', kind: 'isosceles', ask: 'area', unit: 'cm', a: 26, b: 16, s1: 13, s2: 13 },
   p4SikuSiku: { shape: 'trapezoid', kind: 'right', ask: 'area', unit: 'cm', a: 21, b: 15, s2: 10 },
   p5Kolam: { shape: 'trapezoid', kind: 'right', ask: 'perimeter', unit: 'm', a: 9, b: 5, s2: 5 },
+  p5TaplakKeliling: { shape: 'trapezoid', kind: 'isosceles', ask: 'perimeter', unit: 'cm', a: 25, b: 9, s1: 17, s2: 17 },
+  p5TaplakLuas: { shape: 'trapezoid', kind: 'isosceles', ask: 'area', unit: 'cm', a: 25, b: 9, s1: 17, s2: 17 },
 }
+
+describe('Tantangan Pos ⑤ — taplak meja (KONTEN §10)', () => {
+  it('25/9/17: K = 68 cm, x = 8, t = 15, L = 255 cm²', () => {
+    expect(trapezoidPerimeter(25, 9, 17, 17)).toBe(68)
+    const x = offsetX(25, 9, 'isosceles')
+    expect(x).toBe(8)
+    const t = heightFromLeg(17, x)
+    expect(t).toBe(15)
+    expect(trapezoidArea(25, 9, t)).toBe(255)
+  })
+})
 
 describe('Tantangan Pos — kunci dinilai benar', () => {
   it.each([
@@ -213,6 +226,8 @@ describe('Tantangan Pos — kunci dinilai benar', () => {
     ['④ luas 26/16/13', pos.p4Luas, 252, 'cm²'],
     ['④ siku-siku 21/15/10', pos.p4SikuSiku, 144, 'cm²'],
     ['⑤ kolam 9/5/5', pos.p5Kolam, 22, 'm'],
+    ['⑤ taplak keliling 25/9/17', pos.p5TaplakKeliling, 68, 'cm'],
+    ['⑤ taplak luas 25/9/17', pos.p5TaplakLuas, 255, 'cm²'],
   ])('%s → %s %s', (_label, problem, value, unit) => {
     expect(diagnose(problem, value, unit)).toBeNull()
   })
@@ -233,6 +248,9 @@ describe('Tantangan Pos — pengecoh terdeteksi', () => {
     ['④ 273 (kaki sbg tinggi)', pos.p4Luas, 273, 'cm²', 'E_KAKI_SBG_TINGGI'],
     ['④ 180 (kaki sbg tinggi)', pos.p4SikuSiku, 180, 'cm²', 'E_KAKI_SBG_TINGGI'],
     ['⑤ 19 (3 sisi)', pos.p5Kolam, 19, 'm', 'E_SISI_KURANG'],
+    ['⑤ 83 (+ tinggi)', pos.p5TaplakKeliling, 83, 'cm', 'E_TINGGI_DI_KELILING'],
+    ['⑤ 289 (kaki sbg tinggi)', pos.p5TaplakLuas, 289, 'cm²', 'E_KAKI_SBG_TINGGI'],
+    ['⑤ 510 (lupa ½)', pos.p5TaplakLuas, 510, 'cm²', 'E_LUPA_SETENGAH'],
   ])('%s → %s', (_label, problem, value, unit, code) => {
     expect(diagnose(problem, value, unit)).toBe(code)
   })

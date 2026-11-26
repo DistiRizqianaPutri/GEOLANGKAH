@@ -17,6 +17,12 @@ Alur mengikuti tiga fase *Rigorous Mathematical Thinking* (Kinard & Kozulin), di
 
 Petunjuk bertingkat berperan sebagai **mediator** (pertanyaan pemantik dulu, jawaban terakhir).
 
+**Aturan langkah memudar** (kotak kosong ▢ pada rumus):
+- **Memudar 1:** satu angka yang dimasukkan ke rumus dikosongkan.
+- **Memudar 2:** dua angka dikosongkan, atau satu angka + hasilnya.
+- **Mandiri:** siswa mengisi hasil akhir dan satuannya sendiri.
+- Khusus Pythagoras (P4): memudar 1 mengosongkan **x**; memudar 2 mengosongkan **x dan t**.
+
 Setiap pertemuan adalah satu **pos** di Peta Petualangan dan ditutup dengan **Tantangan Pos** (§10):
 
 | Pos | Nama di peta | Pertemuan |
@@ -81,7 +87,7 @@ Diawali **Pretest** (hanya pertemuan ini). Persegi panjang sudah mudah bagi sisw
 | Jenis | Soal | Kunci |
 |---|---|---|
 | Contoh lengkap | Sama kaki: a = 16, b = 10, kaki 5 dan 5 (t = 4 tampil) | K = 16 + 10 + 5 + 5 = 36 cm |
-| Memudar | Siku-siku: a = 12, b = 7, sisi tegak 12, kaki miring 13 | K = 12 + 7 + 12 + 13 = 44 cm |
+| Memudar (1 kosong) | Siku-siku: a = 12, b = 7, sisi tegak 12, kaki miring 13 | K = 12 + 7 + 12 + 13 = 44 cm |
 | Mandiri | Sembarang: a = 24, b = 10, kaki 13 dan 15 (t = 12 tampil) | K = 62 cm |
 
 ---
@@ -136,8 +142,8 @@ Cara kedua (P1, tombol "Cara lain", lapisan `decompose`): persegi panjang 10 × 
 | Jenis | Soal | Langkah | Kunci |
 |---|---|---|---|
 | Contoh lengkap | Sama kaki a = 16, b = 10, s = 5 | x = 3 → t = √(25 − 9) = 4 | t = 4 cm · L = 52 cm² |
-| Memudar | Sama kaki a = 22, b = 10, s = 10 | x = 6 → t = √(100 − 36) | t = 8 cm · L = 128 cm² |
-| Memudar | Siku-siku a = 12, b = 7, s = 13 | x = 5 → t = √(169 − 25) | t = 12 cm · L = 114 cm² |
+| Memudar 1 (x kosong) | Sama kaki a = 22, b = 10, s = 10 | x = 6 → t = √(100 − 36) | t = 8 cm · L = 128 cm² |
+| Memudar 2 (x dan t kosong) | Siku-siku a = 12, b = 7, s = 13 | x = 5 → t = √(169 − 25) | t = 12 cm · L = 114 cm² |
 | Mandiri | Sama kaki a = 30, b = 14, s = 17 | x = 8 → t = 15 | L = 330 cm² · K = 78 cm |
 | Mandiri | Siku-siku a = 20, b = 12, s = 17 | x = 8 → t = 15 | L = 240 cm² · K = 64 cm |
 
@@ -281,8 +287,6 @@ Aturan: tanpa contoh, petunjuk tetap tersedia tetapi tercatat; tiap soal boleh 2
 | ④ | Sama kaki: a = 26 cm, b = 16 cm, kaki 13 cm. Hitung tingginya. | 12 cm (x = 5) | ≈ 8,3 (memakai x = 10) → `E_X_TIDAK_DIBAGI` |
 | ④ | Trapesium yang sama. Hitung luasnya. | 252 cm² | 273 → `E_KAKI_SBG_TINGGI` |
 | ④ | Siku-siku: a = 21 cm, b = 15 cm, kaki miring 10 cm. Hitung luasnya. | 144 cm² (x = 6, t = 8) | 180 → `E_KAKI_SBG_TINGGI` |
-| ⑤ | **PERLU DIGANTI** — Karton (Soal 3 §6) bagian (a): panjang pita | 52 cm | 60 → `E_TINGGI_DI_KELILING` |
-| ⑤ | **PERLU DIGANTI** — Karton (Soal 3 §6) bagian (b): luas yang dicat | 128 cm² | 160 → `E_KAKI_SBG_TINGGI` |
-
-> **PERLU DIGANTI:** dua soal ⑤ di atas menyalin Soal 3 §6 yang baru saja dikerjakan, sehingga bertentangan dengan aturan "tanpa contoh". Pengembang memberi angka baru; Claude Code menghitung ulang dan menambah tesnya sebelum M5.
+| ⑤ | Taplak meja berbentuk trapesium sama kaki. Sisi sejajarnya 25 cm dan 9 cm, kakinya 17 cm. (a) Berapa panjang renda untuk seluruh tepinya? | 68 cm | 83 (+ tinggi) → `E_TINGGI_DI_KELILING` |
+| ⑤ | Taplak yang sama. (b) Berapa luas taplak? | 255 cm² (x = 8, t = 15) | 289 → `E_KAKI_SBG_TINGGI`; 510 → `E_LUPA_SETENGAH` |
 | ⑤ | Kolam berbentuk trapesium siku-siku. Sisi sejajarnya 9 m dan 5 m, sisi miringnya 5 m. Kolam akan dipagari di sekelilingnya. Berapa panjang pagar? | 22 m (sisi tegak = 3 m, dicari dengan Pythagoras) | 19 → `E_SISI_KURANG` |

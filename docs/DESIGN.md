@@ -223,7 +223,11 @@ Nama panggilan **hanya disimpan di HP itu** (`localStorage`) untuk sapaan, tidak
 ## 5. Interaksi gambar trapesium (`FigureCanvas`)
 
 - Koordinat dalam **satuan petak** (1 petak = 1 cm pada label). Titik dipasang ke petak terdekat (*snap*) agar ukuran selalu bilangan bulat.
-- Titik yang bisa digeser: **D dan C** (sudut atas). Keduanya bergerak bersama secara vertikal (sisi atas tetap sejajar), dan masing-masing bebas bergerak horizontal.
+- Titik yang bisa digeser: **D dan C** (sudut atas). Aturan mendatar per jenis trapesium:
+  - **Sama kaki:** seret salah satu titik atas; titik atas lainnya ikut bergerak simetris.
+  - **Siku-siku:** D terkunci tegak di atas A; hanya C yang bisa digeser mendatar.
+  - **Sembarang:** D dan C bebas digeser mendatar.
+- Pada ketiga jenis, seret naik-turun mengubah tinggi **kedua** titik atas bersamaan (sisi atas tetap sejajar). Semua posisi di-*snap* ke petak.
 - Batas (hanya saat gambar bisa digeser): tinggi 2–10 petak; panjang sisi atas ≥ 1 petak; D selalu di kiri C; tidak boleh menembus alas.
 - Gambar statis (tidak bisa digeser) memakai **skala otomatis**: ukuran petak menyesuaikan lebar layar agar ukuran besar (mis. a = 30, t = 15) tetap muat di 360 px. Satuan pada label mengikuti soal (cm atau m).
 - Garis tinggi selalu ditarik dari D (atau C) **tegak lurus** ke alas, dengan simbol siku-siku.

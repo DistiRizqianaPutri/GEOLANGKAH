@@ -20,7 +20,8 @@ Legenda: ☐ belum · ☑ selesai
   - Supabase dibuat pengembang sebelum M6 (tidak dibutuhkan di M1).
   - ☑ Akun GitHub & Vercel sudah ada. Repo **publik**, dibuat & diimpor ke Vercel lewat web (tanpa CLI `gh`/`vercel`).
 - ☑ *Urutan prioritas `diagnose()` dijawab 26-11-2026 di M2* ("spesifik dulu", lihat `ARSITEKTUR.md` §3).
-- Sebelum **M4/M5:** aturan seret per jenis trapesium; kotak kosong pada langkah memudar P2/P3/P4; tipe langkah pilihan ganda & cerita; perilaku setelah 2 percobaan di Tantangan; reset saat tombol Kembali; *seed* soal acak; angka baru Tantangan Pos ⑤ (soal 1–2).
+- Sebelum **M4/M5:** tipe langkah pilihan ganda & cerita; perilaku setelah 2 percobaan di Tantangan; reset saat tombol Kembali; *seed* soal acak.
+  - ☑ *Dijawab 26-11-2026:* aturan seret per jenis trapesium (`DESIGN.md` §5); kotak kosong pada langkah memudar (`KONTEN.md` §1); angka baru Tantangan Pos ⑤ soal 1–2 = taplak meja (`KONTEN.md` §10, sudah dites).
 
 **Cek selesai:** tidak ada pertanyaan terbuka yang menghalangi M1.
 
@@ -40,7 +41,7 @@ Legenda: ☐ belum · ☑ selesai
 - [x] Implementasi `geometry.js` sampai semua tes lulus
 
 **Cek selesai:** `npm test` hijau; tunjukkan keluaran tes.
-*Selesai 26-11-2026:* dengan stub, 76 tes gagal; setelah implementasi, 104 tes lulus (79 geometry + 25 tema); lint bersih; build sukses. Dua soal ⑤ bertanda PERLU DIGANTI belum dites sebagai Tantangan. Tesnya ditambah saat angka barunya ada (sebelum M5).
+*Selesai 26-11-2026:* dengan stub, 76 tes gagal; setelah implementasi, 104 tes lulus (79 geometry + 25 tema); lint bersih; build sukses. Dua soal ⑤ bertanda PERLU DIGANTI belum dites sebagai Tantangan. Tesnya ditambah saat angka barunya ada (sebelum M5). *Diperbarui 26-11-2026:* ⑤ diganti soal taplak meja, tesnya ditambahkan, dan kini 110 tes lulus.
 *Catatan Windows:* jalankan `npm test` dari path ber-drive kapital (`C:\proyek\geolangkah`). Dari `c:\…` (huruf kecil), vitest dimuat dua kali dan semua suite gagal dengan `Cannot read properties of undefined (reading 'config')`.
 
 ## M3 — Gambar interaktif
