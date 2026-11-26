@@ -246,7 +246,7 @@
           "stage": "hitung",
           "story": "m5-latih-01",
           "title": "Biaya seluruhnya",
-          "text": ["Luas taman 330 m².", "Biayanya Rp15.000 per m².", "Tulis angka tanpa titik ribuan."],
+          "text": ["Luas taman 330 m².", "Biayanya Rp15.000 per m².", "Titik boleh dipakai sebagai pemisah ribuan."],
           "answerLabel": "Biaya",
           "problem": {
             "shape": "trapezoid",

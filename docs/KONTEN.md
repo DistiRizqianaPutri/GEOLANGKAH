@@ -245,7 +245,7 @@ Setelah soal cerita: **Tantangan Pos 5** (§10), **Skala Leppink**, lalu **Postt
 - **Rumuskan** = langkah `story`. Setiap potongan punya chip: info penting (masuk Diketahui dengan label dari JSON, mis. `a = 20 m`) dan minimal satu pengecoh (nama, tempat, kegunaan). Pengecoh ditolak dengan umpan balik dan dicatat sebagai percobaan (`E_LAIN`). Baris Diketahui bisa dihapus (dikoreksi).
 - **Ditanya** = PG "keliling atau luas?" per pertanyaan (umpan balik per opsi, dicatat dengan id `<step_id>#ditanya-N`, tidak ikut skor).
 - Lanjut ke Hitung terbuka setelah semua info penting ada di Diketahui **dan** semua Ditanya benar.
-- **Hitung**: satu besaran per layar. Soal 1: `K = 20 + 12 + 15 + ▢` (64 m) → `L = ½ × (20 + 12) × ▢` (240 m²) → pupuk 24 kg. Soal 2: `x = (30 − 14) ÷ 2 = ▢ · t = √(289 − 64) = ▢` (330 m²) → biaya Rp4.950.000 (diketik tanpa titik ribuan). Soal 3: K 52 cm → L 128 cm² (mandiri).
+- **Hitung**: satu besaran per layar. Soal 1: `K = 20 + 12 + 15 + ▢` (64 m) → `L = ½ × (20 + 12) × ▢` (240 m²) → pupuk 24 kg. Soal 2: `x = (30 − 14) ÷ 2 = ▢ · t = √(289 − 64) = ▢` (330 m²) → biaya Rp4.950.000. Isian bersatuan Rp menerima `4950000`, `4.950.000`, `Rp4.950.000`, `Rp 4.950.000` (titik = pemisah ribuan; `parseAnswer` di `answer.js`). Isian lain tetap: koma maupun titik = desimal. Soal 3: K 52 cm → L 128 cm² (mandiri).
 - **Tafsirkan**: PG cek kewajaran (tipe `why`): Soal 1 "mengapa pagar keliling, pupuk luas?", Soal 2 "apakah hasil ini masuk akal?", Soal 3 "mengapa satuan pita cm, cat cm²?".
 - Satuan turunan kg/Rp memakai `problem.convert` (ARSITEKTUR §3).
 

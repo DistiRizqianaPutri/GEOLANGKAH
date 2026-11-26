@@ -1,6 +1,6 @@
 // Memeriksa jawaban per tipe langkah. Semua hitungan tetap di geometry.js:
 // file ini hanya menghubungkan isi konten (problem, template) ke checkAnswer/diagnose.
-import { parseNumber } from './answer.js'
+import { parseAnswer, parseNumber } from './answer.js'
 import { checkAnswer, diagnose, solveProblem } from './geometry.js'
 
 const answerText = (raw, unit) => `${String(raw).trim()}${unit ? ` ${unit}` : ''}`
@@ -10,7 +10,7 @@ const answerText = (raw, unit) => `${String(raw).trim()}${unit ? ` ${unit}` : ''
  * @returns {{correct:boolean, errorCode:string|null, answer:string}|null}
  */
 export function checkSolve(step, raw, unit) {
-  const value = parseNumber(raw)
+  const value = parseAnswer(raw, unit)
   if (value === null) return null
   const errorCode = diagnose(step.problem, value, unit ?? '')
   return { correct: errorCode === null, errorCode, answer: answerText(raw, unit) }

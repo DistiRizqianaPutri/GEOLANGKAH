@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { parseNumber } from '../../lib/answer.js'
+import { parseAnswer } from '../../lib/answer.js'
 import { checkFaded } from '../../lib/checkStep.js'
 import { formatAnswer } from '../../lib/geometry.js'
 import AnswerInput from '../answer/AnswerInput.jsx'
@@ -41,7 +41,7 @@ export default function FadedStep({ step, record, onAttempt, onHint }) {
       <AnswerFeedback step={step} record={record} result={result} revealText={formatAnswer(step.answer.value, step.answer.unit)} />
       <StepTools hints={step.hints} record={record} onHint={onHint} />
       {!done && (
-        <PrimaryButton onClick={check} disabled={parseNumber(raw) === null}>
+        <PrimaryButton onClick={check} disabled={parseAnswer(raw, unit) === null}>
           Cek jawaban
         </PrimaryButton>
       )}

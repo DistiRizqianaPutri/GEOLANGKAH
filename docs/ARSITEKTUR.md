@@ -114,7 +114,7 @@ formatAnswer(v, unit)            // "52 cm²", "24 kg", "Rp4.950.000"
 
 | File | Isi |
 |---|---|
-| `lib/answer.js` | `parseNumber` (koma/titik desimal) |
+| `lib/answer.js` | `parseNumber` (koma/titik desimal); `parseRupiah`, `parseAnswer(raw, unit)` — satuan Rp atau isian berawalan "Rp": titik = ribuan, koma = desimal |
 | `lib/random.js` | `seededShuffle(list, seed)`: seed = kode siswa + pertemuan |
 | `lib/hintRules.js` | `canOpenHint`, `shouldOfferHint` (KONTEN §7) |
 | `lib/checkStep.js` | `checkSolve`, `checkFaded` (`E_KOTAK`), `checkIdentify` (juga `ask: 'hypotenuse'`, M5), `checkChoice`, `parseTemplate`, `templateValue` (nilai kotak dari `solveProblem`, M5) |

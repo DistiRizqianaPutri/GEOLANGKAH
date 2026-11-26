@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { parseNumber } from '../../lib/answer.js'
+import { parseAnswer } from '../../lib/answer.js'
 import { checkSolve } from '../../lib/checkStep.js'
 import { formatAnswer } from '../../lib/geometry.js'
 import AnswerInput from '../answer/AnswerInput.jsx'
@@ -51,7 +51,7 @@ export default function SolveStep({ step, record, onAttempt, onHint, isChallenge
           />
           <StepTools hints={step.hints} record={record} onHint={onHint} />
           {!done && (
-            <PrimaryButton onClick={check} disabled={parseNumber(raw) === null}>
+            <PrimaryButton onClick={check} disabled={parseAnswer(raw, unit) === null}>
               Cek jawaban
             </PrimaryButton>
           )}

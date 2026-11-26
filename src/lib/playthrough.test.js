@@ -200,3 +200,25 @@ describe('jalur salah P3–P5 dengan konten asli', () => {
     expect(canAdvance(step, s.records[step.id])).toBe(true)
   })
 })
+
+describe('P5 biaya: isian rupiah format Indonesia', () => {
+  const step = flattenSteps(MEETINGS[5], 'T01-m5').find((s) => s.id === 'm5-latih-03')
+
+  it.each(['4950000', '4.950.000', 'Rp4.950.000', 'Rp 4.950.000'])('"%s" Rp → benar', (raw) => {
+    expect(checkSolve(step, raw, 'Rp')).toMatchObject({ correct: true, errorCode: null })
+  })
+
+  it('angka rupiah benar, satuan m² → E_SATUAN', () => {
+    expect(checkSolve(step, 'Rp4.950.000', 'm²').errorCode).toBe('E_SATUAN')
+  })
+
+  it('titik bukan kelompok ribuan → bukan angka (Cek tidak aktif)', () => {
+    expect(checkSolve(step, '4.95', 'Rp')).toBeNull()
+  })
+
+  it('isian lain tidak berubah: koma desimal pada kg', () => {
+    const pupuk = flattenSteps(MEETINGS[5], 'T01-m5').find((s) => s.id === 'm5-bangun-04')
+    expect(checkSolve(pupuk, '24,0', 'kg').correct).toBe(true)
+    expect(checkSolve(pupuk, '6,4', 'kg').errorCode).toBe('E_KL_TERTUKAR')
+  })
+})
