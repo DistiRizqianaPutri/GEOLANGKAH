@@ -54,6 +54,135 @@ export function legFromHeight(t, x) {
   return Math.sqrt(t * t + x * x)
 }
 
+// --- Model gambar (FigureCanvas, DESIGN.md §5) -----------------------------
+// Koordinat dalam satuan petak, sumbu y ke atas.
+// Trapesium: A = (0,0), B = (a,0), D = (d,t), C = (c,t) → { shape, kind, a, t, d, c }.
+// Persegi panjang: { shape: 'rect', p, l }.
+
+/** Batas seret (DESIGN.md §5). */
+export const DRAG_LIMITS = { minHeight: 2, maxHeight: 10, minTop: 1, rectMin: 1, rectMaxP: 12, rectMaxL: 8 }
+
+const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v))
+
+/**
+ * Bangun model gambar dari ukuran soal.
+ * Sama kaki: d = x = (a − b) ÷ 2 · siku-siku: d = 0 (sisi tegak AD) · sembarang: d = x1 (wajib).
+ */
+export function trapezoidFromSides({ kind, a, b, t, x1 }) {
+  let d
+  if (kind === 'isosceles') d = offsetX(a, b, kind)
+  else if (kind === 'right') d = 0
+  else if (kind === 'scalene' && Number.isFinite(x1)) d = x1
+  else throw new Error(`trapezoidFromSides: jenis "${kind}" butuh x1`)
+  return { shape: 'trapezoid', kind, a, t, d, c: d + b }
+}
+
+/** Ukuran, titik sudut, dan kaki garis tinggi untuk satu trapesium. */
+export function trapezoidMeasures({ a, t, d, c }) {
+  const b = c - d
+  const x1 = d
+  const x2 = a - c
+  const s1 = legFromHeight(t, x1) // kaki kiri AD
+  const s2 = legFromHeight(t, x2) // kaki kanan BC
+  return {
+    a,
+    b,
+    t,
+    x1,
+    x2,
+    s1,
+    s2,
+    perimeter: trapezoidPerimeter(a, b, s1, s2),
+    area: trapezoidArea(a, b, t),
+    points: { A: [0, 0], B: [a, 0], C: [c, t], D: [d, t] },
+    foot: [d, 0], // garis tinggi dari D tegak lurus ke alas
+  }
+}
+
+/** Ukuran persegi panjang. */
+export function rectMeasures({ p, l }) {
+  return { p, l, perimeter: rectPerimeter(p, l), area: rectArea(p, l) }
+}
+
+/**
+ * Label ukuran: bilangan dengan ≤ 1 desimal ditulis tepat ("16", "22,5");
+ * selain itu dibulatkan 1 desimal dengan tanda ≈ ("≈ 4,5").
+ */
+export function formatMeasure(value) {
+  const r = Math.round(value * 10) / 10
+  const text = String(r).replace('.', ',')
+  return Math.abs(value - r) < 1e-9 ? text : `≈ ${text}`
+}
+
+/**
+ * Seret titik atas ('D' atau 'C') ke `point` (satuan petak, boleh pecahan).
+ * Hasil di-snap ke petak; aturan per jenis dan batas dari DESIGN.md §5.
+ */
+export function dragTopVertex(shape, handle, point) {
+  const { kind, a } = shape
+  const { minHeight, maxHeight, minTop } = DRAG_LIMITS
+  const t = clamp(Math.round(point.y), minHeight, maxHeight)
+  const x = Math.round(point.x)
+  let { d, c } = shape
+
+  if (kind === 'isosceles') {
+    // Simetris terhadap x = a/2, dengan 0 ≤ d dan c − d ≥ minTop.
+    const maxD = Math.floor((a - minTop) / 2)
+    d = handle === 'D' ? clamp(x, 0, maxD) : clamp(a - x, 0, maxD)
+    c = a - d
+  } else if (kind === 'right') {
+    d = 0
+    if (handle === 'C') c = clamp(x, minTop, a)
+  } else if (handle === 'D') {
+    d = clamp(x, 0, c - minTop)
+  } else {
+    c = clamp(x, d + minTop, a)
+  }
+
+  return { ...shape, t, d, c }
+}
+
+/** Seret sudut kanan atas persegi panjang; snap + batas p 1–12, l 1–8. */
+export function dragRectCorner(shape, point) {
+  const { rectMin, rectMaxP, rectMaxL } = DRAG_LIMITS
+  return {
+    ...shape,
+    p: clamp(Math.round(point.x), rectMin, rectMaxP),
+    l: clamp(Math.round(point.y), rectMin, rectMaxL),
+  }
+}
+
+/**
+ * Lapisan `decompose`: persegi panjang di tengah + segitiga siku-siku di tepi.
+ * Segitiga bernilai null bila x-nya 0 (mis. sisi tegak trapesium siku-siku).
+ */
+export function decomposeParts(shape) {
+  const { a, t, d, c } = shape
+  const triangle = (points, x) => (x > 0 ? { points, base: x, area: 0.5 * x * t } : null)
+  return {
+    rect: { points: [[d, 0], [c, 0], [c, t], [d, t]], area: rectArea(c - d, t) },
+    left: triangle([[0, 0], [d, 0], [d, t]], d),
+    right: triangle([[c, 0], [a, 0], [c, t]], a - c),
+  }
+}
+
+/**
+ * Lapisan `doubleRotate`: salinan trapesium diputar 180° pada titik tengah BC,
+ * sehingga keduanya membentuk jajargenjang dengan alas a + b dan tinggi t.
+ */
+export function doubleRotateParts(shape) {
+  const { a, t, d, c } = shape
+  const pivot = [(a + c) / 2, t / 2]
+  const turn = ([px, py]) => [2 * pivot[0] - px, 2 * pivot[1] - py]
+  const { A, B, C, D } = trapezoidMeasures(shape).points
+  const base = a + (c - d)
+  return {
+    pivot,
+    copy: { A: turn(A), B: turn(B), C: turn(C), D: turn(D) },
+    parallelogram: { points: [A, [base, 0], [base + d, t], D], base, area: rectArea(base, t) },
+  }
+}
+
 // --- Pemeriksaan jawaban ----------------------------------------------------
 
 /**

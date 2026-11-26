@@ -228,7 +228,8 @@ Nama panggilan **hanya disimpan di HP itu** (`localStorage`) untuk sapaan, tidak
   - **Siku-siku:** D terkunci tegak di atas A; hanya C yang bisa digeser mendatar.
   - **Sembarang:** D dan C bebas digeser mendatar.
 - Pada ketiga jenis, seret naik-turun mengubah tinggi **kedua** titik atas bersamaan (sisi atas tetap sejajar). Semua posisi di-*snap* ke petak.
-- Batas (hanya saat gambar bisa digeser): tinggi 2–10 petak; panjang sisi atas ≥ 1 petak; D selalu di kiri C; tidak boleh menembus alas.
+- Batas (hanya saat gambar bisa digeser): tinggi 2–10 petak; panjang sisi atas ≥ 1 petak; D selalu di kiri C; tidak boleh menembus alas. Titik atas tidak keluar dari rentang alas (0 ≤ D.x, C.x ≤ a), jadi kaki garis tinggi selalu jatuh di alas. Persegi panjang: sudut kanan atas bisa digeser, p 1–12 dan l 1–8 petak. *(Dipertegas di M3, 26-11-2026; batas dihitung `dragTopVertex`/`dragRectCorner` di `geometry.js`.)*
+- Saat gambar bisa digeser, daerah gambar tetap (selebar alas dan setinggi 10 petak) agar gambar tidak melompat ketika diseret.
 - Gambar statis (tidak bisa digeser) memakai **skala otomatis**: ukuran petak menyesuaikan lebar layar agar ukuran besar (mis. a = 30, t = 15) tetap muat di 360 px. Satuan pada label mengikuti soal (cm atau m).
 - Garis tinggi selalu ditarik dari D (atau C) **tegak lurus** ke alas, dengan simbol siku-siku.
 - Saat digeser, label ukuran diperbarui langsung. Kaki miring yang bukan bilangan bulat ditampilkan 1 angka desimal (≈).

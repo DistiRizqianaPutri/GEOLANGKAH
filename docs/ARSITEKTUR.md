@@ -87,7 +87,19 @@ heightFromLeg(s, x)              // Math.sqrt(s*s - x*x); lempar error bila s <=
 legFromHeight(t, x)              // Math.sqrt(t*t + x*x)
 checkAnswer(value, unit, expected) // → { correct, valueOk, unitOk }; toleransi ±0,01 + cek satuan
 diagnose(problem, value, unit)   // → null bila benar, atau kode kesalahan dari KONTEN.md §7
+
+// Model gambar FigureCanvas (M3). Satuan petak: A=(0,0), B=(a,0), D=(d,t), C=(c,t)
+trapezoidFromSides({ kind, a, b, t, x1 }) // → { shape:'trapezoid', kind, a, t, d, c }; sembarang wajib x1
+trapezoidMeasures(shape)         // → { a, b, t, x1, x2, s1, s2, perimeter, area, points, foot }
+rectMeasures({ p, l })           // → { p, l, perimeter, area }
+dragTopVertex(shape, 'D'|'C', {x, y}) // snap + aturan seret per jenis + batas (DESIGN.md §5)
+dragRectCorner(shape, {x, y})    // snap, p 1–12, l 1–8
+decomposeParts(shape)            // persegi panjang + segitiga tepi (null bila x = 0), masing-masing dengan luas
+doubleRotateParts(shape)         // salinan diputar 180° pada titik tengah BC → jajargenjang alas a + b
+formatMeasure(v)                 // "16", "22,5", atau "≈ 4,5" (koma desimal)
 ```
+
+Komponen `src/components/figure/` (`FigureCanvas`, `DragHandle`, `layers/*`) hanya menggambar hasil fungsi di atas. Halaman uji `/lab` (`src/pages/Lab.jsx`) hanya ada di mode pengembangan.
 
 `offsetX` melempar error untuk jenis selain `isosceles`/`right`.
 

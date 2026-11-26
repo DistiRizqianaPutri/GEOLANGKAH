@@ -45,13 +45,14 @@ Legenda: ☐ belum · ☑ selesai
 *Catatan Windows:* jalankan `npm test` dari path ber-drive kapital (`C:\proyek\geolangkah`). Dari `c:\…` (huruf kecil), vitest dimuat dua kali dan semua suite gagal dengan `Cannot read properties of undefined (reading 'config')`.
 
 ## M3 — Gambar interaktif
-- [ ] `FigureCanvas` (SVG) untuk persegi panjang & trapesium (sama kaki, siku-siku, sembarang)
-- [ ] Lapisan: `grid`, `parallel`, `height`, `rightAngle`, `legs`, `labels`, `area`, `perimeter`
-- [ ] `DragHandle` untuk titik D & C dengan batasan di `DESIGN.md` §5 (snap ke petak)
-- [ ] Animasi `decompose` dan `doubleRotate` yang dijalankan tombol + dukungan `prefers-reduced-motion`
-- [ ] Halaman uji `/lab` (hanya mode pengembangan) untuk mencoba semua lapisan
+- [x] `FigureCanvas` (SVG) untuk persegi panjang & trapesium (sama kaki, siku-siku, sembarang)
+- [x] Lapisan: `grid`, `parallel`, `height`, `rightAngle`, `legs`, `labels`, `area`, `perimeter`
+- [x] `DragHandle` untuk titik D & C dengan batasan di `DESIGN.md` §5 (snap ke petak)
+- [x] Animasi `decompose` dan `doubleRotate` yang dijalankan tombol + dukungan `prefers-reduced-motion`
+- [x] Halaman uji `/lab` (hanya mode pengembangan) untuk mencoba semua lapisan
 
 **Cek selesai:** di viewport 360 × 640 dan HP Android asli, titik bisa diseret tanpa halaman ikut tergulir; tinggi selalu tegak lurus; label sesuai hitungan `geometry.js`.
+*Selesai 26-11-2026:* 142 tes lulus (32 tes baru untuk model gambar: ukuran semua angka KONTEN §2–5, snap, aturan seret per jenis, batas, `decompose`/`doubleRotate`, `formatMeasure`); lint bersih; build sukses, dan kode `/lab` tidak ada di `dist/`. Label dan garis tinggi diambil langsung dari `trapezoidMeasures()`; D dan C selalu punya y yang sama (dites). `doubleRotate` berhenti di jajargenjang; langkah potong-geser ke persegi panjang dikerjakan bersama konten P3 (M5). **Belum dicek:** seret di HP Android asli dan di 360 × 640. Pengembang mengeceknya sendiri di `/lab` (`npm run dev -- --host`).
 
 ## M4 — Mesin langkah, petunjuk, umpan balik + Pertemuan 1–2
 - [ ] `StepEngine` membaca `meeting-*.json` (format di `KONTEN.md` §9)

@@ -2,14 +2,23 @@
 // Jika angka di KONTEN.md berubah, tabel di file ini wajib ikut diperbarui.
 import { describe, expect, it } from 'vitest'
 import {
+  DRAG_LIMITS,
   checkAnswer,
+  decomposeParts,
   diagnose,
+  doubleRotateParts,
+  dragRectCorner,
+  dragTopVertex,
+  formatMeasure,
   heightFromLeg,
   legFromHeight,
   offsetX,
   rectArea,
+  rectMeasures,
   rectPerimeter,
   trapezoidArea,
+  trapezoidFromSides,
+  trapezoidMeasures,
   trapezoidPerimeter,
 } from './geometry.js'
 
@@ -365,5 +374,183 @@ describe('urutan prioritas diagnose()', () => {
 
   it('satuan diabaikan saat mencocokkan pola', () => {
     expect(diagnose(latih.luas16, 104, 'cm')).toBe('E_LUPA_SETENGAH')
+  })
+})
+
+// ---------------------------------------------------------------------------
+// 4. Model gambar (M3) — FigureCanvas hanya menggambar hasil fungsi ini
+// ---------------------------------------------------------------------------
+
+describe('trapezoidFromSides + trapezoidMeasures (angka KONTEN §3–5)', () => {
+  it.each([
+    // kind, a, b, t, x1, d, c, s1, s2, K, L
+    ['isosceles', 16, 10, 4, undefined, 3, 13, 5, 5, 36, 52], // P2/P3 Kenali
+    ['right', 12, 7, 12, undefined, 0, 7, 12, 13, 44, 114], // P2 memudar, P3/P4
+    ['scalene', 24, 10, 12, 5, 5, 15, 13, 15, 62, 204], // P2 mandiri (kaki 13 & 15)
+    ['isosceles', 22, 10, 8, undefined, 6, 16, 10, 10, 52, 128], // P3/P4 pengecoh kaki
+    ['isosceles', 30, 14, 15, undefined, 8, 22, 17, 17, 78, 330], // P4 mandiri (statis besar)
+    ['right', 20, 12, 15, undefined, 0, 12, 15, 17, 64, 240], // P4 mandiri
+  ])('%s a=%i b=%i t=%i', (kind, a, b, t, x1, d, c, s1, s2, K, L) => {
+    const shape = trapezoidFromSides({ kind, a, b, t, x1 })
+    expect(shape).toEqual({ shape: 'trapezoid', kind, a, t, d, c })
+    const m = trapezoidMeasures(shape)
+    expect(m.a).toBe(a)
+    expect(m.b).toBe(b)
+    expect(m.t).toBe(t)
+    expect(m.s1).toBeCloseTo(s1, 9)
+    expect(m.s2).toBeCloseTo(s2, 9)
+    expect(m.perimeter).toBeCloseTo(K, 9)
+    expect(m.area).toBe(L)
+  })
+
+  it('titik sudut: alas dan sisi atas mendatar, kaki tinggi tepat di bawah D', () => {
+    const m = trapezoidMeasures(trapezoidFromSides({ kind: 'isosceles', a: 16, b: 10, t: 4 }))
+    expect(m.points).toEqual({ A: [0, 0], B: [16, 0], C: [13, 4], D: [3, 4] })
+    expect(m.foot).toEqual([3, 0])
+  })
+
+  it('trapesium sembarang tanpa x1 ditolak', () => {
+    expect(() => trapezoidFromSides({ kind: 'scalene', a: 24, b: 10, t: 12 })).toThrow()
+  })
+
+  it('kaki tidak bulat (a=10, b=6, t=4 → s = √20)', () => {
+    const m = trapezoidMeasures(trapezoidFromSides({ kind: 'isosceles', a: 10, b: 6, t: 4 }))
+    expect(m.s1).toBeCloseTo(Math.sqrt(20), 9)
+    expect(formatMeasure(m.s1)).toBe('≈ 4,5')
+    expect(m.area).toBe(32)
+  })
+})
+
+describe('rectMeasures (KONTEN §2)', () => {
+  it('6 × 4 petak → K = 20, L = 24', () => {
+    expect(rectMeasures({ shape: 'rect', p: 6, l: 4 })).toEqual({ p: 6, l: 4, perimeter: 20, area: 24 })
+  })
+})
+
+describe('formatMeasure', () => {
+  it.each([
+    [16, '16'],
+    [52, '52'],
+    [22.5, '22,5'], // tepat 1 desimal: tanpa ≈
+    [Math.sqrt(20), '≈ 4,5'],
+    [Math.sqrt(244), '≈ 15,6'],
+    [5.000000000001, '5'], // galat pecahan biner
+  ])('%f → %s', (v, s) => {
+    expect(formatMeasure(v)).toBe(s)
+  })
+})
+
+describe('dragTopVertex — aturan seret DESIGN §5', () => {
+  const iso = trapezoidFromSides({ kind: 'isosceles', a: 16, b: 10, t: 4 })
+  const right = trapezoidFromSides({ kind: 'right', a: 12, b: 7, t: 6 })
+  const scalene = trapezoidFromSides({ kind: 'scalene', a: 16, b: 8, t: 5, x1: 3 })
+
+  it('posisi di-snap ke petak terdekat', () => {
+    const s = dragTopVertex(scalene, 'C', { x: 12.4, y: 6.6 })
+    expect(s.c).toBe(12)
+    expect(s.t).toBe(7)
+  })
+
+  it('sama kaki: titik atas lainnya ikut simetris', () => {
+    const s = dragTopVertex(iso, 'C', { x: 14, y: 4 })
+    expect([s.d, s.c]).toEqual([2, 14])
+    const s2 = dragTopVertex(iso, 'D', { x: 5, y: 4 })
+    expect([s2.d, s2.c]).toEqual([5, 11])
+    expect(trapezoidMeasures(s2).s1).toBeCloseTo(trapezoidMeasures(s2).s2, 9)
+  })
+
+  it('siku-siku: D terkunci di atas A, C bebas mendatar', () => {
+    expect(dragTopVertex(right, 'D', { x: 4, y: 6 }).d).toBe(0)
+    expect(dragTopVertex(right, 'C', { x: 9, y: 6 })).toMatchObject({ d: 0, c: 9 })
+  })
+
+  it('sembarang: D dan C bebas sendiri-sendiri', () => {
+    expect(dragTopVertex(scalene, 'D', { x: 1, y: 5 })).toMatchObject({ d: 1, c: 11 })
+    expect(dragTopVertex(scalene, 'C', { x: 14, y: 5 })).toMatchObject({ d: 3, c: 14 })
+  })
+
+  it.each([
+    ['isosceles', iso],
+    ['right', right],
+    ['scalene', scalene],
+  ])('%s: seret naik-turun mengubah tinggi kedua titik atas (sisi atas tetap sejajar)', (_, shape) => {
+    const s = dragTopVertex(shape, 'C', { x: shape.c, y: 8 })
+    expect(s.t).toBe(8)
+    const { C, D } = trapezoidMeasures(s).points
+    expect(C[1]).toBe(D[1])
+    expect(C[1]).toBe(8)
+  })
+
+  it('batas tinggi 2–10 petak', () => {
+    expect(dragTopVertex(iso, 'C', { x: 13, y: 0.5 }).t).toBe(DRAG_LIMITS.minHeight)
+    expect(dragTopVertex(iso, 'C', { x: 13, y: -3 }).t).toBe(2) // tidak menembus alas
+    expect(dragTopVertex(iso, 'C', { x: 13, y: 25 }).t).toBe(DRAG_LIMITS.maxHeight)
+  })
+
+  it('sisi atas ≥ 1 petak dan D selalu di kiri C', () => {
+    expect(dragTopVertex(scalene, 'D', { x: 30, y: 5 })).toMatchObject({ d: 10, c: 11 })
+    expect(dragTopVertex(scalene, 'C', { x: -5, y: 5 })).toMatchObject({ d: 3, c: 4 })
+    expect(dragTopVertex(right, 'C', { x: -2, y: 6 }).c).toBe(1)
+    const s = dragTopVertex(iso, 'C', { x: 2, y: 4 }) // a = 16 → c ≥ 9 agar b ≥ 1
+    expect(s.c - s.d).toBeGreaterThanOrEqual(DRAG_LIMITS.minTop)
+    expect([s.d, s.c]).toEqual([7, 9])
+  })
+
+  it('titik atas tidak keluar dari rentang alas (0 ≤ d, c ≤ a)', () => {
+    expect(dragTopVertex(scalene, 'D', { x: -4, y: 5 }).d).toBe(0)
+    expect(dragTopVertex(scalene, 'C', { x: 40, y: 5 }).c).toBe(16)
+    expect(dragTopVertex(iso, 'C', { x: 40, y: 4 })).toMatchObject({ d: 0, c: 16 })
+  })
+
+  it('sama kaki dengan a ganjil tetap bilangan bulat dan b ≥ 1', () => {
+    const odd = trapezoidFromSides({ kind: 'isosceles', a: 9, b: 5, t: 4 })
+    const s = dragTopVertex(odd, 'D', { x: 8, y: 4 })
+    expect([s.d, s.c]).toEqual([4, 5])
+  })
+
+  it('tidak mengubah objek aslinya', () => {
+    dragTopVertex(iso, 'C', { x: 15, y: 9 })
+    expect(iso).toEqual({ shape: 'trapezoid', kind: 'isosceles', a: 16, t: 4, d: 3, c: 13 })
+  })
+})
+
+describe('dragRectCorner (KONTEN §2 Kenali 3)', () => {
+  const rect = { shape: 'rect', p: 6, l: 4 }
+  it('snap + batas p 1–12, l 1–8', () => {
+    expect(dragRectCorner(rect, { x: 7.6, y: 2.2 })).toEqual({ shape: 'rect', p: 8, l: 2 })
+    expect(dragRectCorner(rect, { x: -3, y: 40 })).toEqual({ shape: 'rect', p: 1, l: 8 })
+    expect(dragRectCorner(rect, { x: 50, y: 0 })).toEqual({ shape: 'rect', p: 12, l: 1 })
+  })
+})
+
+describe('decomposeParts (KONTEN §4 cara kedua, §5 segitiga di tepi)', () => {
+  it('16/10/4 → persegi panjang 10 × 4 = 40 + dua segitiga ½ × 3 × 4 = 6 → 52', () => {
+    const shape = trapezoidFromSides({ kind: 'isosceles', a: 16, b: 10, t: 4 })
+    const { rect, left, right } = decomposeParts(shape)
+    expect(rect.area).toBe(40)
+    expect(left.area).toBe(6)
+    expect(right.area).toBe(6)
+    expect(rect.area + left.area + right.area).toBe(trapezoidMeasures(shape).area)
+    expect(left.points).toEqual([[0, 0], [3, 0], [3, 4]])
+    expect(right.points).toEqual([[13, 0], [16, 0], [13, 4]])
+  })
+
+  it('siku-siku: tidak ada segitiga kiri', () => {
+    const { rect, left, right } = decomposeParts(trapezoidFromSides({ kind: 'right', a: 12, b: 7, t: 12 }))
+    expect(left).toBeNull()
+    expect(rect.area).toBe(84)
+    expect(right.area).toBe(30)
+  })
+})
+
+describe('doubleRotateParts (KONTEN §4 Bangun 1–4)', () => {
+  it('salinan diputar 180° pada titik tengah BC → jajargenjang alas a + b', () => {
+    const shape = trapezoidFromSides({ kind: 'isosceles', a: 16, b: 10, t: 4 })
+    const { pivot, copy, parallelogram } = doubleRotateParts(shape)
+    expect(pivot).toEqual([14.5, 2])
+    expect(copy).toEqual({ A: [29, 4], B: [13, 4], C: [16, 0], D: [26, 0] })
+    expect(parallelogram.base).toBe(26)
+    expect(parallelogram.area).toBe(104)
+    expect(parallelogram.area / 2).toBe(trapezoidMeasures(shape).area)
   })
 })
