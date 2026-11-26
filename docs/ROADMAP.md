@@ -113,4 +113,5 @@ Legenda: ☐ belum · ☑ selesai
 - [ ] Buat akun `S01`, `S02` (dan `T01` untuk uji)
 - [ ] Pastikan proyek Supabase aktif (tidak dijeda) sebelum setiap pertemuan
 - [ ] Uji coba kering (*dry run*) satu pertemuan oleh pengembang di HP
+- [ ] Sembunyikan lagi halaman uji `/lab` dari build produksi (kembalikan syarat `import.meta.env.DEV` di `src/App.jsx`)
 - [ ] Bekukan versi (tag `v1.0-ujicoba`) — tidak ada perubahan konten selama 5 pertemuan uji coba

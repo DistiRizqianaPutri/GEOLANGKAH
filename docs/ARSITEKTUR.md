@@ -99,7 +99,7 @@ doubleRotateParts(shape)         // salinan diputar 180° pada titik tengah BC �
 formatMeasure(v)                 // "16", "22,5", atau "≈ 4,5" (koma desimal)
 ```
 
-Komponen `src/components/figure/` (`FigureCanvas`, `DragHandle`, `layers/*`) hanya menggambar hasil fungsi di atas. Halaman uji `/lab` (`src/pages/Lab.jsx`) hanya ada di mode pengembangan.
+Komponen `src/components/figure/` (`FigureCanvas`, `DragHandle`, `layers/*`) hanya menggambar hasil fungsi di atas. Halaman uji `/lab` (`src/pages/Lab.jsx`) sementara aktif juga di produksi agar bisa dicoba di HP; disembunyikan lagi di M10.
 
 `offsetX` melempar error untuk jenis selain `isosceles`/`right`.
 
