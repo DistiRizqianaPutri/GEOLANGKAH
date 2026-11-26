@@ -6,6 +6,7 @@ export default function ExplainStep({ step }) {
   return (
     <StepCard
       title={step.title}
+      stage={step.stage}
       text={step.text}
       figure={step.figure && <StepFigure figure={step.figure} actions={step.actions} />}
     />

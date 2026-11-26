@@ -45,7 +45,7 @@ export default function StepEngine({ meeting, stationName, code }) {
           }
           onHint={(level) => dispatch({ type: 'OPEN_HINT', stepId: step.id, level })}
         />
-        {(step.phase === 'latih' || step.phase === 'tantangan') && <FormulaCard meeting={n} />}
+        {(step.phase === 'latih' || step.phase === 'tantangan' || step.stage === 'hitung') && <FormulaCard meeting={n} />}
         {resettable(step) && (
           <TextButton onClick={() => dispatch({ type: 'RESET_FIGURE' })}>
             <Icon name="redo" />

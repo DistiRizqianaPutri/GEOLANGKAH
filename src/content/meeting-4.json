@@ -1,0 +1,405 @@
+{
+  "meeting": 4,
+  "title": "Mencari tinggi dengan Teorema Pythagoras",
+  "summary": ["Sama kaki: x = (a − b) ÷ 2 · siku-siku: x = a − b", "t = √(s² − x²), dan t harus lebih pendek dari s"],
+  "phases": [
+    {
+      "phase": "kenali",
+      "steps": [
+        {
+          "id": "m4-kenali-01",
+          "type": "explain",
+          "title": "Sisi miring",
+          "text": ["Ini segitiga siku-siku.", "Sisi terpanjang disebut sisi miring.", "Sisi miring selalu berhadapan dengan sudut siku-siku."],
+          "figure": { "shape": "triangle", "x": 3, "t": 4, "unit": "cm", "layers": ["labels", "rightAngle", "legs"] }
+        },
+        {
+          "id": "m4-kenali-02",
+          "type": "explain",
+          "title": "Teorema Pythagoras",
+          "text": ["sisi miring² = sisi tegak² + sisi tegak².", "Contoh: 5² = 3² + 4², yaitu 25 = 9 + 16."],
+          "figure": { "shape": "triangle", "x": 3, "t": 4, "unit": "cm", "layers": ["labels", "rightAngle"] }
+        },
+        {
+          "id": "m4-kenali-03",
+          "type": "explain",
+          "title": "Mencari sisi tegak",
+          "text": ["Sisi miring dan satu sisi tegak sudah diketahui.", "Sisi tegak lainnya: t = √(s² − x²).", "Contoh: t = √(25 − 9) = √16 = 4 cm."],
+          "figure": { "shape": "triangle", "x": 3, "t": 4, "unit": "cm", "layers": ["labels", "rightAngle"], "hideLabels": ["t"] }
+        },
+        {
+          "id": "m4-kenali-04",
+          "type": "explain",
+          "title": "Segitiga di dalam trapesium",
+          "text": ["Tekan Pisahkan segitiga.", "Sisi miring segitiga adalah kaki trapesium.", "Sisi tegaknya adalah tinggi dan x."],
+          "figure": {
+            "shape": "trapezoid",
+            "kind": "isosceles",
+            "a": 16,
+            "b": 10,
+            "t": 4,
+            "unit": "cm",
+            "layers": ["parallel", "legs", "labels", "decompose"]
+          },
+          "actions": [{ "run": "decompose", "label": "Pisahkan segitiga" }]
+        },
+        {
+          "id": "m4-kenali-05",
+          "type": "identify",
+          "title": "Ketuk sisi miringnya",
+          "text": ["Lihat segitiga siku-siku di tepi kiri.", "Ketuk sisi miringnya."],
+          "ask": "hypotenuse",
+          "answer": ["s1"],
+          "figure": { "shape": "trapezoid", "kind": "isosceles", "a": 16, "b": 10, "t": 4, "unit": "cm", "layers": ["legs", "height", "rightAngle"] },
+          "hints": [
+            "Sisi miring berhadapan dengan sudut siku-siku.",
+            "Sudut siku-siku ada di kaki garis tinggi. Sisi di depannya miring.",
+            "Sisi AD adalah sisi miring segitiga kiri. Itu juga kaki trapesium."
+          ]
+        }
+      ]
+    },
+    {
+      "phase": "bangun",
+      "steps": [
+        {
+          "id": "m4-bangun-01",
+          "type": "explain",
+          "title": "Langkah 1: temukan segitiganya",
+          "text": ["Kaki s = 5 cm adalah sisi miring segitiga.", "Tinggi t belum diketahui."],
+          "figure": {
+            "shape": "trapezoid",
+            "kind": "isosceles",
+            "a": 16,
+            "b": 10,
+            "t": 4,
+            "unit": "cm",
+            "layers": ["parallel", "legs", "height", "rightAngle", "labels"],
+            "hideLabels": ["t"]
+          }
+        },
+        {
+          "id": "m4-bangun-02",
+          "type": "explain",
+          "title": "Langkah 2: cari x",
+          "text": ["Sama kaki: x = (a − b) ÷ 2.", "Di sini x = (16 − 10) ÷ 2 = 3 cm.", "Siku-siku: x = a − b."],
+          "figure": {
+            "shape": "trapezoid",
+            "kind": "isosceles",
+            "a": 16,
+            "b": 10,
+            "t": 4,
+            "unit": "cm",
+            "layers": ["parallel", "legs", "height", "rightAngle", "labels"],
+            "hideLabels": ["t"]
+          }
+        },
+        {
+          "id": "m4-bangun-03",
+          "type": "explain",
+          "title": "Langkah 3: hitung tinggi",
+          "text": ["t = √(s² − x²) = √(25 − 9).", "t = √16 = 4 cm."],
+          "figure": {
+            "shape": "trapezoid",
+            "kind": "isosceles",
+            "a": 16,
+            "b": 10,
+            "t": 4,
+            "unit": "cm",
+            "layers": ["parallel", "legs", "height", "rightAngle", "labels"]
+          }
+        },
+        {
+          "id": "m4-bangun-04",
+          "type": "explain",
+          "title": "Langkah 4: cek kewajaran",
+          "text": ["Tinggi harus lebih pendek dari kaki.", "t = 4 cm dan s = 5 cm, jadi wajar."],
+          "figure": {
+            "shape": "trapezoid",
+            "kind": "isosceles",
+            "a": 16,
+            "b": 10,
+            "t": 4,
+            "unit": "cm",
+            "layers": ["legs", "height", "rightAngle", "labels"]
+          }
+        }
+      ]
+    },
+    {
+      "phase": "latih",
+      "steps": [
+        {
+          "id": "m4-latih-01",
+          "type": "explain",
+          "title": "Contoh: tinggi lalu luas",
+          "text": ["x = 3, t = √(25 − 9) = 4 cm.", "L = ½ × (16 + 10) × 4 = 52 cm²."],
+          "figure": {
+            "shape": "trapezoid",
+            "kind": "isosceles",
+            "a": 16,
+            "b": 10,
+            "t": 4,
+            "unit": "cm",
+            "layers": ["parallel", "legs", "height", "labels"]
+          }
+        },
+        {
+          "id": "m4-latih-02",
+          "type": "faded",
+          "title": "Lengkapi: cari tinggi",
+          "text": ["Isi x, lalu hitung tinggi t."],
+          "figure": {
+            "shape": "trapezoid",
+            "kind": "isosceles",
+            "a": 22,
+            "b": 10,
+            "t": 8,
+            "unit": "cm",
+            "layers": ["parallel", "legs", "height", "labels"],
+            "hideLabels": ["t"]
+          },
+          "template": "x = (22 − 10) ÷ 2 = {x}",
+          "answerLabel": "t",
+          "problem": { "shape": "trapezoid", "kind": "isosceles", "ask": "height", "unit": "cm", "a": 22, "b": 10, "s1": 10, "s2": 10 },
+          "answer": { "value": 8, "unit": "cm" },
+          "units": ["cm", "cm²"],
+          "hints": [
+            "Segitiga siku-siku mana yang memuat tinggi?",
+            "Kurangkan dua sisi sejajar, lalu bagi 2. Itu alas segitiga (x). Tinggi adalah sisi tegaknya.",
+            "x = (22 − 10) ÷ 2 = 6. t² = 10² − 6² = 100 − 36 = 64, jadi t = 8 cm"
+          ]
+        },
+        {
+          "id": "m4-latih-03",
+          "type": "solve",
+          "title": "Sekarang luasnya",
+          "text": ["Tinggi sudah ketemu: t = 8 cm.", "Hitung luas trapesium yang sama."],
+          "figure": {
+            "shape": "trapezoid",
+            "kind": "isosceles",
+            "a": 22,
+            "b": 10,
+            "t": 8,
+            "unit": "cm",
+            "layers": ["parallel", "legs", "height", "labels"]
+          },
+          "answerLabel": "L",
+          "problem": { "shape": "trapezoid", "kind": "isosceles", "ask": "area", "unit": "cm", "a": 22, "b": 10, "s1": 10, "s2": 10 },
+          "answer": { "value": 128, "unit": "cm²" },
+          "units": ["cm", "cm²"],
+          "hints": [
+            "Rumus luas memakai tinggi atau kaki?",
+            "Pakai t = 8 cm. L = ½ × (a + b) × t.",
+            "L = ½ × (22 + 10) × 8 = ½ × 32 × 8 = 128 cm²"
+          ]
+        },
+        {
+          "id": "m4-latih-04",
+          "type": "faded",
+          "title": "Lengkapi: x dan t",
+          "text": ["Isi x dan t, lalu hitung luasnya."],
+          "figure": {
+            "shape": "trapezoid",
+            "kind": "right",
+            "a": 12,
+            "b": 7,
+            "t": 12,
+            "unit": "cm",
+            "layers": ["parallel", "legs", "rightAngle", "labels"],
+            "hideLabels": ["s1"]
+          },
+          "template": "x = 12 − 7 = {x} · t = √(169 − 25) = {t}",
+          "answerLabel": "L",
+          "problem": { "shape": "trapezoid", "kind": "right", "ask": "area", "unit": "cm", "a": 12, "b": 7, "s2": 13 },
+          "answer": { "value": 114, "unit": "cm²" },
+          "units": ["cm", "cm²"],
+          "hints": [
+            "Pada siku-siku, berapa x?",
+            "x = a − b. Lalu t = √(s² − x²). Sisi tegak AD = t.",
+            "x = 5, t = √(169 − 25) = √144 = 12. L = ½ × 19 × 12 = 114 cm²"
+          ]
+        },
+        {
+          "id": "m4-latih-05",
+          "type": "solve",
+          "title": "Kerjakan sendiri: luas",
+          "text": ["Cari tinggi dulu.", "Lalu hitung luasnya."],
+          "figure": {
+            "shape": "trapezoid",
+            "kind": "isosceles",
+            "a": 30,
+            "b": 14,
+            "t": 15,
+            "unit": "cm",
+            "layers": ["parallel", "legs", "height", "labels"],
+            "hideLabels": ["t"]
+          },
+          "answerLabel": "L",
+          "problem": { "shape": "trapezoid", "kind": "isosceles", "ask": "area", "unit": "cm", "a": 30, "b": 14, "s1": 17, "s2": 17 },
+          "answer": { "value": 330, "unit": "cm²" },
+          "units": ["cm", "cm²"],
+          "hints": [
+            "Ukuran apa yang belum diketahui untuk menghitung luas?",
+            "Cari x = (a − b) ÷ 2, lalu t = √(s² − x²).",
+            "x = 8, t = √(289 − 64) = 15. L = ½ × 44 × 15 = 330 cm²"
+          ]
+        },
+        {
+          "id": "m4-latih-06",
+          "type": "solve",
+          "title": "Kerjakan sendiri: keliling",
+          "text": ["Hitung keliling trapesium yang sama."],
+          "figure": { "shape": "trapezoid", "kind": "isosceles", "a": 30, "b": 14, "t": 15, "unit": "cm", "layers": ["parallel", "legs", "labels"] },
+          "answerLabel": "K",
+          "problem": { "shape": "trapezoid", "kind": "isosceles", "ask": "perimeter", "unit": "cm", "a": 30, "b": 14, "s1": 17, "s2": 17 },
+          "answer": { "value": 78, "unit": "cm" },
+          "units": ["cm", "cm²"],
+          "hints": [
+            "Ada berapa sisi pada trapesium?",
+            "Jumlahkan a, b, dan kedua kaki. Tinggi tidak ikut.",
+            "K = 30 + 14 + 17 + 17 = 78 cm"
+          ]
+        },
+        {
+          "id": "m4-latih-07",
+          "type": "solve",
+          "title": "Kerjakan sendiri: siku-siku",
+          "text": ["Sisi tegak AD belum diketahui.", "Hitung luasnya."],
+          "figure": {
+            "shape": "trapezoid",
+            "kind": "right",
+            "a": 20,
+            "b": 12,
+            "t": 15,
+            "unit": "cm",
+            "layers": ["parallel", "legs", "rightAngle", "labels"],
+            "hideLabels": ["s1"]
+          },
+          "answerLabel": "L",
+          "problem": { "shape": "trapezoid", "kind": "right", "ask": "area", "unit": "cm", "a": 20, "b": 12, "s2": 17 },
+          "answer": { "value": 240, "unit": "cm²" },
+          "units": ["cm", "cm²"],
+          "hints": [
+            "Pada siku-siku, sisi tegak AD adalah tinggi. Berapa panjangnya?",
+            "x = a − b. Lalu t = √(s² − x²).",
+            "x = 8, t = √(289 − 64) = 15. L = ½ × 32 × 15 = 240 cm²"
+          ]
+        },
+        {
+          "id": "m4-latih-08",
+          "type": "solve",
+          "title": "Kerjakan sendiri: keliling",
+          "text": ["Sisi tegak AD = 15 cm dari soal tadi.", "Hitung kelilingnya."],
+          "figure": { "shape": "trapezoid", "kind": "right", "a": 20, "b": 12, "t": 15, "unit": "cm", "layers": ["parallel", "legs", "rightAngle", "labels"] },
+          "answerLabel": "K",
+          "problem": { "shape": "trapezoid", "kind": "right", "ask": "perimeter", "unit": "cm", "a": 20, "b": 12, "s2": 17 },
+          "answer": { "value": 64, "unit": "cm" },
+          "units": ["cm", "cm²"],
+          "hints": [
+            "Ada berapa sisi pada trapesium siku-siku?",
+            "Sisi tegak AD juga sisi, jadi ikut dijumlahkan.",
+            "K = 20 + 12 + 15 + 17 = 64 cm"
+          ]
+        },
+        {
+          "id": "m4-latih-09",
+          "type": "why",
+          "title": "Mengapa?",
+          "text": ["Ingat segitiga siku-siku di tepi trapesium."],
+          "question": {
+            "prompt": "Mengapa tinggi harus lebih pendek dari kaki?",
+            "options": [
+              { "text": "Karena kaki adalah sisi miring segitiga siku-siku", "correct": true, "feedback": "Tepat! Sisi miring selalu sisi terpanjang." },
+              { "text": "Karena tinggi selalu setengah dari kaki", "correct": false, "feedback": "Belum tepat. Bandingkan t = 4 cm dan s = 5 cm." },
+              { "text": "Karena kaki sejajar dengan tinggi", "correct": false, "feedback": "Belum tepat. Kaki miring, sedangkan tinggi tegak lurus." }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "phase": "tantangan",
+      "steps": [
+        {
+          "id": "m4-tantangan-01",
+          "type": "challenge",
+          "title": "Tantangan 1",
+          "text": ["Trapesium sama kaki: kaki 13 cm.", "Hitung tingginya."],
+          "figure": {
+            "shape": "trapezoid",
+            "kind": "isosceles",
+            "a": 26,
+            "b": 16,
+            "t": 12,
+            "unit": "cm",
+            "layers": ["parallel", "legs", "height", "labels"],
+            "hideLabels": ["t"]
+          },
+          "answerLabel": "t",
+          "problem": { "shape": "trapezoid", "kind": "isosceles", "ask": "height", "unit": "cm", "a": 26, "b": 16, "s1": 13, "s2": 13 },
+          "answer": { "value": 12, "unit": "cm" },
+          "units": ["cm", "cm²"],
+          "distractors": [{ "value": 8.3, "unit": "cm", "code": "E_X_TIDAK_DIBAGI" }],
+          "hints": [
+            "Segitiga siku-siku mana yang memuat tinggi?",
+            "x = (a − b) ÷ 2. Lalu t = √(s² − x²).",
+            "x = (26 − 16) ÷ 2 = 5. t = √(169 − 25) = √144 = 12 cm"
+          ]
+        },
+        {
+          "id": "m4-tantangan-02",
+          "type": "challenge",
+          "title": "Tantangan 2",
+          "text": ["Trapesium yang sama.", "Hitung luasnya."],
+          "figure": {
+            "shape": "trapezoid",
+            "kind": "isosceles",
+            "a": 26,
+            "b": 16,
+            "t": 12,
+            "unit": "cm",
+            "layers": ["parallel", "legs", "height", "labels"],
+            "hideLabels": ["t"]
+          },
+          "answerLabel": "L",
+          "problem": { "shape": "trapezoid", "kind": "isosceles", "ask": "area", "unit": "cm", "a": 26, "b": 16, "s1": 13, "s2": 13 },
+          "answer": { "value": 252, "unit": "cm²" },
+          "units": ["cm", "cm²"],
+          "distractors": [{ "value": 273, "unit": "cm²", "code": "E_KAKI_SBG_TINGGI" }],
+          "hints": [
+            "Tinggi sudah kamu hitung di soal tadi.",
+            "Pakai t, bukan kaki. L = ½ × (a + b) × t.",
+            "L = ½ × (26 + 16) × 12 = ½ × 42 × 12 = 252 cm²"
+          ]
+        },
+        {
+          "id": "m4-tantangan-03",
+          "type": "challenge",
+          "title": "Tantangan 3",
+          "text": ["Trapesium siku-siku: kaki miring 10 cm.", "Hitung luasnya."],
+          "figure": {
+            "shape": "trapezoid",
+            "kind": "right",
+            "a": 21,
+            "b": 15,
+            "t": 8,
+            "unit": "cm",
+            "layers": ["parallel", "legs", "rightAngle", "labels"],
+            "hideLabels": ["s1"]
+          },
+          "answerLabel": "L",
+          "problem": { "shape": "trapezoid", "kind": "right", "ask": "area", "unit": "cm", "a": 21, "b": 15, "s2": 10 },
+          "answer": { "value": 144, "unit": "cm²" },
+          "units": ["cm", "cm²"],
+          "distractors": [{ "value": 180, "unit": "cm²", "code": "E_KAKI_SBG_TINGGI" }],
+          "hints": [
+            "Sisi tegak belum diketahui. Bagaimana mencarinya?",
+            "x = a − b. Lalu t = √(s² − x²).",
+            "x = 6, t = √(100 − 36) = 8. L = ½ × 36 × 8 = 144 cm²"
+          ]
+        }
+      ]
+    }
+  ]
+}

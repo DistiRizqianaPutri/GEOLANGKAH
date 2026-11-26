@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { parseNumber } from '../../lib/answer.js'
 import { checkSolve } from '../../lib/checkStep.js'
-import { formatMeasure } from '../../lib/geometry.js'
+import { formatAnswer } from '../../lib/geometry.js'
 import AnswerInput from '../answer/AnswerInput.jsx'
 import PrimaryButton from '../ui/PrimaryButton.jsx'
 import AnswerFeedback from './AnswerFeedback.jsx'
@@ -27,7 +27,7 @@ export default function SolveStep({ step, record, onAttempt, onHint, isChallenge
   }
 
   return (
-    <StepCard title={step.title} text={step.text} figure={step.figure && <StepFigure figure={step.figure} />}>
+    <StepCard title={step.title} text={step.text} stage={step.stage} figure={step.figure && <StepFigure figure={step.figure} />}>
       {prelude}
       {ready && (
         <>
@@ -47,7 +47,7 @@ export default function SolveStep({ step, record, onAttempt, onHint, isChallenge
             record={record}
             result={result}
             isChallenge={isChallenge}
-            revealText={`${formatMeasure(step.answer.value)} ${step.answer.unit}`}
+            revealText={formatAnswer(step.answer.value, step.answer.unit)}
           />
           <StepTools hints={step.hints} record={record} onHint={onHint} />
           {!done && (

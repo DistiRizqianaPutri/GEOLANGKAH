@@ -24,6 +24,7 @@ export default function StepFigure({ figure, actions = [], selectable }) {
         run={run}
         counting={figure.counting}
         selectable={selectable}
+        hideLabels={figure.hideLabels}
       />
       {actions.length > 0 && (
         <div className="flex flex-wrap gap-2">

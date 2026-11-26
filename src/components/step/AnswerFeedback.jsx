@@ -7,7 +7,10 @@ import FeedbackBanner from '../answer/FeedbackBanner.jsx'
  */
 export default function AnswerFeedback({ step, record, result, isChallenge, revealText }) {
   const solution = step.hints?.[2]
-  const context = { ask: step.problem?.ask ?? step.ask, unit: step.problem?.unit }
+  const convert = step.problem?.convert
+  const context = convert
+    ? { ask: 'convert', unit: convert.unit }
+    : { ask: step.problem?.ask ?? step.ask, unit: step.problem?.unit }
   const attempts = record?.attempts ?? 0
 
   if (record?.revealed) {

@@ -4,6 +4,7 @@ import ExploreStep from './ExploreStep.jsx'
 import FadedStep from './FadedStep.jsx'
 import IdentifyStep from './IdentifyStep.jsx'
 import SolveStep from './SolveStep.jsx'
+import StoryStep from './StoryStep.jsx'
 import WhyStep from './WhyStep.jsx'
 
 /** Pilih tampilan sesuai tipe langkah (KONTEN.md §9). */
@@ -22,6 +23,8 @@ export default function StepView({ step, records, onAttempt, onHint }) {
       return <SolveStep {...props} />
     case 'why':
       return <WhyStep {...props} />
+    case 'story':
+      return <StoryStep step={step} records={records} onAttempt={onAttempt} />
     case 'challenge':
       return <ChallengeStep step={step} records={records} onAttempt={onAttempt} onHint={onHint} />
     default:

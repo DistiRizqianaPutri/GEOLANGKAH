@@ -1,5 +1,5 @@
 {
-  "_note": "Teks umpan balik KONTEN.md §7. Kunci kedua = yang ditanya (area, perimeter, height, parallel); 'default' bila tidak ada varian. {unit} = satuan panjang soal.",
+  "_note": "Teks umpan balik KONTEN.md §7. Kunci kedua = yang ditanya (area, perimeter, height, parallel, hypotenuse; 'convert' = soal bersatuan turunan kg/Rp); 'default' bila tidak ada varian. {unit} = satuan panjang soal (pada 'convert': satuan jawaban).",
   "CORRECT": { "default": "Tepat!" },
   "E_LUPA_SETENGAH": { "default": "Hasilmu dua kali lipat. Ingat, dua trapesium membentuk satu jajargenjang — kalikan ½." },
   "E_KAKI_SBG_TINGGI": {
@@ -13,7 +13,8 @@
   },
   "E_SATUAN": {
     "default": "Angkanya tepat! Luas memakai satuan persegi ({unit}²).",
-    "perimeter": "Angkanya tepat! Keliling memakai satuan panjang ({unit})."
+    "perimeter": "Angkanya tepat! Keliling memakai satuan panjang ({unit}).",
+    "convert": "Angkanya tepat! Cek lagi satuannya: yang ditanya dalam {unit}."
   },
   "E_TINGGI_DI_KELILING": { "default": "Tinggi bukan sisi trapesium, jadi tidak ikut dijumlahkan." },
   "E_SISI_KURANG": { "default": "Cek lagi: trapesium punya empat sisi." },
@@ -24,6 +25,7 @@
   "E_KOTAK": { "default": "Cek lagi angka di kotak yang kosong. Lihat label pada gambar." },
   "E_LAIN": {
     "default": "Belum tepat. Mau lihat petunjuk?",
-    "parallel": "Belum tepat. Sisi sejajar arahnya sama dan tidak pernah bertemu."
+    "parallel": "Belum tepat. Sisi sejajar arahnya sama dan tidak pernah bertemu.",
+    "hypotenuse": "Belum tepat. Sisi miring berhadapan dengan sudut siku-siku."
   }
 }

@@ -28,6 +28,7 @@ Legenda: ☐ belum · ☑ selesai
     - Tombol ‹ membuka langkah sebelumnya; langkah yang sudah selesai terkunci beserta jawabannya. "Ulangi langkah" hanya me-reset gambar.
     - Seed soal acak = kode siswa + pertemuan.
     - Soal cerita (P5) belum dibahas; dijawab di M5.
+  - ☑ *Dijawab 26-11-2026 (awal M5):* P5 tetap 4 fase (Kenali pengantar, Bangun = Soal 1, Latih = Soal 2–3, Tantangan). Tandai info wajib lengkap; pengecoh ditolak & dicatat. Ditanya = PG keliling/luas. Detail di `KONTEN.md` §6.
 
 **Cek selesai:** tidak ada pertanyaan terbuka yang menghalangi M1.
 
@@ -87,13 +88,25 @@ Legenda: ☐ belum · ☑ selesai
 **Belum dicek:** tampilan 360 × 640 di peramban dan HP Android asli. Sesi ini tidak punya alat peramban. Pengembang memainkan P1 → Hasil ① → P2 → Hasil ② di HP (Vercel setelah push, atau `npm run dev -- --host`) dan mengecek label kaki di `/lab` (a = 16, seret ke b = 14, t = 6).
 
 ## M5 — Pertemuan 3–5 + soal cerita
-- [ ] Konten Pertemuan 3 & 4 (termasuk penyegaran Pythagoras)
-- [ ] `StoryReader` + `KnownAskedTable` (mode baca ringkas)
-- [ ] Konten Pertemuan 5 (3 soal cerita, tahap Rumuskan–Hitung–Tafsirkan)
-- [ ] Tantangan Pos ③–⑤
-- [ ] Pertanyaan "Mengapa?" (P1)
+- [x] Konten Pertemuan 3 & 4 (termasuk penyegaran Pythagoras)
+- [x] `StoryReader` + `KnownAskedTable` (mode baca ringkas)
+- [x] Konten Pertemuan 5 (3 soal cerita, tahap Rumuskan–Hitung–Tafsirkan)
+- [x] Tantangan Pos ③–⑤
+- [x] Pertanyaan "Mengapa?" (P1)
 
 **Cek selesai:** kelima pertemuan berjalan tanpa error; tes konten memastikan setiap `answer` di JSON sama dengan hasil `geometry.js`.
+
+*Selesai 26-11-2026 (logika & build).* 522 tes lulus (185 baru); lint bersih; build sukses.
+
+**Bukti:**
+- `content.test.js` (100 tes, P1–P5): setiap `answer` dibandingkan langsung dengan `solveProblem()` (nilai + satuan). Kotak memudar, angka gambar, dan akhir L3 juga harus sama dengan `geometry.js`. Info penting soal cerita = `problem` di langkah Hitung. Kunci Tantangan ①–⑤ dan Latih P3–P5 dicocokkan dengan tabel KONTEN. Uji mutasi: kunci P4 330 → 331 membuat 3 tes gagal.
+- `playthrough.test.js` (35 tes): P1–P5 dimainkan sampai Hasil Pos untuk T01, S01, S02 (3 dari 3; 2 dari 3 bila salah 2×). Jalur salah baru: `E_LUPA_SETENGAH`, `E_KAKI_SBG_TINGGI`, `E_KOTAK` (x tidak dibagi), `E_PYTHA_TAMBAH`, `E_X_TIDAK_DIBAGI`, `E_TIDAK_WAJAR`, `E_SATUAN`/`E_KL_TERTUKAR` pada kg, biaya belum dikali, dan pengecoh cerita + gerbang Lanjut.
+- `StepView.test.jsx` (95 tes): setiap langkah P1–P5 dirender tanpa galat dan tanpa emoji; StoryStep awal (kosong) dan selesai (lengkap, terkunci).
+- `geometry.test.js` +satuan turunan, segitiga 3-4-5/6-8-10/5-12-13/8-15-17, `formatAnswer`; `story.test.js` (14 tes).
+
+**Penyederhanaan:** "ketuk segitiga, lalu sisi miringnya" (P4) dijadikan satu ketuk sisi miring (`KONTEN.md` §5).
+
+**Belum dicek:** tampilan 360 × 640 dan HP Android asli (sesi tanpa peramban). Pengembang memainkan P3 → P5 di Vercel. Fokus: chip & tabel soal cerita, label `t = ?`, segitiga di `/lab`, dan templat memudar panjang P4/P5 yang harus terbungkus rapi di 360 px.
 
 ## M6 — Supabase: masuk, progres, log, offline
 - [ ] Migrasi `0001_init.sql` + kebijakan RLS

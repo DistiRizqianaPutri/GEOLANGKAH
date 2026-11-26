@@ -16,6 +16,7 @@ export default function ExploreStep({ step, record, onAttempt }) {
   return (
     <StepCard
       title={step.title}
+      stage={step.stage}
       text={text}
       figure={
         <div className="space-y-2">

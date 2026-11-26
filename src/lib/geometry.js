@@ -54,6 +54,26 @@ export function legFromHeight(t, x) {
   return Math.sqrt(t * t + x * x)
 }
 
+/**
+ * Segitiga siku-siku untuk penyegaran Pythagoras (KONTEN §5, F-07).
+ * Sudut siku-siku di P = (0,0); sisi tegak x mendatar ke Q, sisi tegak t ke atas ke R; QR = sisi miring s.
+ */
+export function rightTriangleMeasures({ x, t }) {
+  return { x, t, s: legFromHeight(t, x), points: { P: [0, 0], Q: [x, 0], R: [0, t] } }
+}
+
+/**
+ * Satuan turunan soal cerita (KONTEN §6): mis. pupuk = luas ÷ 10 (kg), biaya = luas × 15.000 (Rp).
+ * @param {number|undefined} value
+ * @param {{op:'divide'|'multiply', by:number, unit:string}|undefined} convert
+ */
+export function convertValue(value, convert) {
+  if (!convert || value === undefined) return value
+  if (convert.op === 'divide') return value / convert.by
+  if (convert.op === 'multiply') return value * convert.by
+  throw new Error(`convertValue: operasi "${convert.op}" tidak dikenal`)
+}
+
 // --- Model gambar (FigureCanvas, DESIGN.md §5) -----------------------------
 // Koordinat dalam satuan petak, sumbu y ke atas.
 // Trapesium: A = (0,0), B = (a,0), D = (d,t), C = (c,t) → { shape, kind, a, t, d, c }.
@@ -122,6 +142,15 @@ export function formatLabel(name, value, unit) {
   const text = formatMeasure(value)
   const approx = text.startsWith('≈ ')
   return `${name} ${approx ? '≈' : '='} ${approx ? text.slice(2) : text} ${unit}`
+}
+
+/**
+ * Jawaban lengkap untuk ditampilkan: "52 cm²", "24 kg", "Rp4.950.000".
+ * Rupiah memakai titik ribuan tanpa spasi.
+ */
+export function formatAnswer(value, unit) {
+  if (unit === 'Rp') return `Rp${String(Math.round(value)).replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`
+  return `${formatMeasure(value)} ${unit}`
 }
 
 /** Penghitung "Telusuri tepi": satuan yang sudah dilewati titik (0 → K). */
@@ -255,17 +284,19 @@ function resolveTrapezoid(problem) {
   }
 
   const sides = [a, b, s1, s2].every(Number.isFinite) ? [a, b, s1, s2] : undefined
-  return { a, b, t, x, kind, slant: kind === 'right' ? s2 : s1, sides }
+  return { a, b, t, x, s1, s2, kind, slant: kind === 'right' ? s2 : s1, sides }
 }
 
-/** Kunci jawaban (angka) dan satuannya untuk satu soal. */
-function solve(problem) {
+/** Semua besaran satu soal sebelum konversi satuan turunan. */
+function solveBase(problem) {
   const unit = problem.unit ?? 'cm'
   const areaUnit = `${unit}²`
 
   if (problem.shape === 'rect') {
     const { p, l } = problem
     return {
+      p,
+      l,
       perimeter: rectPerimeter(p, l),
       area: rectArea(p, l),
       unit: problem.ask === 'area' ? areaUnit : unit,
@@ -281,6 +312,17 @@ function solve(problem) {
     offset: tz.x,
     unit: problem.ask === 'area' ? areaUnit : unit,
   }
+}
+
+/**
+ * Kunci satu soal dari geometry.js: semua besaran (a, b, t, x, s1, s2, p, l, perimeter, area, …),
+ * `answer` = nilai yang ditanya (sesudah `convert` bila ada), dan `unit` = satuan jawaban.
+ * Dipakai diagnose(), kotak memudar (checkStep), dan tes konten.
+ */
+export function solveProblem(problem) {
+  const s = solveBase(problem)
+  const { convert } = problem
+  return { ...s, answer: convertValue(s[problem.ask], convert), unit: convert?.unit ?? s.unit }
 }
 
 /**
@@ -356,15 +398,15 @@ function wrongPatterns(problem, s) {
  * @returns {string|null}
  */
 export function diagnose(problem, value, unit) {
-  const s = solve(problem)
-  const expected = s[problem.ask]
+  const s = solveProblem(problem)
 
-  const { correct, valueOk } = checkAnswer(value, unit, { value: expected, unit: s.unit })
+  const { correct, valueOk } = checkAnswer(value, unit, { value: s.answer, unit: s.unit })
   if (correct) return null
   if (valueOk) return 'E_SATUAN'
 
+  // Soal bersatuan turunan (kg, Rp): hasil cara salah ikut dikonversi.
   for (const [code, wrong] of wrongPatterns(problem, s)) {
-    if (near(value, wrong)) return code
+    if (near(value, convertValue(wrong, problem.convert))) return code
   }
 
   const tooTall = problem.ask === 'height' && s.slant !== undefined && value >= s.slant

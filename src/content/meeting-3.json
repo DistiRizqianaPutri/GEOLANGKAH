@@ -1,0 +1,292 @@
+{
+  "meeting": 3,
+  "title": "Luas trapesium",
+  "summary": ["L = ½ × (a + b) × t", "Dua trapesium yang sama membentuk satu jajargenjang"],
+  "phases": [
+    {
+      "phase": "kenali",
+      "steps": [
+        {
+          "id": "m3-kenali-01",
+          "type": "explain",
+          "title": "Dari bangun yang kamu kenal",
+          "text": ["Kamu sudah bisa menghitung luas persegi panjang.", "Sekarang kita ubah trapesium menjadi bangun yang kamu kenal."],
+          "figure": { "shape": "trapezoid", "kind": "isosceles", "a": 16, "b": 10, "t": 4, "unit": "cm", "layers": ["parallel", "height", "labels"] }
+        },
+        {
+          "id": "m3-kenali-02",
+          "type": "explore",
+          "title": "Perkirakan luasnya",
+          "text": ["Hitung kira-kira petak di dalam trapesium.", "Satu petak = 1 cm²."],
+          "figure": {
+            "shape": "trapezoid",
+            "kind": "isosceles",
+            "a": 16,
+            "b": 10,
+            "t": 4,
+            "unit": "cm",
+            "layers": ["grid", "area", "parallel", "height", "labels"]
+          },
+          "question": {
+            "prompt": "Berapa kira-kira luas trapesium ini?",
+            "options": [
+              { "text": "Sekitar 40 cm²", "correct": false, "feedback": "Terlalu sedikit. Petak di bagian miring juga ikut dihitung." },
+              { "text": "Sekitar 50 cm²", "correct": true, "feedback": "Tepat! Sebentar lagi kita hitung luas tepatnya." },
+              { "text": "Sekitar 60 cm²", "correct": false, "feedback": "Terlalu banyak. Ujung yang miring tidak terisi penuh." }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "phase": "bangun",
+      "steps": [
+        {
+          "id": "m3-bangun-01",
+          "type": "explain",
+          "title": "Dua trapesium jadi jajargenjang",
+          "text": ["Tekan Putar salinan.", "Dua trapesium yang sama membentuk jajargenjang.", "Alasnya a + b = 26 cm, tingginya tetap 4 cm."],
+          "figure": {
+            "shape": "trapezoid",
+            "kind": "isosceles",
+            "a": 16,
+            "b": 10,
+            "t": 4,
+            "unit": "cm",
+            "layers": ["parallel", "height", "labels", "doubleRotate"]
+          },
+          "actions": [{ "run": "doubleRotate", "label": "Putar salinan" }]
+        },
+        {
+          "id": "m3-bangun-02",
+          "type": "explain",
+          "title": "Jajargenjang jadi persegi panjang",
+          "text": ["Potong segitiga di ujung, geser ke ujung lain.", "Terbentuk persegi panjang 26 × 4.", "Luasnya 26 × 4 = 104 cm²."],
+          "figure": { "shape": "rect", "p": 26, "l": 4, "unit": "cm", "layers": ["area", "labels"] }
+        },
+        {
+          "id": "m3-bangun-03",
+          "type": "explain",
+          "title": "Luas satu trapesium",
+          "text": ["104 cm² adalah luas dua trapesium.", "Satu trapesium = ½ × 104 = 52 cm²."],
+          "figure": {
+            "shape": "trapezoid",
+            "kind": "isosceles",
+            "a": 16,
+            "b": 10,
+            "t": 4,
+            "unit": "cm",
+            "layers": ["area", "parallel", "height", "labels"]
+          }
+        },
+        {
+          "id": "m3-bangun-04",
+          "type": "explain",
+          "title": "Rumus luas trapesium",
+          "text": ["Luas trapesium = setengah × jumlah sisi sejajar × tinggi.", "L = ½ × (a + b) × t."],
+          "figure": { "shape": "trapezoid", "kind": "isosceles", "a": 16, "b": 10, "t": 4, "unit": "cm", "layers": ["parallel", "height", "rightAngle", "labels"] }
+        },
+        {
+          "id": "m3-bangun-05",
+          "type": "explain",
+          "title": "Cara lain",
+          "text": ["Tekan Cara lain.", "Persegi panjang: 10 × 4 = 40 cm².", "Dua segitiga: ½ × 3 × 4 = 6 cm² masing-masing, total 52 cm²."],
+          "figure": {
+            "shape": "trapezoid",
+            "kind": "isosceles",
+            "a": 16,
+            "b": 10,
+            "t": 4,
+            "unit": "cm",
+            "layers": ["parallel", "height", "labels", "decompose"]
+          },
+          "actions": [{ "run": "decompose", "label": "Cara lain" }]
+        }
+      ]
+    },
+    {
+      "phase": "latih",
+      "steps": [
+        {
+          "id": "m3-latih-01",
+          "type": "explain",
+          "title": "Contoh: luas",
+          "text": ["a + b = 16 + 10 = 26 cm.", "L = ½ × 26 × 4 = 52 cm²."],
+          "figure": { "shape": "trapezoid", "kind": "isosceles", "a": 16, "b": 10, "t": 4, "unit": "cm", "layers": ["parallel", "height", "labels"] }
+        },
+        {
+          "id": "m3-latih-02",
+          "type": "faded",
+          "title": "Lengkapi langkahnya",
+          "text": ["Isi kotak yang kosong, lalu hitung luasnya."],
+          "figure": { "shape": "trapezoid", "kind": "isosceles", "a": 10, "b": 6, "t": 4, "unit": "cm", "layers": ["parallel", "height", "labels"] },
+          "template": "L = ½ × (10 + {b}) × 4",
+          "answerLabel": "L",
+          "problem": { "shape": "trapezoid", "kind": "isosceles", "ask": "area", "unit": "cm", "a": 10, "b": 6, "t": 4 },
+          "answer": { "value": 32, "unit": "cm²" },
+          "units": ["cm", "cm²"],
+          "hints": [
+            "Sisi sejajar mana yang belum ditulis?",
+            "Sisi sejajar atas panjangnya 6 cm. Jumlahkan dengan 10.",
+            "L = ½ × (10 + 6) × 4 = ½ × 16 × 4 = 32 cm²"
+          ]
+        },
+        {
+          "id": "m3-latih-03",
+          "type": "faded",
+          "title": "Lengkapi: dua kotak",
+          "text": ["Isi kedua kotak, lalu hitung luasnya."],
+          "figure": { "shape": "trapezoid", "kind": "isosceles", "a": 18, "b": 12, "t": 8, "unit": "cm", "layers": ["parallel", "height", "labels"] },
+          "template": "L = ½ × ({a} + {b}) × 8",
+          "answerLabel": "L",
+          "problem": { "shape": "trapezoid", "kind": "isosceles", "ask": "area", "unit": "cm", "a": 18, "b": 12, "t": 8 },
+          "answer": { "value": 120, "unit": "cm²" },
+          "units": ["cm", "cm²"],
+          "hints": [
+            "Dua angka apa yang dijumlahkan di dalam kurung?",
+            "Isi kotak dengan kedua sisi sejajar. Lalu kalikan ½ dan tinggi.",
+            "L = ½ × (18 + 12) × 8 = ½ × 30 × 8 = 120 cm²"
+          ]
+        },
+        {
+          "id": "m3-latih-04",
+          "type": "solve",
+          "title": "Kerjakan sendiri",
+          "text": ["Kaki 10 cm dan tinggi 8 cm tampil.", "Hitung luasnya.", "Pilih satuannya sendiri."],
+          "figure": {
+            "shape": "trapezoid",
+            "kind": "isosceles",
+            "a": 22,
+            "b": 10,
+            "t": 8,
+            "unit": "cm",
+            "layers": ["parallel", "legs", "height", "labels"]
+          },
+          "answerLabel": "L",
+          "problem": { "shape": "trapezoid", "kind": "isosceles", "ask": "area", "unit": "cm", "a": 22, "b": 10, "t": 8, "s1": 10, "s2": 10 },
+          "answer": { "value": 128, "unit": "cm²" },
+          "units": ["cm", "cm²"],
+          "hints": [
+            "Garis mana yang tegak lurus terhadap sisi sejajar?",
+            "Pakai tinggi, bukan kaki miring. L = ½ × (a + b) × t.",
+            "L = ½ × (22 + 10) × 8 = ½ × 32 × 8 = 128 cm²"
+          ]
+        },
+        {
+          "id": "m3-latih-05",
+          "type": "solve",
+          "title": "Kerjakan sendiri: siku-siku",
+          "text": ["Sisi tegak AD adalah tinggi trapesium ini.", "Hitung luasnya."],
+          "figure": {
+            "shape": "trapezoid",
+            "kind": "right",
+            "a": 12,
+            "b": 7,
+            "t": 12,
+            "unit": "cm",
+            "layers": ["parallel", "legs", "rightAngle", "labels"]
+          },
+          "answerLabel": "L",
+          "problem": { "shape": "trapezoid", "kind": "right", "ask": "area", "unit": "cm", "a": 12, "b": 7, "t": 12, "s1": 12, "s2": 13 },
+          "answer": { "value": 114, "unit": "cm²" },
+          "units": ["cm", "cm²"],
+          "hints": [
+            "Pada siku-siku, sisi mana yang menjadi tinggi?",
+            "Sisi tegak AD = tinggi = 12 cm. Kaki miring 13 cm tidak dipakai.",
+            "L = ½ × (12 + 7) × 12 = ½ × 19 × 12 = 114 cm²"
+          ]
+        },
+        {
+          "id": "m3-latih-06",
+          "type": "why",
+          "title": "Mengapa?",
+          "text": ["Ingat jajargenjang dari dua trapesium."],
+          "question": {
+            "prompt": "Mengapa ada ½ pada rumus luas trapesium?",
+            "options": [
+              {
+                "text": "Karena dua trapesium yang sama membentuk satu jajargenjang",
+                "correct": true,
+                "feedback": "Tepat! Luas jajargenjang dibagi 2 menjadi luas satu trapesium."
+              },
+              { "text": "Karena trapesium punya dua sisi sejajar", "correct": false, "feedback": "Belum tepat. Ingat langkah menggandakan trapesium." },
+              { "text": "Karena tinggi harus dibagi dua", "correct": false, "feedback": "Belum tepat. Tingginya tetap, yang dibagi dua adalah luasnya." }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "phase": "tantangan",
+      "steps": [
+        {
+          "id": "m3-tantangan-01",
+          "type": "challenge",
+          "title": "Tantangan 1",
+          "text": ["a = 14 cm, b = 6 cm, t = 5 cm.", "Hitung luasnya."],
+          "figure": { "shape": "trapezoid", "kind": "isosceles", "a": 14, "b": 6, "t": 5, "unit": "cm", "layers": ["parallel", "height", "labels"] },
+          "answerLabel": "L",
+          "problem": { "shape": "trapezoid", "kind": "isosceles", "ask": "area", "unit": "cm", "a": 14, "b": 6, "t": 5 },
+          "answer": { "value": 50, "unit": "cm²" },
+          "units": ["cm", "cm²"],
+          "distractors": [{ "value": 100, "unit": "cm²", "code": "E_LUPA_SETENGAH" }],
+          "hints": [
+            "Rumus luas trapesium memakai ukuran apa saja?",
+            "Jumlahkan a dan b, kalikan tinggi, lalu kalikan ½.",
+            "L = ½ × (14 + 6) × 5 = ½ × 20 × 5 = 50 cm²"
+          ]
+        },
+        {
+          "id": "m3-tantangan-02",
+          "type": "challenge",
+          "title": "Tantangan 2",
+          "text": ["Trapesium sama kaki: kaki 10 cm, tinggi 8 cm.", "Hitung luasnya."],
+          "figure": {
+            "shape": "trapezoid",
+            "kind": "isosceles",
+            "a": 20,
+            "b": 8,
+            "t": 8,
+            "unit": "cm",
+            "layers": ["parallel", "legs", "height", "labels"]
+          },
+          "answerLabel": "L",
+          "problem": { "shape": "trapezoid", "kind": "isosceles", "ask": "area", "unit": "cm", "a": 20, "b": 8, "t": 8, "s1": 10, "s2": 10 },
+          "answer": { "value": 112, "unit": "cm²" },
+          "units": ["cm", "cm²"],
+          "distractors": [{ "value": 140, "unit": "cm²", "code": "E_KAKI_SBG_TINGGI" }],
+          "hints": [
+            "Garis mana yang menjadi tinggi: kaki atau garis putus-putus?",
+            "Pakai tinggi 8 cm, bukan kaki 10 cm.",
+            "L = ½ × (20 + 8) × 8 = ½ × 28 × 8 = 112 cm²"
+          ]
+        },
+        {
+          "id": "m3-tantangan-03",
+          "type": "challenge",
+          "title": "Tantangan 3",
+          "text": ["Trapesium siku-siku: sisi tegak 8 cm.", "Hitung luasnya."],
+          "figure": {
+            "shape": "trapezoid",
+            "kind": "right",
+            "a": 15,
+            "b": 9,
+            "t": 8,
+            "unit": "cm",
+            "layers": ["parallel", "legs", "rightAngle", "labels"]
+          },
+          "answerLabel": "L",
+          "problem": { "shape": "trapezoid", "kind": "right", "ask": "area", "unit": "cm", "a": 15, "b": 9, "t": 8, "s1": 8, "s2": 10 },
+          "answer": { "value": 96, "unit": "cm²" },
+          "units": ["cm", "cm²"],
+          "distractors": [{ "value": 192, "unit": "cm²", "code": "E_LUPA_SETENGAH" }],
+          "hints": [
+            "Pada siku-siku, sisi tegak juga tinggi.",
+            "Jumlahkan sisi sejajar, kalikan 8, lalu kalikan ½.",
+            "L = ½ × (15 + 9) × 8 = ½ × 24 × 8 = 96 cm²"
+          ]
+        }
+      ]
+    }
+  ]
+}

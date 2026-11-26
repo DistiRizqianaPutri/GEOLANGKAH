@@ -4,7 +4,11 @@ import { describe, expect, it } from 'vitest'
 import {
   DRAG_LIMITS,
   checkAnswer,
+  convertValue,
   decomposeParts,
+  formatAnswer,
+  rightTriangleMeasures,
+  solveProblem,
   diagnose,
   doubleRotateParts,
   dragRectCorner,
@@ -610,4 +614,114 @@ describe('penghitung animasi Kenali P1', () => {
   ])('Isi petak 6 × 4, progres %f → %i baris, %i petak', (p, rows, count) => {
     expect(rectFillProgress({ p: 6, l: 4 }, p)).toEqual({ rows, count })
   })
+})
+
+// ---------------------------------------------------------------------------
+// M5: segitiga siku-siku, satuan turunan soal cerita, solveProblem, formatAnswer
+// ---------------------------------------------------------------------------
+
+describe('rightTriangleMeasures (KONTEN §5 penyegaran Pythagoras)', () => {
+  it.each([
+    [3, 4, 5],
+    [6, 8, 10],
+    [5, 12, 13],
+    [8, 15, 17],
+  ])('sisi tegak %i dan %i → sisi miring %i', (x, t, s) => {
+    const m = rightTriangleMeasures({ x, t })
+    expect(m.s).toBe(s)
+    expect(m.points).toEqual({ P: [0, 0], Q: [x, 0], R: [0, t] })
+  })
+
+  it('3, 4, 5: 9 + 16 = 25', () => {
+    expect(3 * 3 + 4 * 4).toBe(5 * 5)
+  })
+})
+
+describe('convertValue', () => {
+  it('pupuk: 240 m² ÷ 10 = 24 kg', () => expect(convertValue(240, { op: 'divide', by: 10, unit: 'kg' })).toBe(24))
+  it('biaya: 330 m² × 15.000 = 4.950.000', () =>
+    expect(convertValue(330, { op: 'multiply', by: 15000, unit: 'Rp' })).toBe(4950000))
+  it('tanpa convert → nilai tetap', () => expect(convertValue(52, undefined)).toBe(52))
+  it('operasi tak dikenal → error', () => expect(() => convertValue(1, { op: 'pow', by: 2 })).toThrow())
+})
+
+const cerita = {
+  sawahPupuk: {
+    shape: 'trapezoid',
+    kind: 'right',
+    ask: 'area',
+    unit: 'm',
+    a: 20,
+    b: 12,
+    t: 15,
+    s1: 15,
+    s2: 17,
+    convert: { op: 'divide', by: 10, unit: 'kg' },
+  },
+  tamanBiaya: {
+    shape: 'trapezoid',
+    kind: 'isosceles',
+    ask: 'area',
+    unit: 'm',
+    a: 30,
+    b: 14,
+    s1: 17,
+    s2: 17,
+    convert: { op: 'multiply', by: 15000, unit: 'Rp' },
+  },
+}
+
+describe('solveProblem (kunci dari geometry.js)', () => {
+  it('sawah: K 64 m, L 240 m², pupuk 24 kg', () => {
+    const s = solveProblem(cerita.sawahPupuk)
+    expect(s.perimeter).toBe(64)
+    expect(s.area).toBe(240)
+    expect(s.answer).toBe(24)
+    expect(s.unit).toBe('kg')
+  })
+
+  it('taman: x 8, t 15 (dicari), L 330 m², biaya Rp4.950.000', () => {
+    const s = solveProblem(cerita.tamanBiaya)
+    expect(s.x).toBe(8)
+    expect(s.t).toBe(15)
+    expect(s.area).toBe(330)
+    expect(s.answer).toBe(4950000)
+    expect(s.unit).toBe('Rp')
+  })
+
+  it('P4 memudar siku-siku 12/7/13: x 5, t 12, L 114 cm²', () => {
+    const s = solveProblem({ shape: 'trapezoid', kind: 'right', ask: 'area', unit: 'cm', a: 12, b: 7, s2: 13 })
+    expect([s.x, s.t, s.s1, s.answer, s.unit]).toEqual([5, 12, 12, 114, 'cm²'])
+  })
+
+  it('persegi panjang: p, l ikut tersedia', () => {
+    const s = solveProblem({ shape: 'rect', ask: 'perimeter', unit: 'cm', p: 12, l: 7 })
+    expect([s.p, s.l, s.answer, s.unit]).toEqual([12, 7, 38, 'cm'])
+  })
+})
+
+describe('diagnose dengan satuan turunan (kg, Rp)', () => {
+  it('kunci benar', () => {
+    expect(diagnose(cerita.sawahPupuk, 24, 'kg')).toBeNull()
+    expect(diagnose(cerita.tamanBiaya, 4950000, 'Rp')).toBeNull()
+  })
+  it('angka benar, satuan salah → E_SATUAN', () => expect(diagnose(cerita.sawahPupuk, 24, 'm²')).toBe('E_SATUAN'))
+  it('memakai keliling: 64 ÷ 10 = 6,4 → E_KL_TERTUKAR', () =>
+    expect(diagnose(cerita.sawahPupuk, 6.4, 'kg')).toBe('E_KL_TERTUKAR'))
+  it('lupa ½: 480 ÷ 10 = 48 → E_LUPA_SETENGAH', () =>
+    expect(diagnose(cerita.sawahPupuk, 48, 'kg')).toBe('E_LUPA_SETENGAH'))
+  it('kaki sebagai tinggi: ½ × 44 × 17 × 15.000 → E_KAKI_SBG_TINGGI', () =>
+    expect(diagnose(cerita.tamanBiaya, 0.5 * 44 * 17 * 15000, 'Rp')).toBe('E_KAKI_SBG_TINGGI'))
+  it('belum dikonversi (330) → E_LAIN', () => expect(diagnose(cerita.tamanBiaya, 330, 'Rp')).toBe('E_LAIN'))
+})
+
+describe('formatAnswer', () => {
+  it.each([
+    [52, 'cm²', '52 cm²'],
+    [24, 'kg', '24 kg'],
+    [6.4, 'kg', '6,4 kg'],
+    [4950000, 'Rp', 'Rp4.950.000'],
+    [15000, 'Rp', 'Rp15.000'],
+    [500, 'Rp', 'Rp500'],
+  ])('%s %s → %s', (value, unit, text) => expect(formatAnswer(value, unit)).toBe(text))
 })

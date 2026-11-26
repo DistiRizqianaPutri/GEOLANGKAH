@@ -77,14 +77,14 @@ Lima pertemuan = lima **pos** di sebuah desa. Tema hanya membungkus, **tidak bol
 | Komponen | Isi & perilaku |
 |---|---|
 | `TopBar` | Tombol kembali, nama pos singkat (mis. "Jembatan Trapesium"), indikator langkah berupa titik, bukan persentase. Bila langkah > 10, titik diganti teks `3 / 12` agar muat di 360 px. |
-| `StepCard` | Judul langkah + ≤ 3 kalimat + (opsional) satu `FigureCanvas`. |
+| `StepCard` | Judul langkah + ≤ 3 kalimat + (opsional) satu `FigureCanvas`. *(M5)* Langkah soal cerita menampilkan label kecil "Tahap: Rumuskan / Hitung / Tafsirkan" di atas judul. |
 | `FigureCanvas` | SVG responsif, rasio 4:3, menerima daftar `layers` yang aktif (lihat §5). |
 | `DragHandle` | Lingkaran 20 px terlihat, area sentuh 48 px; muncul getar halus (`navigator.vibrate(10)`) bila tersedia saat mulai seret. |
 | `AnswerInput` | Input angka (`inputmode="decimal"`, menerima koma maupun titik desimal) + pilihan satuan sebagai tombol, bukan ketikan. Daftar satuan ditentukan per soal di JSON (`units`): `cm`, `cm²`, `m`, `m²`, serta `kg` dan `Rp` untuk soal cerita P5. |
 | `HintButton` + `HintPanel` | Tombol "Butuh petunjuk?" → panel naik dari bawah, menampilkan L1; tombol "Petunjuk berikutnya" membuka L2, lalu L3. |
 | `FeedbackBanner` | Hasil cek: ✓/! + 1 kalimat spesifik + tombol "Lihat pembahasan". |
-| `StoryReader` | Soal cerita per potongan kalimat; ketuk kata/angka untuk menandai; tombol "Pindahkan ke Diketahui". |
-| `KnownAskedTable` | Dua kolom: **Diketahui** / **Ditanya**, terisi dari tanda siswa, bisa dikoreksi. |
+| `StoryReader` | Soal cerita per potongan kalimat ("Bagian 2 dari 5", ‹ Sebelumnya / Bagian berikutnya); ketuk kata/angka (chip ≥ 48 px) untuk menandai; tombol "Pindahkan ke Diketahui". *(M5)* Chip pengecoh ditolak dengan umpan balik satu kalimat dan dicatat sebagai percobaan. |
+| `KnownAskedTable` | Dua kolom: **Diketahui** / **Ditanya**, terisi dari tanda siswa, bisa dikoreksi (tombol hapus per baris). *(M5)* Ditanya terisi setelah PG "keliling atau luas?" dijawab benar. Lanjut terbuka setelah semua info penting ada di Diketahui dan semua Ditanya benar; setelah itu tabel terkunci. |
 | `FormulaCard` | Kartu lipat "Ingat rumus" (ikon buku) — selalu bisa dibuka di fase Latih. |
 | `LeppinkItem` | Pernyataan + 11 tombol angka 0–10 dalam 2 baris (0–5, 6–10); bukan *slider* (slider tidak presisi di HP). |
 | `PrimaryButton` | Satu tombol utama per layar. Tombol sekunder berupa teks. |
@@ -236,6 +236,9 @@ Nama panggilan **hanya disimpan di HP itu** (`localStorage`) untuk sapaan, tidak
 - *(M4)* Opsi `lockHeight`: seret hanya mendatar, tinggi tetap. Dipakai di P2 Kenali 3 ("geser C → tinggi tetap, kaki berubah").
 - *(M4)* **Label tidak pernah terpotong.** Semua label digeser ke dalam gambar berdasarkan perkiraan lebar teks (`labelFit.js`). Bila label kaki tidak muat di sisi luar kaki (mis. a = 16, b = 14, t = 6, atau gambar statis selebar layar), kedua label kaki pindah ke ¼ tinggi dari alas, dan label t pindah ke ¾ tinggi agar tidak bertumpuk.
 - *(M4)* Ketuk unsur (`identify`): ketukan memilih segmen terdekat dalam radius 24 px (target 48 px), jadi garis tinggi dan kaki yang berdekatan tetap bisa dibedakan. Unsur terpilih ditandai garis tebal biru tua. Pada trapesium siku-siku, "tinggi" = sisi AD.
+- *(M5)* **Label tersembunyi** (`figure.hideLabels`): unsur yang sedang dicari tampil dengan label `t = ?` (atau `s = ?`), garisnya tetap terlihat. Dipakai saat tinggi/sisi tegak harus dihitung dengan Pythagoras.
+- *(M5)* **Segitiga siku-siku** (`shape: 'triangle'`, penyegaran Pythagoras P4): gambar statis. Sisi tegak t oranye putus-putus, sisi tegak x garis gelap, sisi miring s abu (ditebalkan dengan lapisan `legs`), simbol siku-siku dengan `rightAngle`.
+- *(M5)* Ketuk unsur `ask: 'hypotenuse'`: "ketuk sisi miring segitiga di tepi"; jawabannya kaki AD (`s1`).
 - `layers` yang dapat diaktifkan per langkah: `grid`, `parallel`, `height`, `legs`, `area`, `perimeter`, `labels`, `rightAngle`, `decompose` (pecah jadi persegi panjang + 2 segitiga), `doubleRotate` (2 trapesium → jajargenjang).
 - Animasi (`decompose`, `doubleRotate`) berjalan **hanya setelah tombol ditekan**, durasi ≤ 1,2 detik, dan bisa diulang. Hormati `prefers-reduced-motion` (langsung tampil tanpa animasi).
 - Gunakan **Pointer Events** + `touch-action: none` pada SVG agar halaman tidak ikut menggulir saat menyeret.

@@ -1,7 +1,7 @@
 // Memeriksa jawaban per tipe langkah. Semua hitungan tetap di geometry.js:
 // file ini hanya menghubungkan isi konten (problem, template) ke checkAnswer/diagnose.
 import { parseNumber } from './answer.js'
-import { checkAnswer, diagnose } from './geometry.js'
+import { checkAnswer, diagnose, solveProblem } from './geometry.js'
 
 const answerText = (raw, unit) => `${String(raw).trim()}${unit ? ` ${unit}` : ''}`
 
@@ -32,7 +32,15 @@ export function templateKeys(template) {
 }
 
 /**
- * Langkah memudar: kotak ▢ dicek dulu (nilainya = problem[kunci]);
+ * Nilai kotak {kunci} pada templat: dihitung geometry.js dari `problem`
+ * (a, b, p, l, s1, s2, t, x, …), jadi x dan t yang dicari pun bisa dikosongkan.
+ */
+export function templateValue(step, key) {
+  return solveProblem(step.problem)[key]
+}
+
+/**
+ * Langkah memudar: kotak ▢ dicek dulu (nilainya = templateValue);
  * bila ada yang salah/kosong → E_KOTAK, bila benar → hasil akhir didiagnosis.
  */
 export function checkFaded(step, blanks, raw, unit) {
@@ -40,7 +48,7 @@ export function checkFaded(step, blanks, raw, unit) {
   const filled = keys.map((k) => `${k}=${(blanks[k] ?? '').trim()}`).join(', ')
   const blanksOk = keys.every((k) => {
     const v = parseNumber(blanks[k])
-    return v !== null && checkAnswer(v, '', { value: step.problem[k], unit: '' }).valueOk
+    return v !== null && checkAnswer(v, '', { value: templateValue(step, k), unit: '' }).valueOk
   })
   if (!blanksOk) return { correct: false, errorCode: 'E_KOTAK', answer: `${filled}; ${answerText(raw ?? '', unit)}` }
   const result = checkSolve(step, raw, unit)
@@ -52,6 +60,7 @@ const LEGS = ['s1', 's2']
 
 /**
  * Ketuk unsur. `item.answer` = kunci unsur yang benar (urutan bebas).
+ * `ask`: parallel, height, atau hypotenuse (sisi miring segitiga di tepi, P4).
  * Kaki dipilih saat ditanya tinggi → E_KAKI_SBG_TINGGI; selain itu E_LAIN.
  */
 export function checkIdentify(item, selection) {

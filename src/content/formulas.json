@@ -2,5 +2,8 @@
   { "fromMeeting": 1, "name": "Keliling persegi panjang", "formula": "K = 2 × (p + l)" },
   { "fromMeeting": 1, "name": "Luas persegi panjang", "formula": "L = p × l" },
   { "fromMeeting": 2, "name": "Keliling trapesium", "formula": "K = a + b + s₁ + s₂ (jumlah keempat sisi)" },
-  { "fromMeeting": 3, "name": "Luas trapesium", "formula": "L = ½ × (a + b) × t" }
+  { "fromMeeting": 3, "name": "Luas trapesium", "formula": "L = ½ × (a + b) × t" },
+  { "fromMeeting": 4, "name": "Selisih x (sama kaki)", "formula": "x = (a − b) ÷ 2" },
+  { "fromMeeting": 4, "name": "Selisih x (siku-siku)", "formula": "x = a − b" },
+  { "fromMeeting": 4, "name": "Tinggi dari kaki", "formula": "t = √(s² − x²)" }
 ]

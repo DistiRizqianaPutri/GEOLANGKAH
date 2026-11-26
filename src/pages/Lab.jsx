@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import FigureCanvas from '../components/figure/FigureCanvas.jsx'
-import { formatMeasure, rectMeasures, trapezoidFromSides, trapezoidMeasures } from '../lib/geometry.js'
+import { formatMeasure, rectMeasures, rightTriangleMeasures, trapezoidFromSides, trapezoidMeasures } from '../lib/geometry.js'
 
 // Halaman uji gambar (M3) — HANYA mode pengembangan, tidak ikut build produksi.
 // Angka preset dari KONTEN.md §2–5.
@@ -13,6 +13,8 @@ const PRESETS = [
   { name: 'Sama kaki 30/14/15 (P4, besar)', make: () => trapezoidFromSides({ kind: 'isosceles', a: 30, b: 14, t: 15 }) },
   { name: 'Siku-siku 20/12/15 (P4)', make: () => trapezoidFromSides({ kind: 'right', a: 20, b: 12, t: 15 }) },
   { name: 'Sama kaki 10/6/4 (kaki ≈)', make: () => trapezoidFromSides({ kind: 'isosceles', a: 10, b: 6, t: 4 }) },
+  { name: 'Segitiga siku-siku 3-4-5 (P4)', make: () => ({ shape: 'triangle', x: 3, t: 4 }) },
+  { name: 'Siku-siku 9/5/3 kolam (⑤)', make: () => trapezoidFromSides({ kind: 'right', a: 9, b: 5, t: 3 }) },
 ]
 
 const LAYERS = ['grid', 'parallel', 'height', 'rightAngle', 'legs', 'labels', 'area', 'perimeter', 'decompose', 'doubleRotate']
@@ -32,6 +34,7 @@ export default function Lab() {
   const [run, setRun] = useState({ perimeter: 0, area: 0, decompose: 0, doubleRotate: 0 })
   const [lockHeight, setLockHeight] = useState(false)
   const [drags, setDrags] = useState(0)
+  const [hideHeight, setHideHeight] = useState(false)
 
   const choosePreset = (i) => {
     setPreset(i)
@@ -49,10 +52,13 @@ export default function Lab() {
   }
 
   const isRect = shape.shape === 'rect'
-  const m = isRect ? rectMeasures(shape) : trapezoidMeasures(shape)
+  const isTriangle = shape.shape === 'triangle'
+  const m = isRect ? rectMeasures(shape) : isTriangle ? rightTriangleMeasures(shape) : trapezoidMeasures(shape)
   const readout = isRect
     ? [['p', m.p], ['l', m.l], ['K', m.perimeter], ['L', m.area, '²']]
-    : [['a', m.a], ['b', m.b], ['t', m.t], ['s₁ (AD)', m.s1], ['s₂ (BC)', m.s2], ['x₁', m.x1], ['x₂', m.x2], ['K', m.perimeter], ['L', m.area, '²']]
+    : isTriangle
+      ? [['x', m.x], ['t', m.t], ['s (sisi miring)', m.s]]
+      : [['a', m.a], ['b', m.b], ['t', m.t], ['s₁ (AD)', m.s1], ['s₂ (BC)', m.s2], ['x₁', m.x1], ['x₂', m.x2], ['K', m.perimeter], ['L', m.area, '²']]
 
   return (
     <main className="mx-auto max-w-md space-y-4 p-4">
@@ -63,8 +69,9 @@ export default function Lab() {
           shape={shape}
           layers={layers}
           unit={unit}
-          draggable={draggable}
+          draggable={draggable && !isTriangle}
           lockHeight={lockHeight}
+          hideLabels={hideHeight ? ['t', 's1'] : []}
           onChange={handleChange}
           run={run}
           counting={isRect && run.area > 0 ? ['area'] : []}
@@ -123,6 +130,10 @@ export default function Lab() {
         <label className="flex min-h-12 items-center gap-3">
           <input type="checkbox" className="size-6" checked={lockHeight} onChange={(e) => setLockHeight(e.target.checked)} />
           Tinggi terkunci (lockHeight)
+        </label>
+        <label className="flex min-h-12 items-center gap-3">
+          <input type="checkbox" className="size-6" checked={hideHeight} onChange={(e) => setHideHeight(e.target.checked)} />
+          Sembunyikan t dan s₁ (hideLabels → "= ?")
         </label>
         <div className="flex min-h-12 items-center gap-3">
           <span className="w-20 text-text-muted">Satuan</span>

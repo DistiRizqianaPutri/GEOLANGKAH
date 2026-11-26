@@ -1,6 +1,6 @@
 // Penempatan label ukuran agar tidak pernah terpotong di tepi gambar (perbaikan M3).
 // Murni: menerima toPx & lebar viewBox, tidak menyentuh DOM.
-import { formatLabel } from '../../lib/geometry.js'
+import { measureText } from '../../lib/figureSpec.js'
 
 const FONT_PX = 15 // DESIGN.md §2.3: angka di gambar 15 px tebal
 const CHAR_EM = 0.62 // perkiraan lebar rata-rata huruf Nunito 800 (sedikit dilebihkan)
@@ -40,14 +40,14 @@ const LEG_DX = 10
  * (`cramped`), kedua label turun ke ¼ tinggi kaki dari alas; label t lalu
  * dipasang di ¾ tinggi (HeightLayer) agar tidak bertumpuk.
  */
-export function legLabelLayout(m, toPx, unit, viewWidth) {
+export function legLabelLayout(m, toPx, unit, viewWidth, hidden = []) {
   const { A, B, C, D } = m.points
   const legs = [
     { key: 's1', from: toPx(A), to: toPx(D), value: m.s1, dx: -LEG_DX, anchor: 'end' },
     { key: 's2', from: toPx(B), to: toPx(C), value: m.s2, dx: LEG_DX, anchor: 'start' },
   ]
   const at = (leg, f) => [leg.from[0] + (leg.to[0] - leg.from[0]) * f + leg.dx, leg.from[1] + (leg.to[1] - leg.from[1]) * f]
-  const texts = legs.map((leg) => formatLabel('s', leg.value, unit))
+  const texts = legs.map((leg) => measureText('s', leg.value, unit, hidden, leg.key))
   const cramped = legs.some((leg, i) => !labelFits(at(leg, 0.5)[0], leg.anchor, estimateLabelWidth(texts[i]), viewWidth))
   const f = cramped ? 0.25 : 0.5
   return {

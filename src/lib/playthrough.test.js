@@ -1,10 +1,11 @@
-// "Cek selesai" M4 di tingkat logika: Pertemuan 1 & 2 dimainkan dari awal sampai akhir
+// "Cek selesai" M4–M5 di tingkat logika: Pertemuan 1–5 dimainkan dari awal sampai akhir
 // memakai konten asli, reducer, dan pemeriksa jawaban yang sama dengan UI.
 import { describe, expect, it } from 'vitest'
 import MEETINGS from '../content/meetings.js'
-import { checkChoice, checkFaded, checkIdentify, checkSolve, templateKeys } from './checkStep.js'
+import { checkChoice, checkFaded, checkIdentify, checkSolve, templateKeys, templateValue } from './checkStep.js'
 import { canOpenHint, shouldOfferHint } from './hintRules.js'
 import { canAdvance, challengeSummary, createStepReducer, flattenSteps, initialState } from './stepEngine.js'
+import { askedKey, knownChips, moveToKnown, rejectResult, storyComplete, storyResult } from './story.js'
 
 const decimal = (v) => String(v).replace('.', ',')
 const correctIndex = (q) => q.options.findIndex((o) => o.correct)
@@ -13,9 +14,10 @@ const correctIndex = (q) => q.options.findIndex((o) => o.correct)
 function rightAnswer(step) {
   if (step.type === 'identify' || step.task === 'identify') return checkIdentify(step, step.answer)
   if (step.type === 'faded') {
-    const blanks = Object.fromEntries(templateKeys(step.template).map((k) => [k, decimal(step.problem[k])]))
+    const blanks = Object.fromEntries(templateKeys(step.template).map((k) => [k, decimal(templateValue(step, k))]))
     return checkFaded(step, blanks, decimal(step.answer.value), step.answer.unit)
   }
+  if (step.type === 'story') return storyResult(step, knownChips(step).map((c) => c.id))
   if (step.problem) return checkSolve(step, decimal(step.answer.value), step.answer.unit)
   return checkChoice(step.question, correctIndex(step.question))
 }
@@ -33,6 +35,9 @@ function play(n, seed, onStep = () => []) {
     if (step.type === 'challenge' && step.question) {
       s = reduce(s, attempt(`${step.id}#pilih`, checkChoice(step.question, correctIndex(step.question))))
     }
+    if (step.type === 'story') {
+      step.asked.forEach((a, i) => (s = reduce(s, attempt(askedKey(step, i), checkChoice(a.question, correctIndex(a.question))))))
+    }
     if (!canAdvance(step, s.records[step.id])) {
       const r = rightAnswer(step)
       expect(r.correct, step.id).toBe(true)
@@ -44,7 +49,7 @@ function play(n, seed, onStep = () => []) {
   return { steps, s }
 }
 
-describe.each([1, 2])('Pertemuan %i dimainkan sampai Hasil Pos', (n) => {
+describe.each([1, 2, 3, 4, 5])('Pertemuan %i dimainkan sampai Hasil Pos', (n) => {
   it.each(['T01', 'S01', 'S02'])('kode %s: selesai, Tantangan 3 dari 3, petunjuk 0', (code) => {
     const { steps, s } = play(n, `${code}-m${n}`)
     expect(s.finished).toBe(true)
@@ -115,5 +120,83 @@ describe('jalur salah dengan konten asli', () => {
     s = reduce(s, { type: 'BACK' })
     s = reduce(s, attempt(step.id, checkSolve(step, '1', 'cm')))
     expect(s.records[step.id]).toMatchObject({ attempts: 1, is_correct: true })
+  })
+})
+
+describe('jalur salah P3–P5 dengan konten asli', () => {
+  const steps = (n) => flattenSteps(MEETINGS[n], `T01-m${n}`)
+  const byId = (n, id) => steps(n).find((s) => s.id === id)
+
+  it('P3: lupa ½ → E_LUPA_SETENGAH; kaki sebagai tinggi (160) → E_KAKI_SBG_TINGGI', () => {
+    expect(checkSolve(byId(3, 'm3-tantangan-01'), '100', 'cm²').errorCode).toBe('E_LUPA_SETENGAH')
+    expect(checkSolve(byId(3, 'm3-latih-04'), '160', 'cm²').errorCode).toBe('E_KAKI_SBG_TINGGI')
+  })
+
+  it('P3 memudar: kotak b salah → E_KOTAK; benar → lanjut ke hasil', () => {
+    const step = byId(3, 'm3-latih-02')
+    expect(checkFaded(step, { b: '10' }, '32', 'cm²').errorCode).toBe('E_KOTAK')
+    expect(checkFaded(step, { b: '6' }, '32', 'cm²').correct).toBe(true)
+  })
+
+  it('P4 memudar: kotak x dihitung geometry (6); x tidak dibagi (12) → E_KOTAK', () => {
+    const step = byId(4, 'm4-latih-02')
+    expect(templateValue(step, 'x')).toBe(6)
+    expect(checkFaded(step, { x: '12' }, '8', 'cm').errorCode).toBe('E_KOTAK')
+    expect(checkFaded(step, { x: '6' }, '8', 'cm').correct).toBe(true)
+  })
+
+  it('P4 memudar 2: kotak x dan t dari geometry (5 dan 12)', () => {
+    const step = byId(4, 'm4-latih-04')
+    expect([templateValue(step, 'x'), templateValue(step, 't')]).toEqual([5, 12])
+    expect(checkFaded(step, { x: '5', t: '12' }, '114', 'cm²').correct).toBe(true)
+  })
+
+  it('P4: s² + x² → E_PYTHA_TAMBAH; x tidak dibagi → E_X_TIDAK_DIBAGI; t ≥ s → E_TIDAK_WAJAR', () => {
+    const step = byId(4, 'm4-tantangan-01')
+    expect(checkSolve(step, String(Math.sqrt(169 + 25)), 'cm').errorCode).toBe('E_PYTHA_TAMBAH')
+    expect(checkSolve(step, '8,3', 'cm').errorCode).toBe('E_X_TIDAK_DIBAGI')
+    expect(checkSolve(step, '14', 'cm').errorCode).toBe('E_TIDAK_WAJAR')
+  })
+
+  it('P4: ketuk tinggi saat ditanya sisi miring → E_LAIN; sisi AD → benar', () => {
+    const step = byId(4, 'm4-kenali-05')
+    expect(checkIdentify(step, ['t']).errorCode).toBe('E_LAIN')
+    expect(checkIdentify(step, ['s1']).correct).toBe(true)
+  })
+
+  it('P5 pupuk: satuan m² → E_SATUAN; memakai keliling (6,4) → E_KL_TERTUKAR', () => {
+    const step = byId(5, 'm5-bangun-04')
+    expect(checkSolve(step, '24', 'm²').errorCode).toBe('E_SATUAN')
+    expect(checkSolve(step, '6,4', 'kg').errorCode).toBe('E_KL_TERTUKAR')
+  })
+
+  it('P5 biaya: belum dikali (330) → E_LAIN; benar 4950000 Rp', () => {
+    const step = byId(5, 'm5-latih-03')
+    expect(checkSolve(step, '330', 'Rp').errorCode).toBe('E_LAIN')
+    expect(checkSolve(step, '4950000', 'Rp').correct).toBe(true)
+  })
+
+  it('P5 cerita: pengecoh ditolak & dicatat; Lanjut baru terbuka setelah lengkap', () => {
+    const list = steps(5)
+    const step = list.find((s) => s.id === 'm5-bangun-01')
+    const reduce = createStepReducer(list)
+    let s = { ...initialState(), index: list.indexOf(step) }
+
+    const r = moveToKnown(step, [], ['nama', 'a', 'b'])
+    expect(r.rejected.map((c) => c.id)).toEqual(['nama'])
+    s = reduce(s, attempt(step.id, rejectResult(r.rejected[0])))
+    expect(s.records[step.id]).toMatchObject({ attempts: 1, is_correct: false, error_code: 'E_LAIN' })
+    expect(canAdvance(step, s.records[step.id])).toBe(false)
+
+    const all = moveToKnown(step, r.marked, ['bentuk', 'tegak', 'miring', 'pupuk']).marked
+    expect(storyComplete(step, all, s.records)).toBe(false) // Ditanya belum dijawab
+    s = reduce(s, attempt(askedKey(step, 0), checkChoice(step.asked[0].question, 1))) // salah: luas
+    s = reduce(s, attempt(askedKey(step, 0), checkChoice(step.asked[0].question, 0)))
+    s = reduce(s, attempt(askedKey(step, 1), checkChoice(step.asked[1].question, 1)))
+    expect(storyComplete(step, all, s.records)).toBe(true)
+    s = reduce(s, attempt(step.id, storyResult(step, all)))
+    expect(s.records[step.id]).toMatchObject({ attempts: 2, is_correct: true, first_error_code: 'E_LAIN', done: true })
+    expect(s.records[askedKey(step, 0)]).toMatchObject({ attempts: 2, first_error_code: 'E_LAIN' })
+    expect(canAdvance(step, s.records[step.id])).toBe(true)
   })
 })

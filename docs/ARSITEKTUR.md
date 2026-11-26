@@ -101,6 +101,13 @@ formatLabel(name, v, unit)       // "s = 5 cm" atau "s ≈ 6,1 cm" (M4)
 dragTopVertex(..., { lockHeight }) // seret hanya mendatar (M4)
 perimeterTraceCount(K, progress) // penghitung "Telusuri tepi" 0 → K (M4)
 rectFillProgress({p, l}, progress) // "Isi petak" per baris → { rows, count } (M4)
+
+// M5
+solveProblem(problem)            // semua besaran soal (a, b, t, x, s1, s2, p, l, perimeter, area, …)
+                                 // + answer (nilai yang ditanya, sesudah convert) + unit jawaban
+convertValue(v, convert)         // satuan turunan soal cerita: { op:'divide'|'multiply', by, unit }
+rightTriangleMeasures({ x, t })  // segitiga siku-siku penyegaran Pythagoras → { x, t, s, points }
+formatAnswer(v, unit)            // "52 cm²", "24 kg", "Rp4.950.000"
 ```
 
 **Modul murni lain (M4, semuanya dites Vitest):**
@@ -110,9 +117,10 @@ rectFillProgress({p, l}, progress) // "Isi petak" per baris → { rows, count } 
 | `lib/answer.js` | `parseNumber` (koma/titik desimal) |
 | `lib/random.js` | `seededShuffle(list, seed)`: seed = kode siswa + pertemuan |
 | `lib/hintRules.js` | `canOpenHint`, `shouldOfferHint` (KONTEN §7) |
-| `lib/checkStep.js` | `checkSolve`, `checkFaded` (`E_KOTAK`), `checkIdentify`, `checkChoice`, `parseTemplate` |
-| `lib/feedback.js` | `feedbackText(code, {ask, unit})` dari `content/feedback.json` |
-| `lib/figureSpec.js` | `figureModel(figure)`: `figure` di JSON → model FigureCanvas |
+| `lib/checkStep.js` | `checkSolve`, `checkFaded` (`E_KOTAK`), `checkIdentify` (juga `ask: 'hypotenuse'`, M5), `checkChoice`, `parseTemplate`, `templateValue` (nilai kotak dari `solveProblem`, M5) |
+| `lib/feedback.js` | `feedbackText(code, {ask, unit})` dari `content/feedback.json` (varian `convert` untuk kg/Rp, M5) |
+| `lib/figureSpec.js` | `figureModel(figure)`: `figure` di JSON → model FigureCanvas (termasuk `triangle`, M5); `measureText` (label atau `t = ?`) |
+| `lib/story.js` *(M5)* | mode baca soal cerita: `splitSegment`, `moveToKnown`, `rejectResult`, `missingKnown`, `storyComplete`, `storyResult`, `askedKey` |
 | `lib/stepEngine.js` | `flattenSteps`, reducer (`ATTEMPT`, `OPEN_HINT`, `NEXT`, `BACK`, `RESET_FIGURE`), `canAdvance`, `challengeSummary`, simpan/muat progres |
 | `components/figure/labelFit.js`, `hitTest.js` | penempatan label di dalam gambar; segmen terdekat untuk ketuk unsur |
 
@@ -134,10 +142,13 @@ Komponen `src/components/figure/` (`FigureCanvas`, `DragHandle`, `layers/*`) han
   ask: 'perimeter' | 'area' | 'height' | 'offset',
   unit: 'cm' | 'm',                          // satuan luas otomatis: unit + '²'
   p, l,                                      // persegi panjang
-  a, b, t, s1, s2 }                          // trapesium; siku-siku: s1 = sisi tegak, s2 = kaki miring
+  a, b, t, s1, s2,                           // trapesium; siku-siku: s1 = sisi tegak, s2 = kaki miring
+  convert }                                  // M5, soal cerita: { op:'divide'|'multiply', by, unit:'kg'|'Rp' }
 ```
 
 Data yang tidak tertulis di soal dilengkapi otomatis jika bisa diturunkan. Contoh: t dari kaki (sama kaki/siku-siku), kaki miring dari t, atau sisi tegak = t. Pola yang datanya tidak lengkap dilewati.
+
+*(M5)* Dengan `convert`, kunci = hasil `ask` lalu dikonversi (pupuk = luas ÷ 10 kg, biaya = luas × 15.000 Rp). Pola cara salah ikut dikonversi, mis. memakai keliling → `E_KL_TERTUKAR`, lupa ½ → `E_LUPA_SETENGAH`. Angka tepat tetapi satuan salah → `E_SATUAN` (teks varian `convert`). Hasil yang belum dikonversi → `E_LAIN`.
 
 **Urutan prioritas `diagnose()`** (diputuskan 26-11-2026, "spesifik dulu"):
 1. Angka dan satuan benar → `null`
@@ -150,7 +161,7 @@ Data yang tidak tertulis di soal dilengkapi otomatis jika bisa diturunkan. Conto
 4. `E_TIDAK_WAJAR`: hasil ≤ 0, atau tinggi ≥ kaki miring
 5. `E_LAIN`
 
-Tes (`geometry.test.js`): semua kunci jawaban di `KONTEN.md`, setiap kode kesalahan di §7, kunci dan pengecoh Tantangan Pos §10, dan kasus tidak wajar (s ≤ x).
+Tes (`geometry.test.js`): semua kunci jawaban di `KONTEN.md`, setiap kode kesalahan di §7, kunci dan pengecoh Tantangan Pos §10, dan kasus tidak wajar (s ≤ x). *(M5)* `content/content.test.js` membandingkan setiap `answer` di `meeting-*.json` langsung dengan `solveProblem()`, termasuk nilai kotak memudar, angka gambar, akhir pembahasan L3, dan info penting soal cerita.
 
 ## 4. Skema database (draf `supabase/migrations/0001_init.sql`)
 

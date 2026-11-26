@@ -1,15 +1,16 @@
 // Tes konten pertemuan: kunci jawaban = geometry.js, aturan teks DESIGN.md §9, format KONTEN.md §9.
 import { describe, expect, it } from 'vitest'
-import { templateKeys } from '../lib/checkStep.js'
+import { templateKeys, templateValue } from '../lib/checkStep.js'
 import { figureModel } from '../lib/figureSpec.js'
-import { diagnose, trapezoidMeasures } from '../lib/geometry.js'
+import { diagnose, formatAnswer, solveProblem, trapezoidMeasures } from '../lib/geometry.js'
 import { flattenSteps } from '../lib/stepEngine.js'
+import { allChips, knownChips } from '../lib/story.js'
 import feedback from './feedback.json'
 import formulas from './formulas.json'
 import MEETINGS from './meetings.js'
 import stations from './stations.json'
 
-const TYPES = ['explain', 'explore', 'identify', 'faded', 'solve', 'why', 'challenge']
+const TYPES = ['explain', 'explore', 'identify', 'faded', 'solve', 'why', 'challenge', 'story']
 const LAYERS = ['grid', 'parallel', 'height', 'rightAngle', 'legs', 'labels', 'area', 'perimeter', 'decompose', 'doubleRotate']
 const TARGETS = ['a', 'b', 's1', 's2', 't']
 const ANSWERED = ['faded', 'solve']
@@ -65,8 +66,11 @@ describe.each(Object.entries(MEETINGS))('Pertemuan %s', (n, meeting) => {
     for (const s of steps) {
       const variantText = s.variants ? [s.variants.map((v) => v.text).sort((x, y) => y.length - x.length)[0]] : []
       const text = [...(s.text ?? []), ...variantText].join(' ')
-      expect(sentences(text).length, s.id).toBeLessThanOrEqual(3)
-      for (const sentence of sentences(text)) expect(words(sentence).length, `${s.id}: ${sentence}`).toBeLessThanOrEqual(15)
+      // Soal cerita: setiap potongan dibaca sendiri-sendiri (mode baca ringkas).
+      for (const block of [text, ...(s.segments ?? []).map((seg) => seg.text)]) {
+        expect(sentences(block).length, s.id).toBeLessThanOrEqual(3)
+        for (const sentence of sentences(block)) expect(words(sentence).length, `${s.id}: ${sentence}`).toBeLessThanOrEqual(15)
+      }
     }
   })
 
@@ -82,39 +86,98 @@ describe.each(Object.entries(MEETINGS))('Pertemuan %s', (n, meeting) => {
     }
   })
 
-  it('setiap soal hitung: kunci = geometry.js (diagnose → null), satuan tersedia', () => {
-    for (const s of steps.filter(isSolve)) {
+  it('label tersembunyi (hideLabels) hanya untuk unsur yang tampil di gambar', () => {
+    for (const s of steps.filter((x) => x.figure?.hideLabels)) {
+      const { shape, layers, hideLabels } = s.figure
+      expect(layers, s.id).toContain('labels')
+      for (const key of hideLabels) {
+        if (shape === 'triangle') expect(['x', 't', 's'], s.id).toContain(key)
+        else if (key === 't') expect(layers, s.id).toContain('height')
+        else if (key === 's1' || key === 's2') expect(layers, s.id).toContain('legs')
+        else expect(['a', 'b'], s.id).toContain(key)
+      }
+    }
+  })
+
+  it('setiap answer di JSON = hasil geometry.js (nilai dan satuan), satuan tersedia', () => {
+    const solved = steps.filter(isSolve)
+    expect(solved.length).toBeGreaterThan(0)
+    for (const s of solved) {
+      const key = solveProblem(s.problem)
+      expect(Number.isFinite(key.answer), s.id).toBe(true)
+      expect(s.answer.value, s.id).toBeCloseTo(key.answer, 9)
+      expect(s.answer.unit, s.id).toBe(key.unit)
       expect(diagnose(s.problem, s.answer.value, s.answer.unit), s.id).toBeNull()
       expect(s.units, s.id).toContain(s.answer.unit)
       expect(s.answerLabel, s.id).toBeTruthy()
     }
   })
 
-  it('angka gambar = angka soal (a, b, t, kaki)', () => {
+  it('angka gambar = angka soal yang dihitung geometry.js (a, b, t, kaki)', () => {
     for (const s of steps.filter((x) => isSolve(x) && x.figure)) {
       const { problem, figure } = s
+      const key = solveProblem(problem)
       if (problem.shape === 'rect') {
-        expect([figure.p, figure.l], s.id).toEqual([problem.p, problem.l])
+        expect([figure.p, figure.l], s.id).toEqual([key.p, key.l])
         continue
       }
+      expect(figure.kind, s.id).toBe(problem.kind)
       const m = trapezoidMeasures(figureModel(figure))
-      expect([m.a, m.b, m.t], s.id).toEqual([problem.a, problem.b, problem.t])
-      expect(m.s1, s.id).toBeCloseTo(problem.s1, 9)
-      expect(m.s2, s.id).toBeCloseTo(problem.s2, 9)
+      expect([m.a, m.b], s.id).toEqual([key.a, key.b])
+      expect(m.t, s.id).toBeCloseTo(key.t, 9)
+      expect(m.s1, s.id).toBeCloseTo(key.s1, 9)
+      expect(m.s2, s.id).toBeCloseTo(key.s2, 9)
     }
   })
 
-  it('templat memudar: setiap kotak punya nilai di problem', () => {
+  it('templat memudar: setiap kotak bernilai dari geometry.js', () => {
     for (const s of steps.filter((x) => x.type === 'faded')) {
       const keys = templateKeys(s.template)
       expect(keys.length, s.id).toBeGreaterThan(0)
-      for (const k of keys) expect(Number.isFinite(s.problem[k]), `${s.id}: ${k}`).toBe(true)
+      for (const k of keys) {
+        const v = templateValue(s, k)
+        expect(Number.isFinite(v), `${s.id}: ${k}`).toBe(true)
+        if (Number.isFinite(s.problem[k])) expect(v, `${s.id}: ${k}`).toBe(s.problem[k])
+      }
     }
   })
 
   it('petunjuk 3 tingkat di setiap soal', () => {
     for (const s of steps.filter((x) => isSolve(x) || isIdentify(x))) {
       expect(s.hints, s.id).toHaveLength(3)
+    }
+  })
+
+  it('pembahasan (L3) diakhiri kunci yang sama dengan answer', () => {
+    for (const s of steps.filter(isSolve)) {
+      expect(s.hints[2].endsWith(formatAnswer(s.answer.value, s.answer.unit)), `${s.id}: ${s.hints[2]}`).toBe(true)
+    }
+  })
+
+  it('soal cerita: chip ada di teks, info penting cocok dengan soal Hitung, ada pengecoh', () => {
+    for (const s of steps.filter((x) => x.type === 'story')) {
+      expect(s.stage, s.id).toBe('rumuskan')
+      const ids = allChips(s).map((c) => c.id)
+      expect(new Set(ids).size, s.id).toBe(ids.length)
+      for (const seg of s.segments) for (const c of seg.chips ?? []) expect(seg.text, `${s.id}: ${c.id}`).toContain(c.text)
+      expect(allChips(s).some((c) => !c.known && c.feedback), s.id).toBe(true)
+      expect(knownChips(s).length, s.id).toBeGreaterThan(0)
+      expect(s.asked.length, s.id).toBeGreaterThan(0)
+      for (const a of s.asked) expect(a.question.options.filter((o) => o.correct === true), s.id).toHaveLength(1)
+
+      const linked = steps.filter((x) => x.story === s.id)
+      expect(linked.length, s.id).toBeGreaterThan(0)
+      for (const x of linked) expect(x.stage, x.id).toBe('hitung')
+      for (const { known } of knownChips(s)) {
+        if (known.key === 'kind') {
+          for (const x of linked) expect(known.text, x.id).toBe(x.problem.kind === 'right' ? 'trapesium siku-siku' : 'trapesium sama kaki')
+        } else if (known.key === 'convert') {
+          expect(linked.some((x) => x.problem.convert?.by === known.value), `${s.id}: ${known.label}`).toBe(true)
+        } else {
+          for (const x of linked) expect(x.problem[known.key], `${x.id}: ${known.key}`).toBe(known.value)
+          for (const x of linked) expect(x.problem.unit, `${x.id}: ${known.key}`).toBe(known.unit)
+        }
+      }
     }
   })
 
@@ -130,7 +193,7 @@ describe.each(Object.entries(MEETINGS))('Pertemuan %s', (n, meeting) => {
 
   it('identifikasi: jawaban memakai unsur yang ada di gambar', () => {
     for (const s of steps.filter(isIdentify)) {
-      expect(['parallel', 'height']).toContain(s.ask)
+      expect(['parallel', 'height', 'hypotenuse']).toContain(s.ask)
       for (const k of s.answer) expect(TARGETS).toContain(k)
       if (s.answer.includes('t')) expect(s.figure.layers, s.id).toContain('height')
       if (s.answer.includes('t')) expect(s.figure.kind, s.id).not.toBe('right')
@@ -155,13 +218,30 @@ describe.each(Object.entries(MEETINGS))('Pertemuan %s', (n, meeting) => {
   })
 })
 
-describe('KONTEN §10 Tantangan ① dan ② (angka)', () => {
+describe('KONTEN §10 Tantangan Pos ①–⑤ (angka)', () => {
   const answers = (n) =>
     MEETINGS[n].phases
       .find((p) => p.phase === 'tantangan')
       .steps.map((s) => (s.task === 'identify' ? s.answer.join() : `${s.answer.value} ${s.answer.unit}`))
   it('①: 30 cm · 120 cm² · 48 m²', () => expect(answers(1)).toEqual(['30 cm', '120 cm²', '48 m²']))
   it('②: sisi tegak (AD) · 42 cm · 48 cm', () => expect(answers(2)).toEqual(['s1', '42 cm', '48 cm']))
+  it('③: 50 cm² · 112 cm² · 96 cm²', () => expect(answers(3)).toEqual(['50 cm²', '112 cm²', '96 cm²']))
+  it('④: 12 cm · 252 cm² · 144 cm²', () => expect(answers(4)).toEqual(['12 cm', '252 cm²', '144 cm²']))
+  it('⑤: 68 cm · 255 cm² · 22 m', () => expect(answers(5)).toEqual(['68 cm', '255 cm²', '22 m']))
+})
+
+describe('KONTEN §4–6 kunci Latih & soal cerita (angka)', () => {
+  const keys = (n) =>
+    MEETINGS[n].phases
+      .flatMap((p) => p.steps)
+      .filter(isSolve)
+      .filter((s) => s.type !== 'challenge')
+      .map((s) => formatAnswer(s.answer.value, s.answer.unit))
+  it('P3: 32 · 120 · 128 · 114', () => expect(keys(3)).toEqual(['32 cm²', '120 cm²', '128 cm²', '114 cm²']))
+  it('P4: t 8 · L 128 · L 114 · L 330 · K 78 · L 240 · K 64', () =>
+    expect(keys(4)).toEqual(['8 cm', '128 cm²', '114 cm²', '330 cm²', '78 cm', '240 cm²', '64 cm']))
+  it('P5: 64 m · 240 m² · 24 kg · 330 m² · Rp4.950.000 · 52 cm · 128 cm²', () =>
+    expect(keys(5)).toEqual(['64 m', '240 m²', '24 kg', '330 m²', 'Rp4.950.000', '52 cm', '128 cm²']))
 })
 
 describe('stations & formulas', () => {

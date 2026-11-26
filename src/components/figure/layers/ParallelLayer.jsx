@@ -1,4 +1,4 @@
-import { formatLabel } from '../../../lib/geometry.js'
+import { measureText } from '../../../lib/figureSpec.js'
 import MeasureLabel from './MeasureLabel.jsx'
 
 // Tanda panah sejajar ">" di tengah sisi.
@@ -7,11 +7,11 @@ function Chevron({ x, y }) {
 }
 
 /** Sisi sejajar a (alas AB) dan b (sisi atas DC): biru, tebal 4 px, tanda ">". */
-export default function ParallelLayer({ m, toPx, unit, labels }) {
+export default function ParallelLayer({ m, toPx, unit, labels, hidden }) {
   const { A, B, C, D } = m.points
   const sides = [
-    { key: 'a', from: toPx(A), to: toPx(B), text: formatLabel('a', m.a, unit), dy: 22 },
-    { key: 'b', from: toPx(D), to: toPx(C), text: formatLabel('b', m.b, unit), dy: -22 },
+    { key: 'a', from: toPx(A), to: toPx(B), text: measureText('a', m.a, unit, hidden), dy: 22 },
+    { key: 'b', from: toPx(D), to: toPx(C), text: measureText('b', m.b, unit, hidden), dy: -22 },
   ]
   return (
     <g>

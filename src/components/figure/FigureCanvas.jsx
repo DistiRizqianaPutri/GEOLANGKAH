@@ -5,8 +5,10 @@ import {
   dragTopVertex,
   formatLabel,
   rectMeasures,
+  rightTriangleMeasures,
   trapezoidMeasures,
 } from '../../lib/geometry.js'
+import { measureText } from '../../lib/figureSpec.js'
 import DragHandle from './DragHandle.jsx'
 import FigureViewContext from './FigureViewContext.js'
 import { nearestSegment } from './hitTest.js'
@@ -24,6 +26,7 @@ import PerimeterLayer from './layers/PerimeterLayer.jsx'
 import RectSideLabels from './layers/RectSideLabels.jsx'
 import RightAngleLayer from './layers/RightAngleLayer.jsx'
 import TapTargetsLayer from './layers/TapTargetsLayer.jsx'
+import TriangleLayer from './layers/TriangleLayer.jsx'
 import VertexLabels from './layers/VertexLabels.jsx'
 
 const KIND_NAME = {
@@ -42,6 +45,7 @@ const SEGMENT_NAME = {
 
 /** Daerah gambar (satuan petak). Saat bisa digeser, ukurannya tetap agar gambar tidak melompat. */
 function figureBounds(shape, m, layers, draggable) {
+  if (shape.shape === 'triangle') return { minX: 0, maxX: shape.x, maxY: shape.t }
   if (shape.shape === 'rect') {
     return {
       minX: 0,
@@ -90,6 +94,7 @@ function tapSegments(shape, m, layers, toPx) {
  *        penghitung tombol animasi; animasi berjalan setiap kali angkanya bertambah
  * @param {string[]} props.counting   lapisan yang labelnya menghitung naik (mis. ['perimeter', 'area'])
  * @param {{selected:string[], onToggle:(key:string)=>void, disabled?:boolean}} props.selectable  ketuk unsur
+ * @param {string[]} props.hideLabels unsur yang sedang dicari; labelnya "t = ?" (a, b, t, s1, s2; segitiga: x, t, s)
  */
 export default function FigureCanvas({
   shape,
@@ -102,10 +107,21 @@ export default function FigureCanvas({
   run = {},
   counting = [],
   selectable,
+  hideLabels = [],
 }) {
+  const on = new Set(layers)
+  const hidden = new Set(hideLabels)
+  if (shape.shape === 'triangle') return <TriangleFigure shape={shape} on={on} unit={unit} hidden={hidden} />
+  return (
+    <ShapeFigure
+      {...{ shape, on, hidden, unit, areaUnit, draggable, lockHeight, onChange, run, counting, selectable }}
+    />
+  )
+}
+
+function ShapeFigure({ shape, on, hidden, unit, areaUnit, draggable, lockHeight, onChange, run, counting, selectable }) {
   const svgRef = useRef(null)
   const id = useId()
-  const on = new Set(layers)
   const isRect = shape.shape === 'rect'
   const m = isRect ? rectMeasures(shape) : trapezoidMeasures(shape)
   const bounds = figureBounds(shape, m, on, draggable)
@@ -121,9 +137,9 @@ export default function FigureCanvas({
   const title = isRect ? 'Persegi panjang' : KIND_NAME[shape.kind]
   const desc = isRect
     ? `${formatLabel('p', m.p, unit)}, ${formatLabel('l', m.l, unit)}`
-    : `${formatLabel('a', m.a, unit)}, ${formatLabel('b', m.b, unit)}, ${formatLabel('t', m.t, unit)}`
+    : `${measureText('a', m.a, unit, hidden)}, ${measureText('b', m.b, unit, hidden)}, ${measureText('t', m.t, unit, hidden)}`
 
-  const legLayout = !isRect && on.has('legs') && labels ? legLabelLayout(m, toPx, unit, width) : null
+  const legLayout = !isRect && on.has('legs') && labels ? legLabelLayout(m, toPx, unit, width, hidden) : null
 
   const handles = !draggable
     ? []
@@ -185,9 +201,9 @@ export default function FigureCanvas({
           <>
             {on.has('decompose') && <DecomposeLayer shape={shape} toPx={toPx} run={run.decompose ?? 0} />}
             {on.has('legs') && <LegsLayer m={m} toPx={toPx} labels={labels} legLabels={legLayout?.labels ?? []} />}
-            {on.has('parallel') && <ParallelLayer m={m} toPx={toPx} unit={unit} labels={labels} />}
+            {on.has('parallel') && <ParallelLayer m={m} toPx={toPx} unit={unit} labels={labels} hidden={hidden} />}
             {on.has('height') && (
-              <HeightLayer m={m} toPx={toPx} unit={unit} labels={labels} labelAt={legLayout?.cramped ? 0.75 : 0.5} />
+              <HeightLayer m={m} toPx={toPx} unit={unit} labels={labels} labelAt={legLayout?.cramped ? 0.75 : 0.5} hidden={hidden} />
             )}
             {on.has('rightAngle') && <RightAngleLayer m={m} toPx={toPx} />}
             {on.has('doubleRotate') && (
@@ -223,6 +239,43 @@ export default function FigureCanvas({
             />
           )
         })}
+      </svg>
+    </FigureViewContext.Provider>
+  )
+}
+
+/** Segitiga siku-siku (penyegaran Pythagoras, P4): gambar statis, tanpa seret/ketuk. */
+function TriangleFigure({ shape, on, unit, hidden }) {
+  const svgRef = useRef(null)
+  const id = useId()
+  const m = rightTriangleMeasures(shape)
+  const bounds = figureBounds(shape)
+  const { width, height, toPx } = useFigureScale(svgRef, bounds)
+  const texts = {
+    x: measureText('x', m.x, unit, hidden),
+    t: measureText('t', m.t, unit, hidden),
+    s: measureText('s', m.s, unit, hidden),
+  }
+  return (
+    <FigureViewContext.Provider value={{ width }}>
+      <svg
+        ref={svgRef}
+        viewBox={`0 0 ${width} ${height}`}
+        className="block aspect-[4/3] w-full select-none"
+        role="img"
+        aria-labelledby={`${id}t ${id}d`}
+      >
+        <title id={`${id}t`}>Segitiga siku-siku</title>
+        <desc id={`${id}d`}>{`Sisi tegak ${texts.x} dan ${texts.t}, sisi miring ${texts.s}`}</desc>
+        {on.has('grid') && <GridLayer bounds={bounds} toPx={toPx} />}
+        <TriangleLayer
+          m={m}
+          toPx={toPx}
+          labels={on.has('labels')}
+          texts={texts}
+          rightAngle={on.has('rightAngle')}
+          emphasis={on.has('legs')}
+        />
       </svg>
     </FigureViewContext.Provider>
   )

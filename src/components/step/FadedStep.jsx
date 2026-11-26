@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { parseNumber } from '../../lib/answer.js'
 import { checkFaded } from '../../lib/checkStep.js'
-import { formatMeasure } from '../../lib/geometry.js'
+import { formatAnswer } from '../../lib/geometry.js'
 import AnswerInput from '../answer/AnswerInput.jsx'
 import PrimaryButton from '../ui/PrimaryButton.jsx'
 import AnswerFeedback from './AnswerFeedback.jsx'
@@ -26,7 +26,7 @@ export default function FadedStep({ step, record, onAttempt, onHint }) {
   }
 
   return (
-    <StepCard title={step.title} text={step.text} figure={step.figure && <StepFigure figure={step.figure} />}>
+    <StepCard title={step.title} text={step.text} stage={step.stage} figure={step.figure && <StepFigure figure={step.figure} />}>
       {(!done || result) && (
         <>
           <FadedTemplate
@@ -38,7 +38,7 @@ export default function FadedStep({ step, record, onAttempt, onHint }) {
           <AnswerInput label={step.answerLabel} value={raw} onValue={setRaw} unit={unit} onUnit={setUnit} units={step.units} disabled={done} />
         </>
       )}
-      <AnswerFeedback step={step} record={record} result={result} revealText={`${formatMeasure(step.answer.value)} ${step.answer.unit}`} />
+      <AnswerFeedback step={step} record={record} result={result} revealText={formatAnswer(step.answer.value, step.answer.unit)} />
       <StepTools hints={step.hints} record={record} onHint={onHint} />
       {!done && (
         <PrimaryButton onClick={check} disabled={parseNumber(raw) === null}>

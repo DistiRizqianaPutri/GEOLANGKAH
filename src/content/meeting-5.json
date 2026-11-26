@@ -1,0 +1,476 @@
+{
+  "meeting": 5,
+  "title": "Soal cerita literasi matematis",
+  "summary": ["Rumuskan → Hitung → Tafsirkan", "Tepi berarti keliling, permukaan berarti luas"],
+  "phases": [
+    {
+      "phase": "kenali",
+      "steps": [
+        {
+          "id": "m5-kenali-01",
+          "type": "explain",
+          "title": "Tiga tahap soal cerita",
+          "text": [
+            "Rumuskan: baca, tandai info penting, isi Diketahui dan Ditanya.",
+            "Hitung: kerjakan langkah demi langkah.",
+            "Tafsirkan: cek lagi, apakah jawabannya masuk akal?"
+          ]
+        }
+      ]
+    },
+    {
+      "phase": "bangun",
+      "steps": [
+        {
+          "id": "m5-bangun-01",
+          "type": "story",
+          "stage": "rumuskan",
+          "title": "Soal 1: sawah",
+          "text": ["Baca per bagian.", "Ketuk info penting, lalu pindahkan ke Diketahui."],
+          "segments": [
+            {
+              "text": "Sawah Pak Darto berbentuk trapesium siku-siku.",
+              "chips": [
+                { "id": "nama", "text": "Pak Darto", "feedback": "Nama pemilik tidak dipakai untuk menghitung." },
+                { "id": "bentuk", "text": "trapesium siku-siku", "known": { "key": "kind", "label": "bentuk", "text": "trapesium siku-siku" } }
+              ]
+            },
+            {
+              "text": "Sisi yang sejajar panjangnya 20 m dan 12 m.",
+              "chips": [
+                { "id": "a", "text": "20 m", "known": { "key": "a", "label": "a", "value": 20, "unit": "m" } },
+                { "id": "b", "text": "12 m", "known": { "key": "b", "label": "b", "value": 12, "unit": "m" } }
+              ]
+            },
+            {
+              "text": "Sisi tegaknya 15 m dan sisi miringnya 17 m.",
+              "chips": [
+                { "id": "tegak", "text": "15 m", "known": { "key": "s1", "label": "sisi tegak", "value": 15, "unit": "m" } },
+                { "id": "miring", "text": "17 m", "known": { "key": "s2", "label": "sisi miring", "value": 17, "unit": "m" } }
+              ]
+            },
+            { "text": "(a) Pak Darto ingin memagari seluruh tepi sawah. Berapa meter pagar yang dibutuhkan?" },
+            {
+              "text": "(b) Setiap 10 m² sawah membutuhkan 1 kg pupuk. Berapa kg pupuk yang dibutuhkan?",
+              "chips": [
+                { "id": "pupuk", "text": "10 m²", "known": { "key": "convert", "label": "pupuk", "value": 10, "text": "1 kg tiap 10 m²" } }
+              ]
+            }
+          ],
+          "asked": [
+            {
+              "label": "Pagar",
+              "question": {
+                "prompt": "(a) Pagar: keliling atau luas?",
+                "options": [
+                  { "text": "Keliling", "correct": true, "feedback": "Tepat! Pagar mengelilingi tepi sawah." },
+                  { "text": "Luas", "correct": false, "feedback": "Belum tepat. Pagar hanya di tepi, tidak menutupi sawah." }
+                ]
+              }
+            },
+            {
+              "label": "Pupuk",
+              "question": {
+                "prompt": "(b) Pupuk: keliling atau luas?",
+                "options": [
+                  { "text": "Keliling", "correct": false, "feedback": "Belum tepat. Pupuk ditabur ke seluruh permukaan sawah." },
+                  { "text": "Luas", "correct": true, "feedback": "Tepat! Pupuk menutupi permukaan, jadi pakai luas." }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "m5-bangun-02",
+          "type": "faded",
+          "stage": "hitung",
+          "story": "m5-bangun-01",
+          "title": "(a) Panjang pagar",
+          "text": ["Pagar = keliling = jumlah keempat sisi."],
+          "figure": { "shape": "trapezoid", "kind": "right", "a": 20, "b": 12, "t": 15, "unit": "m", "layers": ["parallel", "legs", "rightAngle", "labels"] },
+          "template": "K = 20 + 12 + 15 + {s2}",
+          "answerLabel": "K",
+          "problem": { "shape": "trapezoid", "kind": "right", "ask": "perimeter", "unit": "m", "a": 20, "b": 12, "t": 15, "s1": 15, "s2": 17 },
+          "answer": { "value": 64, "unit": "m" },
+          "units": ["m", "m²"],
+          "hints": [
+            "Ada berapa sisi pada sawah ini?",
+            "Jumlahkan kedua sisi sejajar, sisi tegak, dan sisi miring.",
+            "K = 20 + 12 + 15 + 17 = 64 m"
+          ]
+        },
+        {
+          "id": "m5-bangun-03",
+          "type": "faded",
+          "stage": "hitung",
+          "story": "m5-bangun-01",
+          "title": "(b) Luas sawah",
+          "text": ["Pupuk menutupi permukaan, jadi hitung luas dulu."],
+          "figure": { "shape": "trapezoid", "kind": "right", "a": 20, "b": 12, "t": 15, "unit": "m", "layers": ["parallel", "legs", "rightAngle", "labels"] },
+          "template": "L = ½ × (20 + 12) × {t}",
+          "answerLabel": "L",
+          "problem": { "shape": "trapezoid", "kind": "right", "ask": "area", "unit": "m", "a": 20, "b": 12, "t": 15, "s1": 15, "s2": 17 },
+          "answer": { "value": 240, "unit": "m²" },
+          "units": ["m", "m²"],
+          "hints": [
+            "Sisi mana yang menjadi tinggi sawah ini?",
+            "Sisi tegak 15 m adalah tinggi. L = ½ × (a + b) × t.",
+            "L = ½ × (20 + 12) × 15 = ½ × 32 × 15 = 240 m²"
+          ]
+        },
+        {
+          "id": "m5-bangun-04",
+          "type": "solve",
+          "stage": "hitung",
+          "story": "m5-bangun-01",
+          "title": "(b) Banyak pupuk",
+          "text": ["Luas sawah 240 m².", "Setiap 10 m² butuh 1 kg pupuk."],
+          "answerLabel": "Pupuk",
+          "problem": {
+            "shape": "trapezoid",
+            "kind": "right",
+            "ask": "area",
+            "unit": "m",
+            "a": 20,
+            "b": 12,
+            "t": 15,
+            "s1": 15,
+            "s2": 17,
+            "convert": { "op": "divide", "by": 10, "unit": "kg" }
+          },
+          "answer": { "value": 24, "unit": "kg" },
+          "units": ["kg", "m²"],
+          "hints": [
+            "Ada berapa kelompok 10 m² dalam 240 m²?",
+            "Bagi luas sawah dengan 10.",
+            "Pupuk = 240 ÷ 10 = 24 kg"
+          ]
+        },
+        {
+          "id": "m5-bangun-05",
+          "type": "why",
+          "stage": "tafsirkan",
+          "title": "Cek jawabanmu",
+          "text": ["Pagar 64 m dan pupuk 24 kg."],
+          "question": {
+            "prompt": "Mengapa pagar memakai keliling, tetapi pupuk memakai luas?",
+            "options": [
+              { "text": "Pagar ada di tepi, pupuk menutupi permukaan", "correct": true, "feedback": "Tepat! Tepi berarti keliling, permukaan berarti luas." },
+              { "text": "Karena angka pagar lebih besar", "correct": false, "feedback": "Belum tepat. Pikirkan di mana pagar dan pupuk berada." },
+              { "text": "Karena pupuk diukur dengan kg", "correct": false, "feedback": "Belum tepat. Banyak pupuk dihitung dari luas permukaan." }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "phase": "latih",
+      "steps": [
+        {
+          "id": "m5-latih-01",
+          "type": "story",
+          "stage": "rumuskan",
+          "title": "Soal 2: taman",
+          "text": ["Baca per bagian.", "Ketuk info penting, lalu pindahkan ke Diketahui."],
+          "segments": [
+            {
+              "text": "Taman sekolah berbentuk trapesium sama kaki.",
+              "chips": [
+                { "id": "tempat", "text": "Taman sekolah", "feedback": "Tempatnya tidak dipakai untuk menghitung." },
+                { "id": "bentuk", "text": "trapesium sama kaki", "known": { "key": "kind", "label": "bentuk", "text": "trapesium sama kaki" } }
+              ]
+            },
+            {
+              "text": "Sisi sejajarnya 30 m dan 14 m.",
+              "chips": [
+                { "id": "a", "text": "30 m", "known": { "key": "a", "label": "a", "value": 30, "unit": "m" } },
+                { "id": "b", "text": "14 m", "known": { "key": "b", "label": "b", "value": 14, "unit": "m" } }
+              ]
+            },
+            {
+              "text": "Panjang setiap kakinya 17 m.",
+              "chips": [{ "id": "kaki", "text": "17 m", "known": { "key": "s1", "label": "kaki", "value": 17, "unit": "m" } }]
+            },
+            {
+              "text": "Taman akan ditanami rumput dengan biaya Rp15.000 per m².",
+              "chips": [
+                { "id": "biaya", "text": "Rp15.000 per m²", "known": { "key": "convert", "label": "biaya", "value": 15000, "text": "Rp15.000 per m²" } }
+              ]
+            },
+            { "text": "Berapa biaya seluruhnya?" }
+          ],
+          "asked": [
+            {
+              "label": "Biaya rumput",
+              "question": {
+                "prompt": "Biaya rumput dihitung dari keliling atau luas?",
+                "options": [
+                  { "text": "Keliling", "correct": false, "feedback": "Belum tepat. Rumput menutupi seluruh permukaan taman." },
+                  { "text": "Luas", "correct": true, "feedback": "Tepat! Rumput menutupi permukaan, jadi pakai luas." }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "m5-latih-02",
+          "type": "faded",
+          "stage": "hitung",
+          "story": "m5-latih-01",
+          "title": "Luas taman",
+          "text": ["Tinggi taman belum diketahui.", "Isi x dan t, lalu hitung luasnya."],
+          "figure": {
+            "shape": "trapezoid",
+            "kind": "isosceles",
+            "a": 30,
+            "b": 14,
+            "t": 15,
+            "unit": "m",
+            "layers": ["parallel", "legs", "height", "labels"],
+            "hideLabels": ["t"]
+          },
+          "template": "x = (30 − 14) ÷ 2 = {x} · t = √(289 − 64) = {t}",
+          "answerLabel": "L",
+          "problem": { "shape": "trapezoid", "kind": "isosceles", "ask": "area", "unit": "m", "a": 30, "b": 14, "s1": 17, "s2": 17 },
+          "answer": { "value": 330, "unit": "m²" },
+          "units": ["m", "m²"],
+          "hints": [
+            "Ukuran apa yang belum ada untuk menghitung luas?",
+            "x = (a − b) ÷ 2, lalu t = √(s² − x²).",
+            "x = 8, t = 15. L = ½ × (30 + 14) × 15 = 330 m²"
+          ]
+        },
+        {
+          "id": "m5-latih-03",
+          "type": "solve",
+          "stage": "hitung",
+          "story": "m5-latih-01",
+          "title": "Biaya seluruhnya",
+          "text": ["Luas taman 330 m².", "Biayanya Rp15.000 per m².", "Tulis angka tanpa titik ribuan."],
+          "answerLabel": "Biaya",
+          "problem": {
+            "shape": "trapezoid",
+            "kind": "isosceles",
+            "ask": "area",
+            "unit": "m",
+            "a": 30,
+            "b": 14,
+            "s1": 17,
+            "s2": 17,
+            "convert": { "op": "multiply", "by": 15000, "unit": "Rp" }
+          },
+          "answer": { "value": 4950000, "unit": "Rp" },
+          "units": ["Rp", "m²"],
+          "hints": [
+            "Setiap 1 m² butuh Rp15.000. Ada berapa m²?",
+            "Kalikan luas taman dengan 15.000.",
+            "Biaya = 330 × 15.000 = Rp4.950.000"
+          ]
+        },
+        {
+          "id": "m5-latih-04",
+          "type": "why",
+          "stage": "tafsirkan",
+          "title": "Cek jawabanmu",
+          "text": ["Biaya rumput Rp4.950.000."],
+          "question": {
+            "prompt": "Apakah hasil ini masuk akal?",
+            "options": [
+              { "text": "Ya, 330 m² dikali Rp15.000 memang jutaan rupiah", "correct": true, "feedback": "Tepat! Luasnya besar dan harga per m² juga besar." },
+              { "text": "Tidak, biaya harus lebih kecil dari luas", "correct": false, "feedback": "Belum tepat. Harga 1 m² saja sudah Rp15.000." },
+              { "text": "Tidak, seharusnya memakai keliling", "correct": false, "feedback": "Belum tepat. Rumput menutupi permukaan, jadi memakai luas." }
+            ]
+          }
+        },
+        {
+          "id": "m5-latih-05",
+          "type": "story",
+          "stage": "rumuskan",
+          "title": "Soal 3: karton hiasan",
+          "text": ["Kerjakan sendiri.", "Ketuk info penting, lalu pindahkan ke Diketahui."],
+          "segments": [
+            {
+              "text": "Karton hiasan berbentuk trapesium sama kaki.",
+              "chips": [
+                { "id": "guna", "text": "hiasan", "feedback": "Kegunaan karton tidak dipakai untuk menghitung." },
+                { "id": "bentuk", "text": "trapesium sama kaki", "known": { "key": "kind", "label": "bentuk", "text": "trapesium sama kaki" } }
+              ]
+            },
+            {
+              "text": "Sisi sejajarnya 22 cm dan 10 cm.",
+              "chips": [
+                { "id": "a", "text": "22 cm", "known": { "key": "a", "label": "a", "value": 22, "unit": "cm" } },
+                { "id": "b", "text": "10 cm", "known": { "key": "b", "label": "b", "value": 10, "unit": "cm" } }
+              ]
+            },
+            {
+              "text": "Kakinya 10 cm.",
+              "chips": [{ "id": "kaki", "text": "10 cm", "known": { "key": "s1", "label": "kaki", "value": 10, "unit": "cm" } }]
+            },
+            { "text": "(a) Berapa panjang pita minimal untuk menghias seluruh tepinya?" },
+            { "text": "(b) Berapa luas karton yang akan dicat?" }
+          ],
+          "asked": [
+            {
+              "label": "Pita",
+              "question": {
+                "prompt": "(a) Pita: keliling atau luas?",
+                "options": [
+                  { "text": "Keliling", "correct": true, "feedback": "Tepat! Pita dipasang di sepanjang tepi." },
+                  { "text": "Luas", "correct": false, "feedback": "Belum tepat. Pita hanya di tepi karton." }
+                ]
+              }
+            },
+            {
+              "label": "Cat",
+              "question": {
+                "prompt": "(b) Cat: keliling atau luas?",
+                "options": [
+                  { "text": "Keliling", "correct": false, "feedback": "Belum tepat. Cat menutupi seluruh permukaan karton." },
+                  { "text": "Luas", "correct": true, "feedback": "Tepat! Cat menutupi permukaan, jadi pakai luas." }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "m5-latih-06",
+          "type": "solve",
+          "stage": "hitung",
+          "story": "m5-latih-05",
+          "title": "(a) Panjang pita",
+          "text": ["Hitung panjang pita.", "Pilih satuannya sendiri."],
+          "figure": { "shape": "trapezoid", "kind": "isosceles", "a": 22, "b": 10, "t": 8, "unit": "cm", "layers": ["parallel", "legs", "labels"] },
+          "answerLabel": "K",
+          "problem": { "shape": "trapezoid", "kind": "isosceles", "ask": "perimeter", "unit": "cm", "a": 22, "b": 10, "s1": 10, "s2": 10 },
+          "answer": { "value": 52, "unit": "cm" },
+          "units": ["cm", "cm²"],
+          "hints": [
+            "Pita dipasang di mana: di tepi atau di permukaan?",
+            "Jumlahkan keempat sisi karton.",
+            "K = 22 + 10 + 10 + 10 = 52 cm"
+          ]
+        },
+        {
+          "id": "m5-latih-07",
+          "type": "solve",
+          "stage": "hitung",
+          "story": "m5-latih-05",
+          "title": "(b) Luas karton",
+          "text": ["Hitung luas karton.", "Pilih satuannya sendiri."],
+          "figure": {
+            "shape": "trapezoid",
+            "kind": "isosceles",
+            "a": 22,
+            "b": 10,
+            "t": 8,
+            "unit": "cm",
+            "layers": ["parallel", "legs", "height", "labels"],
+            "hideLabels": ["t"]
+          },
+          "answerLabel": "L",
+          "problem": { "shape": "trapezoid", "kind": "isosceles", "ask": "area", "unit": "cm", "a": 22, "b": 10, "s1": 10, "s2": 10 },
+          "answer": { "value": 128, "unit": "cm²" },
+          "units": ["cm", "cm²"],
+          "hints": [
+            "Tinggi karton belum diketahui. Bagaimana mencarinya?",
+            "x = (a − b) ÷ 2, lalu t = √(s² − x²).",
+            "x = 6, t = 8. L = ½ × (22 + 10) × 8 = 128 cm²"
+          ]
+        },
+        {
+          "id": "m5-latih-08",
+          "type": "why",
+          "stage": "tafsirkan",
+          "title": "Cek jawabanmu",
+          "text": ["Pita 52 cm dan cat 128 cm²."],
+          "question": {
+            "prompt": "Mengapa satuan pita cm, tetapi satuan cat cm²?",
+            "options": [
+              { "text": "Pita mengukur panjang tepi, cat menutupi permukaan", "correct": true, "feedback": "Tepat! Panjang memakai cm, luas memakai cm²." },
+              { "text": "Karena cat lebih mahal dari pita", "correct": false, "feedback": "Belum tepat. Satuan tidak bergantung pada harga." },
+              { "text": "Karena pita lebih pendek", "correct": false, "feedback": "Belum tepat. Bandingkan yang diukur: tepi atau permukaan." }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "phase": "tantangan",
+      "steps": [
+        {
+          "id": "m5-tantangan-01",
+          "type": "challenge",
+          "title": "Tantangan 1",
+          "text": ["Taplak meja berbentuk trapesium sama kaki.", "Sisi sejajarnya 25 cm dan 9 cm, kakinya 17 cm.", "Berapa panjang renda untuk seluruh tepinya?"],
+          "figure": { "shape": "trapezoid", "kind": "isosceles", "a": 25, "b": 9, "t": 15, "unit": "cm", "layers": ["parallel", "legs", "labels"] },
+          "answerLabel": "K",
+          "problem": { "shape": "trapezoid", "kind": "isosceles", "ask": "perimeter", "unit": "cm", "a": 25, "b": 9, "s1": 17, "s2": 17 },
+          "answer": { "value": 68, "unit": "cm" },
+          "units": ["cm", "cm²"],
+          "distractors": [{ "value": 83, "unit": "cm", "code": "E_TINGGI_DI_KELILING" }],
+          "hints": [
+            "Renda dipasang di tepi. Keliling atau luas?",
+            "Jumlahkan keempat sisi. Tinggi tidak ikut.",
+            "K = 25 + 9 + 17 + 17 = 68 cm"
+          ]
+        },
+        {
+          "id": "m5-tantangan-02",
+          "type": "challenge",
+          "title": "Tantangan 2",
+          "text": ["Taplak yang sama.", "Berapa luas taplak?"],
+          "figure": {
+            "shape": "trapezoid",
+            "kind": "isosceles",
+            "a": 25,
+            "b": 9,
+            "t": 15,
+            "unit": "cm",
+            "layers": ["parallel", "legs", "height", "labels"],
+            "hideLabels": ["t"]
+          },
+          "answerLabel": "L",
+          "problem": { "shape": "trapezoid", "kind": "isosceles", "ask": "area", "unit": "cm", "a": 25, "b": 9, "s1": 17, "s2": 17 },
+          "answer": { "value": 255, "unit": "cm²" },
+          "units": ["cm", "cm²"],
+          "distractors": [
+            { "value": 289, "unit": "cm²", "code": "E_KAKI_SBG_TINGGI" },
+            { "value": 510, "unit": "cm²", "code": "E_LUPA_SETENGAH" }
+          ],
+          "hints": [
+            "Tinggi taplak belum diketahui. Bagaimana mencarinya?",
+            "x = (a − b) ÷ 2, lalu t = √(s² − x²).",
+            "x = 8, t = 15. L = ½ × (25 + 9) × 15 = 255 cm²"
+          ]
+        },
+        {
+          "id": "m5-tantangan-03",
+          "type": "challenge",
+          "title": "Tantangan 3",
+          "text": ["Kolam trapesium siku-siku: sisi sejajar 9 m dan 5 m, sisi miring 5 m.", "Kolam akan dipagari di sekelilingnya.", "Berapa panjang pagar?"],
+          "figure": {
+            "shape": "trapezoid",
+            "kind": "right",
+            "a": 9,
+            "b": 5,
+            "t": 3,
+            "unit": "m",
+            "layers": ["parallel", "legs", "rightAngle", "labels"],
+            "hideLabels": ["s1"]
+          },
+          "answerLabel": "K",
+          "problem": { "shape": "trapezoid", "kind": "right", "ask": "perimeter", "unit": "m", "a": 9, "b": 5, "s2": 5 },
+          "answer": { "value": 22, "unit": "m" },
+          "units": ["m", "m²"],
+          "distractors": [{ "value": 19, "unit": "m", "code": "E_SISI_KURANG" }],
+          "hints": [
+            "Sisi tegak belum diketahui. Bagaimana mencarinya?",
+            "x = a − b, lalu sisi tegak = √(s² − x²).",
+            "x = 4, sisi tegak = √(25 − 16) = 3. K = 9 + 5 + 3 + 5 = 22 m"
+          ]
+        }
+      ]
+    }
+  ]
+}

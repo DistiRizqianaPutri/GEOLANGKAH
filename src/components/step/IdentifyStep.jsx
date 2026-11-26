@@ -33,6 +33,7 @@ export default function IdentifyStep({ step, record, onAttempt, onHint, isChalle
   return (
     <StepCard
       title={step.title}
+      stage={step.stage}
       text={step.text}
       figure={<StepFigure figure={step.figure} selectable={{ selected: shown, onToggle: toggle, disabled: done }} />}
     >

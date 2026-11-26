@@ -154,6 +154,20 @@ Cara kedua (P1, tombol "Cara lain", lapisan `decompose`): persegi panjang 10 × 
 | Mandiri | Siku-siku a = 12, b = 7, t = 12 | L = ½ × 19 × 12 = 114 cm² |
 | Mengapa? | "Mengapa ada ½ pada rumus?" | Karena dua trapesium yang sama membentuk satu jajargenjang/persegi panjang |
 
+**Penerapan di aplikasi (M5, `src/content/meeting-3.json`):**
+- Kenali 2: PG perkiraan pada gambar berpetak: 40 · **50** · 60 cm² (luas tepat 52).
+- Bangun: (1) tombol "Putar salinan" (`doubleRotate`) → jajargenjang, alas a + b = 26; (2) persegi panjang 26 × 4 = 104 cm²; (3) ½ × 104 = 52 cm²; (4) kalimat kunci; (5) tombol "Cara lain" (`decompose`) → 40 + 6 + 6 = 52.
+- Memudar 1: `L = ½ × (10 + ▢) × 4`. Memudar 2: `L = ½ × (▢ + ▢) × 8`. Mandiri + pengecoh: kaki 10 dan t 8 tampil; 160 → `E_KAKI_SBG_TINGGI`.
+
+*Draf petunjuk (perlu ditinjau peneliti):*
+
+| Soal | L1 | L2 | L3 |
+|---|---|---|---|
+| Memudar 1 | Sisi sejajar mana yang belum ditulis? | Sisi sejajar atas panjangnya 6 cm. Jumlahkan dengan 10. | L = ½ × (10 + 6) × 4 = ½ × 16 × 4 = 32 cm² |
+| Memudar 2 | Dua angka apa yang dijumlahkan di dalam kurung? | Isi kotak dengan kedua sisi sejajar. Lalu kalikan ½ dan tinggi. | L = ½ × (18 + 12) × 8 = ½ × 30 × 8 = 120 cm² |
+| Mandiri sama kaki | Garis mana yang tegak lurus terhadap sisi sejajar? | Pakai tinggi, bukan kaki miring. | L = ½ × (22 + 10) × 8 = ½ × 32 × 8 = 128 cm² |
+| Mandiri siku-siku | Pada siku-siku, sisi mana yang menjadi tinggi? | Sisi tegak AD = tinggi = 12 cm. Kaki miring 13 cm tidak dipakai. | L = ½ × (12 + 7) × 12 = ½ × 19 × 12 = 114 cm² |
+
 ---
 
 ## 5. Pertemuan 4 — Mencari tinggi dengan Teorema Pythagoras
@@ -189,6 +203,13 @@ Contoh petunjuk bertingkat (soal sama kaki a = 22, b = 10, s = 10):
 - **L2 (strategi):** "Kurangkan dua sisi sejajar, lalu bagi 2. Itu alas segitiga (x). Tinggi adalah sisi tegaknya."
 - **L3 (langkah contoh):** "x = (22 − 10) ÷ 2 = 6. t² = 10² − 6² = 100 − 36 = 64, jadi t = 8 cm."
 
+**Penerapan di aplikasi (M5, `src/content/meeting-4.json`):**
+- Penyegaran: 3 layar dengan gambar segitiga siku-siku 3-4-5 (`shape: 'triangle'`). Layar 3 menyembunyikan label t (`t = ?`).
+- "Siswa mengetuk segitiga itu, lalu mengetuk sisi miringnya" **disederhanakan**: tombol "Pisahkan segitiga" (`decompose`), lalu satu langkah ketuk unsur `ask: 'hypotenuse'` (jawaban kaki AD). Mengetuk daerah segitiga belum didukung.
+- Bangun: 4 layar strategi pada 16/10/5. Label t tersembunyi sampai langkah 3.
+- Latih, satu besaran per layar: memudar 1 `x = (22 − 10) ÷ 2 = ▢` → t = 8, lalu L = 128; memudar 2 `x = 12 − 7 = ▢ · t = √(169 − 25) = ▢` → L = 114; mandiri 30/14/17 → L 330, lalu K 78; mandiri 20/12/17 → L 240, lalu K 64. Nilai kotak x dan t dihitung `geometry.js`.
+- "Mengapa?" (F-10): "Mengapa tinggi harus lebih pendek dari kaki?" → **karena kaki adalah sisi miring segitiga siku-siku** · tinggi selalu setengah kaki · kaki sejajar dengan tinggi.
+
 ---
 
 ## 6. Pertemuan 5 — Soal cerita literasi matematis
@@ -218,6 +239,27 @@ Kunci: x = 8, t = 15, L = 330 m² → biaya = **Rp4.950.000**.
 Kunci: (a) K = 22 + 10 + 10 + 10 = **52 cm** · (b) t = 8 → L = **128 cm²**.
 
 Setelah soal cerita: **Tantangan Pos 5** (§10), **Skala Leppink**, lalu **Posttest**.
+
+**Penerapan di aplikasi (M5, `src/content/meeting-5.json`)** — *diputuskan 26-11-2026 (awal M5):*
+- Tetap 4 fase: **Kenali** = 1 layar pengantar 3 tahap · **Bangun** = Soal 1 sawah (terbimbing) · **Latih** = Soal 2 taman (memudar) + Soal 3 karton (mandiri) · **Tantangan** ⑤.
+- **Rumuskan** = langkah `story`. Setiap potongan punya chip: info penting (masuk Diketahui dengan label dari JSON, mis. `a = 20 m`) dan minimal satu pengecoh (nama, tempat, kegunaan). Pengecoh ditolak dengan umpan balik dan dicatat sebagai percobaan (`E_LAIN`). Baris Diketahui bisa dihapus (dikoreksi).
+- **Ditanya** = PG "keliling atau luas?" per pertanyaan (umpan balik per opsi, dicatat dengan id `<step_id>#ditanya-N`, tidak ikut skor).
+- Lanjut ke Hitung terbuka setelah semua info penting ada di Diketahui **dan** semua Ditanya benar.
+- **Hitung**: satu besaran per layar. Soal 1: `K = 20 + 12 + 15 + ▢` (64 m) → `L = ½ × (20 + 12) × ▢` (240 m²) → pupuk 24 kg. Soal 2: `x = (30 − 14) ÷ 2 = ▢ · t = √(289 − 64) = ▢` (330 m²) → biaya Rp4.950.000 (diketik tanpa titik ribuan). Soal 3: K 52 cm → L 128 cm² (mandiri).
+- **Tafsirkan**: PG cek kewajaran (tipe `why`): Soal 1 "mengapa pagar keliling, pupuk luas?", Soal 2 "apakah hasil ini masuk akal?", Soal 3 "mengapa satuan pita cm, cat cm²?".
+- Satuan turunan kg/Rp memakai `problem.convert` (ARSITEKTUR §3).
+
+*Draf petunjuk Hitung (perlu ditinjau peneliti):*
+
+| Soal | L1 | L2 | L3 |
+|---|---|---|---|
+| 1 pagar | Ada berapa sisi pada sawah ini? | Jumlahkan kedua sisi sejajar, sisi tegak, dan sisi miring. | K = 20 + 12 + 15 + 17 = 64 m |
+| 1 luas | Sisi mana yang menjadi tinggi sawah ini? | Sisi tegak 15 m adalah tinggi. | L = ½ × (20 + 12) × 15 = ½ × 32 × 15 = 240 m² |
+| 1 pupuk | Ada berapa kelompok 10 m² dalam 240 m²? | Bagi luas sawah dengan 10. | Pupuk = 240 ÷ 10 = 24 kg |
+| 2 luas | Ukuran apa yang belum ada untuk menghitung luas? | x = (a − b) ÷ 2, lalu t = √(s² − x²). | x = 8, t = 15. L = ½ × (30 + 14) × 15 = 330 m² |
+| 2 biaya | Setiap 1 m² butuh Rp15.000. Ada berapa m²? | Kalikan luas taman dengan 15.000. | Biaya = 330 × 15.000 = Rp4.950.000 |
+| 3 pita | Pita dipasang di mana: di tepi atau di permukaan? | Jumlahkan keempat sisi karton. | K = 22 + 10 + 10 + 10 = 52 cm |
+| 3 luas | Tinggi karton belum diketahui. Bagaimana mencarinya? | x = (a − b) ÷ 2, lalu t = √(s² − x²). | x = 6, t = 8. L = ½ × (22 + 10) × 8 = 128 cm² |
 
 ---
 
@@ -328,6 +370,19 @@ Aturan petunjuk:
 | `distractors: [{value, unit, code}]` | `challenge` | pengecoh §10. Dites: `diagnose()` harus memberi `code` |
 | `summary` (tingkat pertemuan) | Hasil Pos | 1–2 baris "Yang kamu temukan hari ini" |
 
+**Bidang tambahan (M5).** Juga dicek `content.test.js`, termasuk: setiap `answer` = `solveProblem()` di `geometry.js` (nilai + satuan), setiap kotak bernilai dari `geometry.js`, angka gambar = angka soal, dan L3 diakhiri kunci yang sama.
+
+| Bidang | Dipakai di | Arti |
+|---|---|---|
+| `figure.shape: "triangle"` + `x`, `t` | `explain` (P4) | segitiga siku-siku penyegaran Pythagoras |
+| `figure.hideLabels: ["t" \| "s1" \| "s2" …]` | semua | label unsur yang dicari tampil `t = ?` |
+| `ask: "hypotenuse"` | `identify` | ketuk sisi miring segitiga di tepi trapesium |
+| `{x}`, `{t}`, `{s2}` … di `template` | `faded` | nilai kotak dihitung `solveProblem(problem)`, tidak harus tertulis di `problem` |
+| `problem.convert: {op, by, unit}` | `solve` (P5) | satuan turunan: pupuk (`divide` 10, `kg`), biaya (`multiply` 15000, `Rp`) |
+| `stage: "rumuskan" \| "hitung" \| "tafsirkan"` | langkah soal cerita | label tahap di kartu; kartu "Ingat rumus" juga tampil saat `hitung` |
+| `type: "story"` + `segments: [{text, chips}]` + `asked: [{label, question}]` | Rumuskan | chip `{id, text, known?: {key, label, value?, unit?, text?}}` atau pengecoh `{id, text, feedback}`. `known.key` = bidang `problem` (`a`, `b`, `s1`, `s2`), `kind`, atau `convert` |
+| `story: "<id langkah story>"` | langkah Hitung | menghubungkan soal Hitung ke ceritanya; dites: `known.value` = `problem[key]` |
+
 ---
 
 ## 10. Tantangan Pos (3 soal di akhir tiap pertemuan)
@@ -339,6 +394,7 @@ Aturan: tanpa contoh, petunjuk tetap tersedia tetapi tercatat; tiap soal boleh 2
 - "Petunjuk dipakai" = jumlah level petunjuk yang dibuka di ketiga soal Tantangan.
 - Pilihan "keliling atau luas?" di ① soal 3 dicatat dengan id `m1-tantangan-03#pilih` dan tidak ikut skor.
 - Kartu "Ingat rumus" tersedia di Latih dan Tantangan.
+- *(M5)* Soal yang tingginya/sisi tegaknya harus dicari (④ semua, ⑤ soal 2–3) menampilkan label `t = ?` / `s = ?`. ⑤ soal 1 tidak menampilkan garis tinggi; pengecoh 83 tetap dideteksi karena t dihitung `geometry.js`. ④ pengecoh ditulis 8,3 (≈ 8,31; masih dalam toleransi ±0,01).
 
 | Pos | Soal | Kunci | Pengecoh yang dideteksi |
 |---|---|---|---|
