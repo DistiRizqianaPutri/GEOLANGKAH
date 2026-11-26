@@ -9,10 +9,13 @@ import {
   doubleRotateParts,
   dragRectCorner,
   dragTopVertex,
+  formatLabel,
   formatMeasure,
   heightFromLeg,
   legFromHeight,
   offsetX,
+  perimeterTraceCount,
+  rectFillProgress,
   rectArea,
   rectMeasures,
   rectPerimeter,
@@ -552,5 +555,59 @@ describe('doubleRotateParts (KONTEN §4 Bangun 1–4)', () => {
     expect(parallelogram.base).toBe(26)
     expect(parallelogram.area).toBe(104)
     expect(parallelogram.area / 2).toBe(trapezoidMeasures(shape).area)
+  })
+})
+
+// ---------------------------------------------------------------------------
+// 5. Tambahan M4 — label, kunci tinggi, penghitung animasi
+// ---------------------------------------------------------------------------
+
+describe('formatLabel (perbaikan M3: "s ≈ 6,1 cm", bukan "s = ≈ 6,1 cm")', () => {
+  it.each([
+    ['s', 5, 'cm', 's = 5 cm'],
+    ['a', 22.5, 'm', 'a = 22,5 m'],
+    ['s', Math.sqrt(37), 'cm', 's ≈ 6,1 cm'], // a=16, b=14, t=6 → x = 1
+    ['K', 20, 'satuan', 'K = 20 satuan'],
+  ])('%s, %f, %s → %s', (name, v, unit, text) => {
+    expect(formatLabel(name, v, unit)).toBe(text)
+  })
+
+  it('kaki setelah diseret ke a=16, b=14, t=6', () => {
+    const iso = trapezoidFromSides({ kind: 'isosceles', a: 16, b: 10, t: 4 })
+    const s = dragTopVertex(iso, 'D', { x: 1, y: 6 })
+    expect(formatLabel('s', trapezoidMeasures(s).s1, 'cm')).toBe('s ≈ 6,1 cm')
+  })
+})
+
+describe('dragTopVertex { lockHeight } (KONTEN §3 Kenali 3: geser C → tinggi tetap)', () => {
+  const iso = trapezoidFromSides({ kind: 'isosceles', a: 16, b: 10, t: 4 })
+  it('tinggi tidak berubah walau jari bergerak naik-turun', () => {
+    const s = dragTopVertex(iso, 'C', { x: 15, y: 9 }, { lockHeight: true })
+    expect(s.t).toBe(4)
+    expect([s.d, s.c]).toEqual([1, 15])
+  })
+  it('tanpa opsi: perilaku lama', () => {
+    expect(dragTopVertex(iso, 'C', { x: 15, y: 9 }).t).toBe(9)
+  })
+})
+
+describe('penghitung animasi Kenali P1', () => {
+  it.each([
+    [0, 0],
+    [0.5, 10],
+    [0.99, 19],
+    [1, 20],
+  ])('Telusuri tepi K = 20, progres %f → %i', (p, n) => {
+    expect(perimeterTraceCount(20, p)).toBe(n)
+  })
+
+  it.each([
+    [0, 0, 0],
+    [0.3, 1, 6],
+    [0.5, 2, 12],
+    [0.99, 3, 18],
+    [1, 4, 24],
+  ])('Isi petak 6 × 4, progres %f → %i baris, %i petak', (p, rows, count) => {
+    expect(rectFillProgress({ p: 6, l: 4 }, p)).toEqual({ rows, count })
   })
 })

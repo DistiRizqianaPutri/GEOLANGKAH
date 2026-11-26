@@ -1,0 +1,319 @@
+{
+  "meeting": 2,
+  "title": "Mengenal trapesium & kelilingnya",
+  "summary": ["Keliling trapesium = jumlah keempat sisi", "Tinggi bukan sisi, kecuali sisi tegak trapesium siku-siku"],
+  "phases": [
+    {
+      "phase": "kenali",
+      "steps": [
+        {
+          "id": "m2-kenali-01",
+          "type": "explain",
+          "title": "Sisi sejajar",
+          "text": ["Dua sisi biru ini sejajar.", "Jaraknya selalu sama."],
+          "figure": { "shape": "trapezoid", "kind": "isosceles", "a": 16, "b": 10, "t": 4, "unit": "cm", "layers": ["parallel", "labels"] }
+        },
+        {
+          "id": "m2-kenali-02",
+          "type": "explain",
+          "title": "Tinggi",
+          "text": ["Garis oranye putus-putus adalah tinggi.", "Tinggi adalah jarak tegak lurus antara dua sisi sejajar."],
+          "figure": {
+            "shape": "trapezoid",
+            "kind": "isosceles",
+            "a": 16,
+            "b": 10,
+            "t": 4,
+            "unit": "cm",
+            "layers": ["parallel", "height", "rightAngle", "labels"]
+          }
+        },
+        {
+          "id": "m2-kenali-03",
+          "type": "explore",
+          "title": "Geser titik C",
+          "text": ["Geser titik C ke kanan atau ke kiri.", "Bandingkan label t dan s."],
+          "figure": {
+            "shape": "trapezoid",
+            "kind": "isosceles",
+            "a": 16,
+            "b": 10,
+            "t": 4,
+            "unit": "cm",
+            "layers": ["parallel", "height", "rightAngle", "legs", "labels"],
+            "draggable": true,
+            "lockHeight": true
+          },
+          "question": {
+            "prompt": "Apakah kaki miring sama dengan tinggi?",
+            "options": [
+              { "text": "Ya, sama panjang", "correct": false, "feedback": "Itu hanya terjadi bila kaki tegak. Bandingkan lagi s dan t." },
+              { "text": "Tidak, kaki lebih panjang", "correct": true, "feedback": "Tepat! Kaki miring selalu lebih panjang dari tinggi." },
+              { "text": "Tidak, kaki lebih pendek", "correct": false, "feedback": "Geser C lagi. Mana yang lebih panjang, s atau t?" }
+            ]
+          }
+        },
+        {
+          "id": "m2-kenali-04",
+          "type": "explore",
+          "title": "Jenis trapesium",
+          "text": ["Tekan Ubah jenis untuk melihat jenis lain."],
+          "figure": {
+            "shape": "trapezoid",
+            "kind": "isosceles",
+            "a": 16,
+            "b": 10,
+            "t": 4,
+            "unit": "cm",
+            "layers": ["parallel", "height", "rightAngle", "legs", "labels"]
+          },
+          "variants": [
+            { "label": "Sama kaki", "kind": "isosceles", "text": "Sama kaki: kedua kaki sama panjang." },
+            { "label": "Siku-siku", "kind": "right", "text": "Siku-siku: sisi tegak AD sama dengan tinggi." },
+            { "label": "Sembarang", "kind": "scalene", "x1": 2, "text": "Sembarang: kedua kaki berbeda panjang." }
+          ],
+          "actionLabel": "Ubah jenis"
+        },
+        {
+          "id": "m2-kenali-05",
+          "type": "identify",
+          "title": "Ketuk unsurnya",
+          "pick": 3,
+          "items": [
+            {
+              "id": "m2-kenali-05a",
+              "text": ["Ketuk dua sisi yang sejajar."],
+              "ask": "parallel",
+              "answer": ["a", "b"],
+              "figure": { "shape": "trapezoid", "kind": "isosceles", "a": 16, "b": 10, "t": 4, "unit": "cm", "layers": ["legs", "height"] },
+              "hints": [
+                "Sisi sejajar arahnya sama. Sisi mana yang mendatar?",
+                "Sisi sejajar tidak pernah bertemu walau diperpanjang.",
+                "AB dan DC sama-sama mendatar, jadi keduanya sejajar."
+              ]
+            },
+            {
+              "id": "m2-kenali-05b",
+              "text": ["Ketuk garis tinggi."],
+              "ask": "height",
+              "answer": ["t"],
+              "figure": { "shape": "trapezoid", "kind": "isosceles", "a": 16, "b": 10, "t": 4, "unit": "cm", "layers": ["legs", "height"] },
+              "hints": [
+                "Garis mana yang tegak lurus terhadap alas?",
+                "Kaki trapesium ini miring. Tinggi tidak miring.",
+                "Garis putus-putus dari D tegak lurus ke alas. Itulah tinggi."
+              ]
+            },
+            {
+              "id": "m2-kenali-05c",
+              "text": ["Ketuk garis tinggi."],
+              "ask": "height",
+              "answer": ["s1"],
+              "figure": { "shape": "trapezoid", "kind": "right", "a": 12, "b": 7, "t": 12, "unit": "cm", "layers": ["legs"] },
+              "hints": [
+                "Sisi mana yang tegak lurus terhadap alas?",
+                "Ini trapesium siku-siku. Satu sisinya sudah tegak.",
+                "Sisi AD tegak lurus terhadap AB dan DC, jadi AD adalah tinggi."
+              ]
+            },
+            {
+              "id": "m2-kenali-05d",
+              "text": ["Ketuk dua sisi yang sejajar."],
+              "ask": "parallel",
+              "answer": ["a", "b"],
+              "figure": { "shape": "trapezoid", "kind": "scalene", "a": 24, "b": 10, "t": 12, "x1": 5, "unit": "cm", "layers": ["legs", "height"] },
+              "hints": [
+                "Sisi sejajar arahnya sama. Sisi mana yang mendatar?",
+                "Kedua kaki miring ke arah berbeda, jadi tidak sejajar.",
+                "AB dan DC sama-sama mendatar, jadi keduanya sejajar."
+              ]
+            },
+            {
+              "id": "m2-kenali-05e",
+              "text": ["Ketuk garis tinggi."],
+              "ask": "height",
+              "answer": ["t"],
+              "figure": { "shape": "trapezoid", "kind": "scalene", "a": 24, "b": 10, "t": 12, "x1": 5, "unit": "cm", "layers": ["legs", "height"] },
+              "hints": [
+                "Garis mana yang tegak lurus terhadap alas?",
+                "Kedua kaki miring. Tinggi tidak miring.",
+                "Garis putus-putus dari D tegak lurus ke alas. Itulah tinggi."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "phase": "bangun",
+      "steps": [
+        {
+          "id": "m2-bangun-01",
+          "type": "explain",
+          "title": "Keliling trapesium",
+          "text": ["Keliling = jumlah keempat sisi.", "K = a + b + s₁ + s₂."],
+          "figure": {
+            "shape": "trapezoid",
+            "kind": "isosceles",
+            "a": 16,
+            "b": 10,
+            "t": 4,
+            "unit": "cm",
+            "layers": ["perimeter", "parallel", "legs", "labels"]
+          }
+        },
+        {
+          "id": "m2-bangun-02",
+          "type": "explain",
+          "title": "Tinggi tidak dijumlahkan",
+          "text": [
+            "Tinggi bukan sisi trapesium.",
+            "Jadi tinggi tidak ikut dijumlahkan.",
+            "Pada siku-siku, sisi tegaknya memang sisi, jadi ikut dijumlahkan."
+          ],
+          "figure": {
+            "shape": "trapezoid",
+            "kind": "isosceles",
+            "a": 16,
+            "b": 10,
+            "t": 4,
+            "unit": "cm",
+            "layers": ["parallel", "legs", "height", "rightAngle", "labels"]
+          }
+        }
+      ]
+    },
+    {
+      "phase": "latih",
+      "steps": [
+        {
+          "id": "m2-latih-01",
+          "type": "explain",
+          "title": "Contoh: keliling",
+          "text": ["Tinggi 4 cm tampil, tetapi bukan sisi.", "K = 16 + 10 + 5 + 5 = 36 cm."],
+          "figure": {
+            "shape": "trapezoid",
+            "kind": "isosceles",
+            "a": 16,
+            "b": 10,
+            "t": 4,
+            "unit": "cm",
+            "layers": ["parallel", "legs", "height", "labels"]
+          }
+        },
+        {
+          "id": "m2-latih-02",
+          "type": "faded",
+          "title": "Lengkapi: siku-siku",
+          "text": ["Sisi tegak AD juga tinggi trapesium ini.", "Isi kotak, lalu hitung kelilingnya."],
+          "figure": {
+            "shape": "trapezoid",
+            "kind": "right",
+            "a": 12,
+            "b": 7,
+            "t": 12,
+            "unit": "cm",
+            "layers": ["parallel", "legs", "rightAngle", "labels"]
+          },
+          "template": "K = 12 + 7 + {s1} + 13",
+          "answerLabel": "K",
+          "problem": { "shape": "trapezoid", "kind": "right", "ask": "perimeter", "unit": "cm", "a": 12, "b": 7, "t": 12, "s1": 12, "s2": 13 },
+          "answer": { "value": 44, "unit": "cm" },
+          "units": ["cm", "cm²"],
+          "hints": [
+            "Sisi mana yang belum dijumlahkan?",
+            "Sisi tegak AD adalah salah satu sisi. Panjangnya sama dengan tinggi.",
+            "K = 12 + 7 + 12 + 13 = 44 cm"
+          ]
+        },
+        {
+          "id": "m2-latih-03",
+          "type": "solve",
+          "title": "Kerjakan sendiri",
+          "text": ["Hitung keliling trapesium sembarang ini.", "Pilih satuannya sendiri."],
+          "figure": {
+            "shape": "trapezoid",
+            "kind": "scalene",
+            "a": 24,
+            "b": 10,
+            "t": 12,
+            "x1": 5,
+            "unit": "cm",
+            "layers": ["parallel", "legs", "height", "labels"]
+          },
+          "answerLabel": "K",
+          "problem": { "shape": "trapezoid", "kind": "scalene", "ask": "perimeter", "unit": "cm", "a": 24, "b": 10, "t": 12, "s1": 13, "s2": 15 },
+          "answer": { "value": 62, "unit": "cm" },
+          "units": ["cm", "cm²"],
+          "hints": [
+            "Ada berapa sisi pada trapesium?",
+            "Jumlahkan a, b, dan kedua kaki. Tinggi tidak ikut.",
+            "K = 24 + 10 + 13 + 15 = 62 cm"
+          ]
+        }
+      ]
+    },
+    {
+      "phase": "tantangan",
+      "steps": [
+        {
+          "id": "m2-tantangan-01",
+          "type": "challenge",
+          "task": "identify",
+          "title": "Tantangan 1",
+          "text": ["Ketuk garis tinggi pada trapesium siku-siku ini."],
+          "ask": "height",
+          "answer": ["s1"],
+          "figure": { "shape": "trapezoid", "kind": "right", "a": 15, "b": 9, "t": 8, "unit": "cm", "layers": ["legs"] },
+          "hints": [
+            "Tinggi tegak lurus terhadap sisi sejajar. Sisi mana yang tegak?",
+            "Pada siku-siku, satu sisi sudah tegak lurus terhadap alas.",
+            "Sisi AD tegak lurus terhadap AB dan DC, jadi AD adalah tinggi."
+          ]
+        },
+        {
+          "id": "m2-tantangan-02",
+          "type": "challenge",
+          "title": "Tantangan 2",
+          "text": ["Trapesium siku-siku: sisi tegak 8 cm, kaki miring 10 cm.", "Hitung kelilingnya."],
+          "figure": { "shape": "trapezoid", "kind": "right", "a": 15, "b": 9, "t": 8, "unit": "cm", "layers": ["parallel", "legs", "labels"] },
+          "answerLabel": "K",
+          "problem": { "shape": "trapezoid", "kind": "right", "ask": "perimeter", "unit": "cm", "a": 15, "b": 9, "t": 8, "s1": 8, "s2": 10 },
+          "answer": { "value": 42, "unit": "cm" },
+          "units": ["cm", "cm²"],
+          "distractors": [{ "value": 34, "unit": "cm", "code": "E_SISI_KURANG" }],
+          "hints": [
+            "Ada berapa sisi pada trapesium ini?",
+            "Sisi tegak juga sisi. Jumlahkan keempat sisi.",
+            "K = 15 + 9 + 8 + 10 = 42 cm"
+          ]
+        },
+        {
+          "id": "m2-tantangan-03",
+          "type": "challenge",
+          "title": "Tantangan 3",
+          "text": ["Trapesium sama kaki: kaki 10 cm, tinggi 8 cm.", "Hitung kelilingnya."],
+          "figure": {
+            "shape": "trapezoid",
+            "kind": "isosceles",
+            "a": 20,
+            "b": 8,
+            "t": 8,
+            "unit": "cm",
+            "layers": ["parallel", "legs", "height", "labels"]
+          },
+          "answerLabel": "K",
+          "problem": { "shape": "trapezoid", "kind": "isosceles", "ask": "perimeter", "unit": "cm", "a": 20, "b": 8, "t": 8, "s1": 10, "s2": 10 },
+          "answer": { "value": 48, "unit": "cm" },
+          "units": ["cm", "cm²"],
+          "distractors": [{ "value": 56, "unit": "cm", "code": "E_TINGGI_DI_KELILING" }],
+          "hints": [
+            "Apakah tinggi termasuk sisi trapesium?",
+            "Jumlahkan a, b, dan kedua kaki saja.",
+            "K = 20 + 8 + 10 + 10 = 48 cm"
+          ]
+        }
+      ]
+    }
+  ]
+}

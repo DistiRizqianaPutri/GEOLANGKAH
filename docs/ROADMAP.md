@@ -22,6 +22,12 @@ Legenda: ☐ belum · ☑ selesai
 - ☑ *Urutan prioritas `diagnose()` dijawab 26-11-2026 di M2* ("spesifik dulu", lihat `ARSITEKTUR.md` §3).
 - Sebelum **M4/M5:** tipe langkah pilihan ganda & cerita; perilaku setelah 2 percobaan di Tantangan; reset saat tombol Kembali; *seed* soal acak.
   - ☑ *Dijawab 26-11-2026:* aturan seret per jenis trapesium (`DESIGN.md` §5); kotak kosong pada langkah memudar (`KONTEN.md` §1); angka baru Tantangan Pos ⑤ soal 1–2 = taplak meja (`KONTEN.md` §10, sudah dites).
+  - ☑ *Dijawab 26-11-2026 (awal M4):*
+    - Pertanyaan pilihan berupa PG dengan umpan balik per opsi. Siswa boleh mencoba sampai benar, setiap percobaan dicatat, dan Lanjut terbuka setelah benar.
+    - Tantangan: jika percobaan ke-2 salah, jawaban + pembahasan (L3) tampil.
+    - Tombol ‹ membuka langkah sebelumnya; langkah yang sudah selesai terkunci beserta jawabannya. "Ulangi langkah" hanya me-reset gambar.
+    - Seed soal acak = kode siswa + pertemuan.
+    - Soal cerita (P5) belum dibahas; dijawab di M5.
 
 **Cek selesai:** tidak ada pertanyaan terbuka yang menghalangi M1.
 
@@ -55,16 +61,30 @@ Legenda: ☐ belum · ☑ selesai
 *Selesai 26-11-2026:* 142 tes lulus (32 tes baru untuk model gambar: ukuran semua angka KONTEN §2–5, snap, aturan seret per jenis, batas, `decompose`/`doubleRotate`, `formatMeasure`); lint bersih; build sukses, dan kode `/lab` tidak ada di `dist/`. Label dan garis tinggi diambil langsung dari `trapezoidMeasures()`; D dan C selalu punya y yang sama (dites). `doubleRotate` berhenti di jajargenjang; langkah potong-geser ke persegi panjang dikerjakan bersama konten P3 (M5). **Belum dicek:** seret di HP Android asli dan di 360 × 640. Pengembang mengeceknya sendiri di `/lab` (`npm run dev -- --host`).
 
 ## M4 — Mesin langkah, petunjuk, umpan balik + Pertemuan 1–2
-- [ ] `StepEngine` membaca `meeting-*.json` (format di `KONTEN.md` §9)
-- [ ] Tipe langkah: `explain`, `explore` (gambar digeser), `identify` (ketuk unsur), `faded`, `solve`, `why`
-- [ ] `HintPanel` 3 tingkat dengan aturan buka di `KONTEN.md` §7
-- [ ] `AnswerInput` + pilihan satuan, `FeedbackBanner` memakai `diagnose()`
-- [ ] `FormulaCard` "Ingat rumus"
-- [ ] Layar Pembuka/Masuk (tanpa ilustrasi final), **Peta Petualangan** 5 pos, layar **Hasil Pos**
-- [ ] Langkah bertipe `challenge` (Tantangan Pos, `KONTEN.md` §10)
-- [ ] Konten Pertemuan 1 & 2 lengkap, termasuk Tantangan Pos ① dan ②
+- [x] `StepEngine` membaca `meeting-*.json` (format di `KONTEN.md` §9)
+- [x] Tipe langkah: `explain`, `explore` (gambar digeser), `identify` (ketuk unsur), `faded`, `solve`, `why`
+- [x] `HintPanel` 3 tingkat dengan aturan buka di `KONTEN.md` §7
+- [x] `AnswerInput` + pilihan satuan, `FeedbackBanner` memakai `diagnose()`
+- [x] `FormulaCard` "Ingat rumus"
+- [x] Layar Pembuka/Masuk (tanpa ilustrasi final), **Peta Petualangan** 5 pos, layar **Hasil Pos**
+- [x] Langkah bertipe `challenge` (Tantangan Pos, `KONTEN.md` §10)
+- [x] Konten Pertemuan 1 & 2 lengkap, termasuk Tantangan Pos ① dan ②
+- [x] Perbaikan temuan M3: label kaki terpotong di tepi gambar (juga pada gambar statis selebar layar); format `s ≈ 6,1 cm`
 
 **Cek selesai:** Pertemuan 1 & 2 bisa dimainkan dari awal sampai akhir di HP; semua item daftar periksa `DESIGN.md` §9 terpenuhi.
+
+*Selesai 26-11-2026 (logika & build).* 337 tes lulus (195 tes baru); lint bersih; build sukses.
+
+**Bukti alur dimainkan (tanpa peramban):**
+- `playthrough.test.js` memainkan P1 & P2 sampai Hasil Pos untuk T01, S01, S02 dengan konten asli dan reducer + pemeriksa yang sama dengan UI. Hasilnya 3 dari 3, dan 2 dari 3 bila satu Tantangan salah 2×.
+- Jalur salah yang ikut dites: `E_SATUAN`, `E_KL_TERTUKAR`, `E_KOTAK`, `E_SETENGAH_KELILING`, `E_KAKI_SBG_TINGGI`, `E_TINGGI_DI_KELILING`, `E_SISI_KURANG`; tawaran petunjuk setelah 2× salah; L3 terkunci sebelum mencoba; tombol ‹ tidak me-reset langkah yang sudah benar.
+- `StepView.test.jsx` merender setiap langkah P1–P2 (belum dijawab dan sudah dijawab) tanpa galat dan tanpa emoji.
+
+**DESIGN §9:**
+- Dicek otomatis di `content.test.js`: ≤ 3 kalimat dan ≤ 15 kata per kalimat, satu gambar per langkah, tanpa emoji di layar dalam, kunci = `geometry.js`.
+- Ditinjau di kode: target sentuh ≥ 48 px (`min-h-12`/`h-12`), teks ≥ 16 px, tanpa timer/auto-lanjut, panel petunjuk tidak menutup gambar, baris isian `flex-wrap` agar muat 360 px.
+
+**Belum dicek:** tampilan 360 × 640 di peramban dan HP Android asli. Sesi ini tidak punya alat peramban. Pengembang memainkan P1 → Hasil ① → P2 → Hasil ② di HP (Vercel setelah push, atau `npm run dev -- --host`) dan mengecek label kaki di `/lab` (a = 16, seret ke b = 14, t = 6).
 
 ## M5 — Pertemuan 3–5 + soal cerita
 - [ ] Konten Pertemuan 3 & 4 (termasuk penyegaran Pythagoras)

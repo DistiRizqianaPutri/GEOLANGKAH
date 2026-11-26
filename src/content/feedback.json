@@ -1,0 +1,29 @@
+{
+  "_note": "Teks umpan balik KONTEN.md §7. Kunci kedua = yang ditanya (area, perimeter, height, parallel); 'default' bila tidak ada varian. {unit} = satuan panjang soal.",
+  "CORRECT": { "default": "Tepat!" },
+  "E_LUPA_SETENGAH": { "default": "Hasilmu dua kali lipat. Ingat, dua trapesium membentuk satu jajargenjang — kalikan ½." },
+  "E_KAKI_SBG_TINGGI": {
+    "default": "Kamu memakai kaki miring sebagai tinggi. Tinggi adalah garis putus-putus yang tegak lurus.",
+    "height": "Itu kaki miring. Tinggi tegak lurus terhadap kedua sisi sejajar."
+  },
+  "E_SATU_SISI": { "default": "Jumlahkan kedua sisi sejajar dulu, baru dikali tinggi." },
+  "E_KL_TERTUKAR": {
+    "default": "Itu nilai keliling. Yang ditanya luas: banyak petak yang menutupi bangun.",
+    "perimeter": "Itu nilai luas. Yang ditanya keliling: panjang batas bangun."
+  },
+  "E_SATUAN": {
+    "default": "Angkanya tepat! Luas memakai satuan persegi ({unit}²).",
+    "perimeter": "Angkanya tepat! Keliling memakai satuan panjang ({unit})."
+  },
+  "E_TINGGI_DI_KELILING": { "default": "Tinggi bukan sisi trapesium, jadi tidak ikut dijumlahkan." },
+  "E_SISI_KURANG": { "default": "Cek lagi: trapesium punya empat sisi." },
+  "E_SETENGAH_KELILING": { "default": "Itu baru setengah keliling. Panjang dan lebar masing-masing ada dua." },
+  "E_PYTHA_TAMBAH": { "default": "Tinggi adalah sisi tegak, bukan sisi miring. Pakai s² − x²." },
+  "E_X_TIDAK_DIBAGI": { "default": "Selisih sisi sejajar terbagi ke dua sisi kiri dan kanan. Bagi 2 dulu." },
+  "E_TIDAK_WAJAR": { "default": "Tinggi tidak mungkin lebih panjang dari kaki miring. Cek langkah x." },
+  "E_KOTAK": { "default": "Cek lagi angka di kotak yang kosong. Lihat label pada gambar." },
+  "E_LAIN": {
+    "default": "Belum tepat. Mau lihat petunjuk?",
+    "parallel": "Belum tepat. Sisi sejajar arahnya sama dan tidak pernah bertemu."
+  }
+}

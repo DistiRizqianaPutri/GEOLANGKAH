@@ -115,13 +115,35 @@ export function formatMeasure(value) {
 }
 
 /**
+ * Label ukuran lengkap: "s = 5 cm", atau "s ≈ 6,1 cm" bila dibulatkan
+ * (bukan "s = ≈ 6,1 cm"; temuan M3).
+ */
+export function formatLabel(name, value, unit) {
+  const text = formatMeasure(value)
+  const approx = text.startsWith('≈ ')
+  return `${name} ${approx ? '≈' : '='} ${approx ? text.slice(2) : text} ${unit}`
+}
+
+/** Penghitung "Telusuri tepi": satuan yang sudah dilewati titik (0 → K). */
+export function perimeterTraceCount(perimeter, progress) {
+  return Math.min(perimeter, Math.floor(progress * perimeter + EPS))
+}
+
+/** "Isi petak" baris demi baris: banyak baris terisi dan banyak petak (0 → p × l). */
+export function rectFillProgress({ p, l }, progress) {
+  const rows = Math.min(l, Math.floor(progress * l + EPS))
+  return { rows, count: rectArea(p, rows) }
+}
+
+/**
  * Seret titik atas ('D' atau 'C') ke `point` (satuan petak, boleh pecahan).
  * Hasil di-snap ke petak; aturan per jenis dan batas dari DESIGN.md §5.
+ * `lockHeight`: tinggi tidak ikut berubah (langkah "geser C → tinggi tetap").
  */
-export function dragTopVertex(shape, handle, point) {
+export function dragTopVertex(shape, handle, point, { lockHeight = false } = {}) {
   const { kind, a } = shape
   const { minHeight, maxHeight, minTop } = DRAG_LIMITS
-  const t = clamp(Math.round(point.y), minHeight, maxHeight)
+  const t = lockHeight ? shape.t : clamp(Math.round(point.y), minHeight, maxHeight)
   const x = Math.round(point.x)
   let { d, c } = shape
 

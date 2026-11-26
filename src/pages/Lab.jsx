@@ -18,6 +18,7 @@ const PRESETS = [
 const LAYERS = ['grid', 'parallel', 'height', 'rightAngle', 'legs', 'labels', 'area', 'perimeter', 'decompose', 'doubleRotate']
 const ANIMATIONS = [
   { key: 'perimeter', label: 'Telusuri tepi' },
+  { key: 'area', label: 'Isi petak', rectOnly: true },
   { key: 'decompose', label: 'Pecah' },
   { key: 'doubleRotate', label: 'Gandakan & putar' },
 ]
@@ -28,7 +29,8 @@ export default function Lab() {
   const [layers, setLayers] = useState(['grid', 'parallel', 'height', 'rightAngle', 'legs', 'labels'])
   const [draggable, setDraggable] = useState(true)
   const [unit, setUnit] = useState('cm')
-  const [run, setRun] = useState({ perimeter: 0, decompose: 0, doubleRotate: 0 })
+  const [run, setRun] = useState({ perimeter: 0, area: 0, decompose: 0, doubleRotate: 0 })
+  const [lockHeight, setLockHeight] = useState(false)
   const [drags, setDrags] = useState(0)
 
   const choosePreset = (i) => {
@@ -57,7 +59,16 @@ export default function Lab() {
       <h1 className="text-step-title font-extrabold text-heading">Lab gambar (pengembangan)</h1>
 
       <section className="rounded-card border border-surface-border bg-surface p-2">
-        <FigureCanvas shape={shape} layers={layers} unit={unit} draggable={draggable} onChange={handleChange} run={run} />
+        <FigureCanvas
+          shape={shape}
+          layers={layers}
+          unit={unit}
+          draggable={draggable}
+          lockHeight={lockHeight}
+          onChange={handleChange}
+          run={run}
+          counting={isRect && run.area > 0 ? ['area'] : []}
+        />
       </section>
 
       <section aria-label="Angka dari geometry.js" className="rounded-card border border-surface-border bg-surface p-4">
@@ -77,12 +88,12 @@ export default function Lab() {
       </section>
 
       <section className="flex flex-wrap gap-2">
-        {ANIMATIONS.map(({ key, label }) => (
+        {ANIMATIONS.map(({ key, label, rectOnly }) => (
           <button
             key={key}
             type="button"
             onClick={() => play(key)}
-            disabled={isRect && key !== 'perimeter'}
+            disabled={rectOnly ? !isRect : isRect && key !== 'perimeter'}
             className="min-h-12 rounded-button bg-linear-to-b from-primary-from to-primary-to px-4 font-extrabold text-primary-text shadow-[0_3px_0_var(--color-primary-shadow)] disabled:opacity-40"
           >
             {label}
@@ -108,6 +119,10 @@ export default function Lab() {
         <label className="flex min-h-12 items-center gap-3">
           <input type="checkbox" className="size-6" checked={draggable} onChange={(e) => setDraggable(e.target.checked)} />
           Bisa digeser
+        </label>
+        <label className="flex min-h-12 items-center gap-3">
+          <input type="checkbox" className="size-6" checked={lockHeight} onChange={(e) => setLockHeight(e.target.checked)} />
+          Tinggi terkunci (lockHeight)
         </label>
         <div className="flex min-h-12 items-center gap-3">
           <span className="w-20 text-text-muted">Satuan</span>

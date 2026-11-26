@@ -68,6 +68,22 @@ Diawali **Pretest** (hanya pertemuan ini). Persegi panjang sudah mudah bagi sisw
 | Mandiri | p = 9 cm, l = 6 cm (pilih satuan sendiri) | K = 30 cm · L = 54 cm² |
 | Mengapa? | "Mengapa satuan luas cm²?" | Karena luas menghitung petak berukuran 1 cm × 1 cm |
 
+**Penerapan di aplikasi (M4, `src/content/meeting-1.json`):** baris berkunci dua dipecah menjadi dua layar, satu besaran per layar. Contoh lengkap → 2 layar (K, L). Memudar 1 → templat `L = 10 × ▢` lalu soal K. Memudar 2 → `K = 2 × (▢ + ▢)` lalu soal L. Mandiri → soal K lalu soal L. Kenali 1–2: label K/L baru muncul dan menghitung naik (20 satuan, 24 petak) setelah tombol ditekan.
+
+*Draf Claude Code, perlu ditinjau peneliti:*
+
+| Langkah | Pertanyaan / soal | L1 (pemantik) | L2 (strategi) | L3 (langkah contoh) |
+|---|---|---|---|---|
+| Kenali 3 (PG) | Apa yang berubah? Hanya keliling · Hanya luas · **Keduanya** | — | — | — |
+| Memudar 1 | L = 10 × ▢ | Angka berapa yang dikalikan dengan panjang? | Luas = panjang × lebar. Lebarnya tertulis di gambar. | L = 10 × 5 = 50 cm² |
+| … lalu K | K (10 × 5) | Keliling adalah panjang batas bangun. Ada berapa sisi? | Jumlahkan panjang dan lebar, lalu kalikan 2. | K = 2 × (10 + 5) = 2 × 15 = 30 cm |
+| Memudar 2 | K = 2 × (▢ + ▢) | Dua angka apa yang dijumlahkan di dalam kurung? | Isi kotak dengan panjang dan lebar dari gambar. Lalu kalikan 2. | K = 2 × (12 + 7) = 2 × 19 = 38 cm |
+| … lalu L | L (12 × 7) | Luas menghitung petak yang menutupi bangun. | Kalikan panjang dengan lebar. Satuannya satuan persegi. | L = 12 × 7 = 84 cm² |
+| Mandiri K / L | 9 × 6 | Keliling mengukur batas / Luas menghitung petak. Rumus mana yang dipakai? | K = 2 × (p + l) / L = p × l, beserta satuannya | K = 30 cm · L = 54 cm² |
+| Mengapa? (PG) | **Karena luas menghitung petak 1 cm × 1 cm** · Karena luas selalu lebih besar dari keliling · Karena rumus luas memakai angka 2 | — | — | — |
+
+Setiap opsi PG punya umpan balik satu kalimat (lihat JSON). Petunjuk Tantangan ① ada di `meeting-1.json`.
+
 ---
 
 ## 3. Pertemuan 2 — Mengenal trapesium & kelilingnya
@@ -89,6 +105,27 @@ Diawali **Pretest** (hanya pertemuan ini). Persegi panjang sudah mudah bagi sisw
 | Contoh lengkap | Sama kaki: a = 16, b = 10, kaki 5 dan 5 (t = 4 tampil) | K = 16 + 10 + 5 + 5 = 36 cm |
 | Memudar (1 kosong) | Siku-siku: a = 12, b = 7, sisi tegak 12, kaki miring 13 | K = 12 + 7 + 12 + 13 = 44 cm |
 | Mandiri | Sembarang: a = 24, b = 10, kaki 13 dan 15 (t = 12 tampil) | K = 62 cm |
+
+**Penerapan di aplikasi (M4, `src/content/meeting-2.json`):**
+- Kenali 3: seret C hanya mendatar (`lockHeight`), jadi tinggi tetap. PG: Ya, sama panjang · **Tidak, kaki lebih panjang** · Tidak, kaki lebih pendek. Bila kaki diseret sampai tegak, s = t. Umpan balik "Ya" menjelaskan hal ini.
+- Kenali 4: tombol "Ubah jenis" pada a = 16, b = 10, t = 4: sama kaki (x = 3), siku-siku, sembarang (x₁ = 2). Kaki yang tidak bulat tampil dengan ≈.
+- Kenali 5: 3 soal diambil dari 5 soal dengan seed = kode siswa + pertemuan:
+  - (a) sisi sejajar, sama kaki 16/10/4
+  - (b) tinggi, sama kaki 16/10/4
+  - (c) tinggi, siku-siku 12/7/12 (jawaban: sisi AD)
+  - (d) sisi sejajar, sembarang 24/10/12
+  - (e) tinggi, sembarang 24/10/12
+- Memudar siku-siku: `K = 12 + 7 + ▢ + 13`. Kotaknya sisi tegak AD = 12.
+
+*Draf petunjuk (perlu ditinjau peneliti):*
+
+| Soal | L1 | L2 | L3 |
+|---|---|---|---|
+| Ketuk sisi sejajar | Sisi sejajar arahnya sama. Sisi mana yang mendatar? | Sisi sejajar tidak pernah bertemu walau diperpanjang. | AB dan DC sama-sama mendatar, jadi keduanya sejajar. |
+| Ketuk tinggi | Garis mana yang tegak lurus terhadap alas? | Kaki trapesium ini miring. Tinggi tidak miring. | Garis putus-putus dari D tegak lurus ke alas. Itulah tinggi. |
+| Ketuk tinggi (siku-siku) | Sisi mana yang tegak lurus terhadap alas? | Ini trapesium siku-siku. Satu sisinya sudah tegak. | Sisi AD tegak lurus terhadap AB dan DC, jadi AD adalah tinggi. |
+| Memudar siku-siku | Sisi mana yang belum dijumlahkan? | Sisi tegak AD adalah salah satu sisi. Panjangnya sama dengan tinggi. | K = 12 + 7 + 12 + 13 = 44 cm |
+| Mandiri sembarang | Ada berapa sisi pada trapesium? | Jumlahkan a, b, dan kedua kaki. Tinggi tidak ikut. | K = 24 + 10 + 13 + 15 = 62 cm |
 
 ---
 
@@ -202,11 +239,19 @@ Dideteksi oleh `diagnose()` di `src/lib/geometry.js` dengan membandingkan jawaba
 | `E_X_TIDAK_DIBAGI` | x = a − b pada trapesium sama kaki | "Selisih sisi sejajar terbagi ke dua sisi kiri dan kanan. Bagi 2 dulu." |
 | `E_TIDAK_WAJAR` | t ≥ s, atau hasil negatif/nol | "Tinggi tidak mungkin lebih panjang dari kaki miring. Cek langkah x." |
 | `E_LAIN` | tidak cocok pola apa pun | "Belum tepat. Mau lihat petunjuk?" |
+| `E_KOTAK` *(M4)* | kotak ▢ pada langkah memudar kosong/salah (dicek sebelum hasil akhir) | "Cek lagi angka di kotak yang kosong. Lihat label pada gambar." |
+
+**Varian teks sesuai yang ditanya** (M4, `src/content/feedback.json`; `{unit}` = satuan soal):
+- `E_SATUAN` saat ditanya keliling → "Angkanya tepat! Keliling memakai satuan panjang (cm)." Saat ditanya luas, satuannya mengikuti soal (cm² / m²).
+- `E_KL_TERTUKAR` saat ditanya keliling → "Itu nilai luas. Yang ditanya keliling: panjang batas bangun."
+- Ketuk unsur: kaki dipilih saat ditanya tinggi → `E_KAKI_SBG_TINGGI` dengan teks "Itu kaki miring. Tinggi tegak lurus terhadap kedua sisi sejajar."; pilihan salah saat ditanya sisi sejajar → `E_LAIN` dengan teks "Belum tepat. Sisi sejajar arahnya sama dan tidak pernah bertemu."
+- Jawaban benar → "Tepat!" + tombol "Lihat pembahasan" (isi L3). Pilihan ganda memakai umpan balik per opsi (kode `E_LAIN` bila salah).
 
 Aturan petunjuk:
 - Tombol petunjuk selalu terlihat. L1 bisa dibuka kapan saja; **L2 setelah L1**; **L3 setelah L2 dan minimal 1 percobaan**.
 - Setelah 2× salah, petunjuk L1 ditawarkan (tidak dipaksakan).
 - Level petunjuk tertinggi yang dibuka dicatat di log.
+- *(M4)* Petunjuk tidak bisa dibuka lagi setelah soal selesai. Petunjuk yang sudah dibuka tetap bisa dibaca.
 
 ---
 
@@ -267,11 +312,33 @@ Aturan petunjuk:
 }
 ```
 
+**Bidang tambahan (M4).** Semua dicek otomatis oleh `src/content/content.test.js`.
+
+| Bidang | Dipakai di | Arti |
+|---|---|---|
+| `figure.unit`, `figure.areaUnit` | semua | satuan label (`cm`, `m`, `satuan`); satuan luas bawaan `unit²`, mis. `"petak"` |
+| `figure.draggable`, `figure.lockHeight` | `explore` | titik bisa digeser; `lockHeight` = hanya mendatar |
+| `figure.counting` + `actions: [{run, label}]` | `explain` | tombol animasi (`perimeter`, `area`, …); label lapisan di `counting` menghitung naik setelah ditekan |
+| `question: {prompt, options: [{text, correct, feedback}]}` | `explore`, `why`, `challenge` | pilihan ganda, tepat satu benar |
+| `variants: [{label, kind, x1?, text}]` + `actionLabel` | `explore` | tombol "Ubah jenis" pada gambar yang sama |
+| `items: [...]` + `pick` | `identify` | kumpulan soal; `pick` soal diambil dengan seed kode siswa + pertemuan. Tiap butir: `id`, `text`, `ask` (`parallel`/`height`), `answer` (kunci unsur `a`, `b`, `s1`, `s2`, `t`), `figure`, `hints` |
+| `problem` | `faded`, `solve`, `challenge` | objek `diagnose()` (ARSITEKTUR §3). Kotak `{kunci}` di `template` bernilai `problem[kunci]` |
+| `answerLabel`, `answer`, `units`, `hints[3]` | soal | label isian (`K`/`L`), kunci, tombol satuan, petunjuk L1–L3 |
+| `task: "identify"` | `challenge` | soal Tantangan berupa ketuk unsur |
+| `distractors: [{value, unit, code}]` | `challenge` | pengecoh §10. Dites: `diagnose()` harus memberi `code` |
+| `summary` (tingkat pertemuan) | Hasil Pos | 1–2 baris "Yang kamu temukan hari ini" |
+
 ---
 
 ## 10. Tantangan Pos (3 soal di akhir tiap pertemuan)
 
 Aturan: tanpa contoh, petunjuk tetap tersedia tetapi tercatat; tiap soal boleh 2 percobaan. Skor = jumlah soal benar (maks. 3), ditampilkan di Hasil Pos bersama jumlah petunjuk yang dibuka. Langkah bertipe `challenge`, `step_id` berawalan `mX-tantangan-`.
+
+*Diputuskan 26-11-2026 (M4):*
+- Jika percobaan ke-2 juga salah, soal dicatat salah. Jawaban yang benar dan pembahasan (isi L3) langsung tampil, lalu tombol Lanjut.
+- "Petunjuk dipakai" = jumlah level petunjuk yang dibuka di ketiga soal Tantangan.
+- Pilihan "keliling atau luas?" di ① soal 3 dicatat dengan id `m1-tantangan-03#pilih` dan tidak ikut skor.
+- Kartu "Ingat rumus" tersedia di Latih dan Tantangan.
 
 | Pos | Soal | Kunci | Pengecoh yang dideteksi |
 |---|---|---|---|

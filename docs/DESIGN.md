@@ -232,7 +232,10 @@ Nama panggilan **hanya disimpan di HP itu** (`localStorage`) untuk sapaan, tidak
 - Saat gambar bisa digeser, daerah gambar tetap (selebar alas dan setinggi 10 petak) agar gambar tidak melompat ketika diseret.
 - Gambar statis (tidak bisa digeser) memakai **skala otomatis**: ukuran petak menyesuaikan lebar layar agar ukuran besar (mis. a = 30, t = 15) tetap muat di 360 px. Satuan pada label mengikuti soal (cm atau m).
 - Garis tinggi selalu ditarik dari D (atau C) **tegak lurus** ke alas, dengan simbol siku-siku.
-- Saat digeser, label ukuran diperbarui langsung. Kaki miring yang bukan bilangan bulat ditampilkan 1 angka desimal (≈).
+- Saat digeser, label ukuran diperbarui langsung. Kaki miring yang bukan bilangan bulat ditampilkan 1 angka desimal dengan tanda ≈ menggantikan "=", mis. `s ≈ 6,1 cm` (bukan `s = ≈ 6,1 cm`; `formatLabel` di `geometry.js`).
+- *(M4)* Opsi `lockHeight`: seret hanya mendatar, tinggi tetap. Dipakai di P2 Kenali 3 ("geser C → tinggi tetap, kaki berubah").
+- *(M4)* **Label tidak pernah terpotong.** Semua label digeser ke dalam gambar berdasarkan perkiraan lebar teks (`labelFit.js`). Bila label kaki tidak muat di sisi luar kaki (mis. a = 16, b = 14, t = 6, atau gambar statis selebar layar), kedua label kaki pindah ke ¼ tinggi dari alas, dan label t pindah ke ¾ tinggi agar tidak bertumpuk.
+- *(M4)* Ketuk unsur (`identify`): ketukan memilih segmen terdekat dalam radius 24 px (target 48 px), jadi garis tinggi dan kaki yang berdekatan tetap bisa dibedakan. Unsur terpilih ditandai garis tebal biru tua. Pada trapesium siku-siku, "tinggi" = sisi AD.
 - `layers` yang dapat diaktifkan per langkah: `grid`, `parallel`, `height`, `legs`, `area`, `perimeter`, `labels`, `rightAngle`, `decompose` (pecah jadi persegi panjang + 2 segitiga), `doubleRotate` (2 trapesium → jajargenjang).
 - Animasi (`decompose`, `doubleRotate`) berjalan **hanya setelah tombol ditekan**, durasi ≤ 1,2 detik, dan bisa diulang. Hormati `prefers-reduced-motion` (langsung tampil tanpa animasi).
 - Gunakan **Pointer Events** + `touch-action: none` pada SVG agar halaman tidak ikut menggulir saat menyeret.

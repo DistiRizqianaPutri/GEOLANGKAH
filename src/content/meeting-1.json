@@ -1,0 +1,267 @@
+{
+  "meeting": 1,
+  "title": "Persegi panjang: keliling atau luas?",
+  "summary": ["Keliling = panjang batas: K = 2 × (p + l)", "Luas = banyak petak: L = p × l"],
+  "phases": [
+    {
+      "phase": "kenali",
+      "steps": [
+        {
+          "id": "m1-kenali-01",
+          "type": "explain",
+          "title": "Apa itu keliling?",
+          "text": ["Tekan Telusuri tepi, lalu ikuti titik ungu.", "Ini keliling: panjang batas bangun."],
+          "figure": { "shape": "rect", "p": 6, "l": 4, "unit": "satuan", "layers": ["grid", "perimeter"], "counting": ["perimeter"] },
+          "actions": [{ "run": "perimeter", "label": "Telusuri tepi" }]
+        },
+        {
+          "id": "m1-kenali-02",
+          "type": "explain",
+          "title": "Apa itu luas?",
+          "text": ["Tekan Isi petak, lalu hitung petak yang terisi.", "Ini luas: banyak petak yang menutupi bangun."],
+          "figure": { "shape": "rect", "p": 6, "l": 4, "unit": "satuan", "areaUnit": "petak", "layers": ["grid", "area"], "counting": ["area"] },
+          "actions": [{ "run": "area", "label": "Isi petak" }]
+        },
+        {
+          "id": "m1-kenali-03",
+          "type": "explore",
+          "title": "Geser sudutnya",
+          "text": ["Geser titik di sudut kanan atas.", "Perhatikan angka K dan L."],
+          "figure": {
+            "shape": "rect",
+            "p": 6,
+            "l": 4,
+            "unit": "satuan",
+            "areaUnit": "petak",
+            "layers": ["grid", "area", "perimeter", "labels"],
+            "draggable": true
+          },
+          "question": {
+            "prompt": "Apa yang berubah: keliling, luas, atau keduanya?",
+            "options": [
+              { "text": "Hanya keliling", "correct": false, "feedback": "Lihat juga angka L saat kamu menggeser." },
+              { "text": "Hanya luas", "correct": false, "feedback": "Lihat juga angka K saat kamu menggeser." },
+              { "text": "Keduanya", "correct": true, "feedback": "Tepat! Keliling dan luas sama-sama berubah." }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "phase": "bangun",
+      "steps": [
+        {
+          "id": "m1-bangun-01",
+          "type": "explain",
+          "title": "Rumus keliling",
+          "text": ["Keliling = p + l + p + l.", "Jadi K = 2 × (p + l).", "Satuannya satuan panjang, misalnya cm."],
+          "figure": { "shape": "rect", "p": 6, "l": 4, "unit": "cm", "layers": ["perimeter", "labels"] }
+        },
+        {
+          "id": "m1-bangun-02",
+          "type": "explain",
+          "title": "Rumus luas",
+          "text": ["Luas = banyak petak = p × l.", "Satu petak berukuran 1 cm × 1 cm.", "Karena itu satuan luas adalah cm²."],
+          "figure": { "shape": "rect", "p": 6, "l": 4, "unit": "cm", "layers": ["grid", "area", "labels"] }
+        }
+      ]
+    },
+    {
+      "phase": "latih",
+      "steps": [
+        {
+          "id": "m1-latih-01",
+          "type": "explain",
+          "title": "Contoh: keliling",
+          "text": ["Panjang 8 cm dan lebar 5 cm.", "K = 2 × (8 + 5) = 2 × 13 = 26 cm."],
+          "figure": { "shape": "rect", "p": 8, "l": 5, "unit": "cm", "layers": ["perimeter", "labels"] }
+        },
+        {
+          "id": "m1-latih-02",
+          "type": "explain",
+          "title": "Contoh: luas",
+          "text": ["L = p × l = 8 × 5 = 40 cm².", "Satuannya cm² karena yang dihitung petak."],
+          "figure": { "shape": "rect", "p": 8, "l": 5, "unit": "cm", "layers": ["grid", "area", "labels"] }
+        },
+        {
+          "id": "m1-latih-03",
+          "type": "faded",
+          "title": "Lengkapi: luas",
+          "text": ["Isi kotak yang kosong, lalu hitung luasnya."],
+          "figure": { "shape": "rect", "p": 10, "l": 5, "unit": "cm", "layers": ["labels"] },
+          "template": "L = 10 × {l}",
+          "answerLabel": "L",
+          "problem": { "shape": "rect", "ask": "area", "unit": "cm", "p": 10, "l": 5 },
+          "answer": { "value": 50, "unit": "cm²" },
+          "units": ["cm", "cm²"],
+          "hints": [
+            "Angka berapa yang dikalikan dengan panjang?",
+            "Luas = panjang × lebar. Lebarnya tertulis di gambar.",
+            "L = 10 × 5 = 50 cm²"
+          ]
+        },
+        {
+          "id": "m1-latih-04",
+          "type": "solve",
+          "title": "Sekarang kelilingnya",
+          "text": ["Hitung keliling persegi panjang yang sama."],
+          "figure": { "shape": "rect", "p": 10, "l": 5, "unit": "cm", "layers": ["labels"] },
+          "answerLabel": "K",
+          "problem": { "shape": "rect", "ask": "perimeter", "unit": "cm", "p": 10, "l": 5 },
+          "answer": { "value": 30, "unit": "cm" },
+          "units": ["cm", "cm²"],
+          "hints": [
+            "Keliling adalah panjang batas bangun. Ada berapa sisi?",
+            "Jumlahkan panjang dan lebar, lalu kalikan 2.",
+            "K = 2 × (10 + 5) = 2 × 15 = 30 cm"
+          ]
+        },
+        {
+          "id": "m1-latih-05",
+          "type": "faded",
+          "title": "Lengkapi: keliling",
+          "text": ["Isi kedua kotak, lalu hitung kelilingnya."],
+          "figure": { "shape": "rect", "p": 12, "l": 7, "unit": "cm", "layers": ["labels"] },
+          "template": "K = 2 × ({p} + {l})",
+          "answerLabel": "K",
+          "problem": { "shape": "rect", "ask": "perimeter", "unit": "cm", "p": 12, "l": 7 },
+          "answer": { "value": 38, "unit": "cm" },
+          "units": ["cm", "cm²"],
+          "hints": [
+            "Dua angka apa yang dijumlahkan di dalam kurung?",
+            "Isi kotak dengan panjang dan lebar dari gambar. Lalu kalikan 2.",
+            "K = 2 × (12 + 7) = 2 × 19 = 38 cm"
+          ]
+        },
+        {
+          "id": "m1-latih-06",
+          "type": "solve",
+          "title": "Sekarang luasnya",
+          "text": ["Hitung luas persegi panjang yang sama."],
+          "figure": { "shape": "rect", "p": 12, "l": 7, "unit": "cm", "layers": ["labels"] },
+          "answerLabel": "L",
+          "problem": { "shape": "rect", "ask": "area", "unit": "cm", "p": 12, "l": 7 },
+          "answer": { "value": 84, "unit": "cm²" },
+          "units": ["cm", "cm²"],
+          "hints": [
+            "Luas menghitung petak yang menutupi bangun.",
+            "Kalikan panjang dengan lebar. Satuannya satuan persegi.",
+            "L = 12 × 7 = 84 cm²"
+          ]
+        },
+        {
+          "id": "m1-latih-07",
+          "type": "solve",
+          "title": "Kerjakan sendiri: keliling",
+          "text": ["Hitung kelilingnya.", "Pilih satuannya sendiri."],
+          "figure": { "shape": "rect", "p": 9, "l": 6, "unit": "cm", "layers": ["labels"] },
+          "answerLabel": "K",
+          "problem": { "shape": "rect", "ask": "perimeter", "unit": "cm", "p": 9, "l": 6 },
+          "answer": { "value": 30, "unit": "cm" },
+          "units": ["cm", "cm²"],
+          "hints": [
+            "Keliling mengukur batas bangun. Rumus mana yang dipakai?",
+            "K = 2 × (p + l). Satuannya satuan panjang.",
+            "K = 2 × (9 + 6) = 2 × 15 = 30 cm"
+          ]
+        },
+        {
+          "id": "m1-latih-08",
+          "type": "solve",
+          "title": "Kerjakan sendiri: luas",
+          "text": ["Hitung luasnya.", "Pilih satuannya sendiri."],
+          "figure": { "shape": "rect", "p": 9, "l": 6, "unit": "cm", "layers": ["labels"] },
+          "answerLabel": "L",
+          "problem": { "shape": "rect", "ask": "area", "unit": "cm", "p": 9, "l": 6 },
+          "answer": { "value": 54, "unit": "cm²" },
+          "units": ["cm", "cm²"],
+          "hints": [
+            "Luas menghitung petak. Rumus mana yang dipakai?",
+            "L = p × l. Satuannya satuan persegi.",
+            "L = 9 × 6 = 54 cm²"
+          ]
+        },
+        {
+          "id": "m1-latih-09",
+          "type": "why",
+          "title": "Mengapa?",
+          "text": ["Pikirkan apa yang dihitung oleh luas."],
+          "question": {
+            "prompt": "Mengapa satuan luas cm²?",
+            "options": [
+              { "text": "Karena luas menghitung petak 1 cm × 1 cm", "correct": true, "feedback": "Tepat! Setiap petak adalah persegi 1 cm × 1 cm." },
+              { "text": "Karena luas selalu lebih besar dari keliling", "correct": false, "feedback": "Belum tepat. Ingat, luas menghitung banyak petak." },
+              { "text": "Karena rumus luas memakai angka 2", "correct": false, "feedback": "Belum tepat. Angka 2 ada di rumus keliling." }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "phase": "tantangan",
+      "steps": [
+        {
+          "id": "m1-tantangan-01",
+          "type": "challenge",
+          "title": "Tantangan 1",
+          "text": ["Persegi panjang p = 11 cm, l = 4 cm.", "Hitung kelilingnya."],
+          "figure": { "shape": "rect", "p": 11, "l": 4, "unit": "cm", "layers": ["labels"] },
+          "answerLabel": "K",
+          "problem": { "shape": "rect", "ask": "perimeter", "unit": "cm", "p": 11, "l": 4 },
+          "answer": { "value": 30, "unit": "cm" },
+          "units": ["cm", "cm²"],
+          "distractors": [
+            { "value": 44, "unit": "cm", "code": "E_KL_TERTUKAR" },
+            { "value": 15, "unit": "cm", "code": "E_SETENGAH_KELILING" }
+          ],
+          "hints": [
+            "Keliling atau luas yang ditanya?",
+            "Panjang dan lebar masing-masing ada dua. Jumlahkan, lalu kalikan 2.",
+            "K = 2 × (11 + 4) = 2 × 15 = 30 cm"
+          ]
+        },
+        {
+          "id": "m1-tantangan-02",
+          "type": "challenge",
+          "title": "Tantangan 2",
+          "text": ["Persegi panjang p = 15 cm, l = 8 cm.", "Hitung luasnya."],
+          "figure": { "shape": "rect", "p": 15, "l": 8, "unit": "cm", "layers": ["labels"] },
+          "answerLabel": "L",
+          "problem": { "shape": "rect", "ask": "area", "unit": "cm", "p": 15, "l": 8 },
+          "answer": { "value": 120, "unit": "cm²" },
+          "units": ["cm", "cm²"],
+          "distractors": [{ "value": 46, "unit": "cm²", "code": "E_KL_TERTUKAR" }],
+          "hints": [
+            "Luas menghitung apa: batas atau petak?",
+            "Kalikan panjang dengan lebar. Satuannya satuan persegi.",
+            "L = 15 × 8 = 120 cm²"
+          ]
+        },
+        {
+          "id": "m1-tantangan-03",
+          "type": "challenge",
+          "title": "Tantangan 3",
+          "text": ["Lantai kelas 8 m × 6 m akan ditutup karpet."],
+          "figure": { "shape": "rect", "p": 8, "l": 6, "unit": "m", "layers": ["labels"] },
+          "question": {
+            "prompt": "Pilih dulu: keliling atau luas?",
+            "options": [
+              { "text": "Keliling", "correct": false, "feedback": "Karpet menutupi seluruh lantai, bukan hanya tepinya." },
+              { "text": "Luas", "correct": true, "feedback": "Tepat! Karpet menutupi permukaan, jadi kita cari luas." }
+            ]
+          },
+          "answerLabel": "L",
+          "problem": { "shape": "rect", "ask": "area", "unit": "m", "p": 8, "l": 6 },
+          "answer": { "value": 48, "unit": "m²" },
+          "units": ["m", "m²"],
+          "distractors": [{ "value": 28, "unit": "m", "code": "E_KL_TERTUKAR" }],
+          "hints": [
+            "Karpet menutupi lantai. Itu keliling atau luas?",
+            "Luas = panjang × lebar. Satuannya m².",
+            "L = 8 × 6 = 48 m²"
+          ]
+        }
+      ]
+    }
+  ]
+}

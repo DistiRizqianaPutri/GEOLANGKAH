@@ -1,4 +1,4 @@
-import { doubleRotateParts, formatMeasure } from '../../../lib/geometry.js'
+import { doubleRotateParts, formatLabel } from '../../../lib/geometry.js'
 import svgPoints from '../svgPoints.js'
 import useAnimation from '../useAnimation.js'
 import MeasureLabel from './MeasureLabel.jsx'
@@ -31,7 +31,7 @@ export default function DoubleRotateLayer({ shape, m, toPx, unit, labels, run })
         <MeasureLabel
           x={(bx0 + bx1) / 2}
           y={by + 44}
-          text={`a + b = ${formatMeasure(parallelogram.base)} ${unit}`}
+          text={formatLabel('a + b', parallelogram.base, unit)}
           className="fill-parallel"
         />
       )}

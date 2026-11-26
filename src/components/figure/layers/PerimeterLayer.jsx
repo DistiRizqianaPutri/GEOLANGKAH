@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef, useState } from 'react'
-import { formatMeasure } from '../../../lib/geometry.js'
+import { formatLabel, perimeterTraceCount } from '../../../lib/geometry.js'
 import svgPoints from '../svgPoints.js'
 import useAnimation from '../useAnimation.js'
 import MeasureLabel from './MeasureLabel.jsx'
@@ -7,8 +7,9 @@ import MeasureLabel from './MeasureLabel.jsx'
 /**
  * Keliling: tepi ungu tebal 4 px. Titik ungu menelusuri tepi SEKALI
  * setiap kali `run` bertambah (tombol "Telusuri tepi").
+ * `counting`: label K baru muncul saat tombol ditekan dan menghitung naik sampai K.
  */
-export default function PerimeterLayer({ points, perimeter, toPx, unit, labels, run }) {
+export default function PerimeterLayer({ points, perimeter, toPx, unit, labels, run, counting = false, dy = 0 }) {
   const pathRef = useRef(null)
   const { progress, started } = useAnimation(run, 1200)
   const [dot, setDot] = useState(null)
@@ -24,6 +25,8 @@ export default function PerimeterLayer({ points, perimeter, toPx, unit, labels, 
   const px = points.map(toPx)
   const cx = px.reduce((s, p) => s + p[0], 0) / px.length
   const cy = px.reduce((s, p) => s + p[1], 0) / px.length
+  const showLabel = counting ? started : labels
+  const value = counting && started ? perimeterTraceCount(perimeter, progress) : perimeter
 
   return (
     <g>
@@ -35,7 +38,7 @@ export default function PerimeterLayer({ points, perimeter, toPx, unit, labels, 
         strokeLinejoin="round"
       />
       {dot && <circle cx={dot[0]} cy={dot[1]} r={7} className="fill-perimeter" aria-hidden="true" />}
-      {labels && <MeasureLabel x={cx} y={cy} text={`K = ${formatMeasure(perimeter)} ${unit}`} className="fill-perimeter" />}
+      {showLabel && <MeasureLabel x={cx} y={cy + dy} text={formatLabel('K', value, unit)} className="fill-perimeter" />}
     </g>
   )
 }

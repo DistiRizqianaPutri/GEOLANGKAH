@@ -97,7 +97,30 @@ dragRectCorner(shape, {x, y})    // snap, p 1–12, l 1–8
 decomposeParts(shape)            // persegi panjang + segitiga tepi (null bila x = 0), masing-masing dengan luas
 doubleRotateParts(shape)         // salinan diputar 180° pada titik tengah BC → jajargenjang alas a + b
 formatMeasure(v)                 // "16", "22,5", atau "≈ 4,5" (koma desimal)
+formatLabel(name, v, unit)       // "s = 5 cm" atau "s ≈ 6,1 cm" (M4)
+dragTopVertex(..., { lockHeight }) // seret hanya mendatar (M4)
+perimeterTraceCount(K, progress) // penghitung "Telusuri tepi" 0 → K (M4)
+rectFillProgress({p, l}, progress) // "Isi petak" per baris → { rows, count } (M4)
 ```
+
+**Modul murni lain (M4, semuanya dites Vitest):**
+
+| File | Isi |
+|---|---|
+| `lib/answer.js` | `parseNumber` (koma/titik desimal) |
+| `lib/random.js` | `seededShuffle(list, seed)`: seed = kode siswa + pertemuan |
+| `lib/hintRules.js` | `canOpenHint`, `shouldOfferHint` (KONTEN §7) |
+| `lib/checkStep.js` | `checkSolve`, `checkFaded` (`E_KOTAK`), `checkIdentify`, `checkChoice`, `parseTemplate` |
+| `lib/feedback.js` | `feedbackText(code, {ask, unit})` dari `content/feedback.json` |
+| `lib/figureSpec.js` | `figureModel(figure)`: `figure` di JSON → model FigureCanvas |
+| `lib/stepEngine.js` | `flattenSteps`, reducer (`ATTEMPT`, `OPEN_HINT`, `NEXT`, `BACK`, `RESET_FIGURE`), `canAdvance`, `challengeSummary`, simpan/muat progres |
+| `components/figure/labelFit.js`, `hitTest.js` | penempatan label di dalam gambar; segmen terdekat untuk ketuk unsur |
+
+**Catatan per langkah** (`records[step_id]` di progres) memakai nama kolom `step_logs`: `attempts`, `is_correct`, `max_hint_level`, `error_code`, `answer`, ditambah `first_error_code`, `done`, dan `revealed`. Di M6 catatan ini dikirim lewat `logQueue`. Langkah yang sudah `done` tidak menerima percobaan baru (tombol Kembali tidak me-reset).
+
+**Rute (M4):** `/` (Pembuka + Masuk), `/peta`, `/pertemuan/:n`, `/hasil/:n`, `/lab`. Tanpa sesi → `/`. Pertemuan n terbuka bila n = 1 atau pertemuan n − 1 selesai. Pertemuan yang kontennya belum ada (`content/meetings.js`) terkunci dengan tulisan "Segera".
+
+**`localStorage`:** `geolangkah:session` → `{code, nickname}`. **PIN tidak pernah disimpan.** `geolangkah:progress:<kode>:m<n>` → `{index, records, finished, figureReset}`.
 
 Komponen `src/components/figure/` (`FigureCanvas`, `DragHandle`, `layers/*`) hanya menggambar hasil fungsi di atas. Halaman uji `/lab` (`src/pages/Lab.jsx`) sementara aktif juga di produksi agar bisa dicoba di HP; disembunyikan lagi di M10.
 
@@ -207,6 +230,7 @@ create table progress (
 - Peneliti membuat akun siswa di dasbor Supabase (*Add user* → centang *Auto Confirm User*, sehingga tidak ada email yang dikirim): email teknis `s01@<VITE_STUDENT_EMAIL_DOMAIN>`, kata sandi = PIN 6 digit, lalu menambah baris `students`.
 - Domain email teknis: **`siswa.geolangkah.test`** (alamat palsu, tidak pernah dipakai mengirim email; diputuskan 26-11-2026). Jika di M6 Supabase menolak domain `.test`, Claude Code mengusulkan pengganti lalu memperbarui bagian ini.
 - Layar Masuk meminta **Kode** + **PIN**, aplikasi mengubah kode menjadi email teknis lalu memanggil `signInWithPassword`.
+  - *Sementara (M4–M5):* belum ada Supabase. Format Kode (`^[ST]\d{2}$`) dan PIN (6 angka) hanya dicek bentuknya. PIN tidak disimpan dan tidak diverifikasi. Hanya kode + nama panggilan yang disimpan di `localStorage`. Verifikasi sungguhan dikerjakan di M6.
 - Sesi disimpan Supabase di perangkat → siswa tidak perlu masuk ulang setiap pertemuan.
 - **Nama panggilan** (opsional) hanya disimpan di `localStorage` untuk sapaan; tidak pernah dikirim ke Supabase atau ke tutor AI.
 - Peneliti masuk dengan email pribadinya di `/peneliti`.
