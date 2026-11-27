@@ -30,8 +30,7 @@ def _ask_deepseek(messages):
     req = urllib.request.Request(
         API_URL,
         method="POST",
-        data=json.dumps({"model": model, "messages": messages, "max_tokens": 120, "temperature": 0.3, "stream": False}).encode(),
-        headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"},
+data=json.dumps({"model": model, "messages": messages, "max_tokens": 120, "temperature": 0.3, "stream": False, "thinking": {"type": "disabled"}}).encode(),        headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"},
     )
     try:
         with urllib.request.urlopen(req, timeout=15) as res:
