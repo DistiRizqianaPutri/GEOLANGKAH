@@ -11,7 +11,7 @@ export async function isResearcher(client, userId) {
 /** Semua data yang dibutuhkan dashboard, digabung per siswa. */
 export async function fetchDashboard(client) {
   const [students, progress, answers, leppink] = await Promise.all([
-    client.from('students').select('id, code').order('code'),
+    client.from('students').select('id, code, name, kelas').order('kelas').order('name').order('code'),
     client.from('progress').select('student_id, meeting, completed_at'),
     client.from('test_answers').select('id, student_id, kind, item_id, answer, score, stage_scores, scored_at'),
     client.from('leppink_responses').select('student_id, meeting'),
@@ -23,6 +23,22 @@ export async function fetchDashboard(client) {
     answers: answers.data.filter((a) => a.student_id === s.id),
     leppink: leppink.data.filter((l) => l.student_id === s.id).map((l) => l.meeting),
   }))
+}
+
+/** Nama + kelas → kunci pembanding (huruf kecil, spasi dirapikan); null bila nama kosong. */
+export function nameKey(name, kelas) {
+  const n = (name ?? '').trim().replace(/\s+/g, ' ').toLowerCase()
+  return n ? `${n}|${kelas ?? ''}` : null
+}
+
+/** Set id siswa yang nama + kelasnya sama dengan siswa lain (kemungkinan akun ganda). */
+export function duplicateIds(students) {
+  const groups = new Map()
+  for (const s of students) {
+    const k = nameKey(s.name, s.kelas)
+    if (k) groups.set(k, [...(groups.get(k) ?? []), s.id])
+  }
+  return new Set([...groups.values()].filter((ids) => ids.length > 1).flat())
 }
 
 /** Ringkasan tes satu siswa: { sent, scored, total } untuk kind 'pre' | 'post'. */

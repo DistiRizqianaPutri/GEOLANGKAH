@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { isAuthRetryableFetchError } from '@supabase/supabase-js'
 import { createLogQueue, queueKey, startAutoSync, supabaseSender } from '../../lib/logQueue.js'
-import { STUDENT_CODE, codeToEmail, supabase } from '../../lib/supabase.js'
+import { codeToEmail, supabase } from '../../lib/supabase.js'
 import { SessionContext } from './sessionContext.js'
 
 // Sesi siswa (ARSITEKTUR §5). Masuk = Kode + PIN → signInWithPassword ke email teknis.
@@ -12,7 +12,7 @@ const KEY = 'geolangkah:session'
 function readSession() {
   try {
     const s = JSON.parse(localStorage.getItem(KEY))
-    return s && STUDENT_CODE.test(s.code) && s.userId ? s : null
+    return s && s.code && s.userId ? s : null
   } catch {
     return null
   }
@@ -83,6 +83,25 @@ export function SessionProvider({ children }) {
     setSession(next)
   }
 
+  // Masuk tanpa kode: anonymous sign-in (sesi Supabase tersimpan di HP), lalu simpan
+  // nama + kelas di tabel students (RLS: hanya baris sendiri). Nama tidak pernah dikirim ke AI.
+  const start = async (name, kelas) => {
+    if (!supabase) throw new SignInError('config')
+    if (!navigator.onLine) throw new SignInError('offline')
+    const { data: current } = await supabase.auth.getSession()
+    let user = current.session?.user
+    if (!user) {
+      const { data, error } = await supabase.auth.signInAnonymously()
+      if (error) throw new SignInError(isOffline(error) ? 'offline' : 'wrong')
+      user = data.user
+    }
+    const { error } = await supabase.from('students').upsert({ id: user.id, name, kelas }, { onConflict: 'id' })
+    if (error) throw new SignInError(isOffline(error) ? 'offline' : 'unregistered')
+    const next = { code: user.id, name, kelas, nickname: name, userId: user.id }
+    localStorage.setItem(KEY, JSON.stringify(next))
+    setSession(next)
+  }
+
   const signOut = async () => {
     const pending = queue?.size() ?? 0
     if (
@@ -94,5 +113,5 @@ export function SessionProvider({ children }) {
     await supabase?.auth.signOut({ scope: 'local' }).catch(() => {})
   }
 
-  return <SessionContext.Provider value={{ session, signIn, signOut, queue, sync }}>{children}</SessionContext.Provider>
+  return <SessionContext.Provider value={{ session, signIn, start, signOut, queue, sync }}>{children}</SessionContext.Provider>
 }

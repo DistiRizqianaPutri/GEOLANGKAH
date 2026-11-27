@@ -246,6 +246,8 @@ create table progress (
 
 ## 5. Masuk (login)
 
+> *(27-11-2026, menggantikan Kode + PIN di layar pembuka)* Layar pembuka meminta **Nama lengkap + Kelas** (VII/VIII/IX) → `signInAnonymously()` (sesi tetap tersimpan di HP) → `upsert` baris `students {id, name, kelas}` (migrasi `0003_anon.sql`: `code` boleh kosong, RLS insert/select/update hanya baris sendiri). `localStorage` `geolangkah:session` → `{code: userId, name, kelas, nickname: name, userId}`; `code` di sini hanya kunci penyimpanan lokal. Halaman peneliti menampilkan nama + kelas dan menandai nama+kelas yang sama. Nama tidak dikirim ke tutor AI. Catatan: ekspor CSV masih menyaring siswa berkode S, jadi siswa anonim belum ikut terekspor. Alur Kode + PIN di bawah tetap ada di kode (`signIn`), tetapi tidak tampil.
+
 - Peneliti membuat akun siswa di dasbor Supabase (*Add user* → centang *Auto Confirm User*, sehingga tidak ada email yang dikirim): email teknis `s001@<VITE_STUDENT_EMAIL_DOMAIN>`, kata sandi = PIN 6 digit, lalu menambah baris `students`.
 - Domain email teknis: **`siswa.geolangkah.test`** (alamat palsu, tidak pernah dipakai mengirim email; diputuskan 26-11-2026). Jika di M6 Supabase menolak domain `.test`, Claude Code mengusulkan pengganti lalu memperbarui bagian ini.
 - Layar Masuk meminta **Kode** + **PIN**, aplikasi mengubah kode menjadi email teknis lalu memanggil `signInWithPassword`.

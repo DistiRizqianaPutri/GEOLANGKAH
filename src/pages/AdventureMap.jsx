@@ -71,7 +71,7 @@ export default function AdventureMap() {
         })}
       </ol>
 
-      <TextButton onClick={signOut}>Keluar ({code})</TextButton>
+      <TextButton onClick={signOut}>Keluar ({nickname ?? code})</TextButton>
     </main>
   )
 }

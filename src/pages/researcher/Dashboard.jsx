@@ -97,7 +97,7 @@ function ResearcherHome({ user, onSignOut }) {
 
       {selected && (
         <section className="space-y-3">
-          <h2 className="text-step-title font-extrabold text-heading">Skor uraian — {selected.code}</h2>
+          <h2 className="text-step-title font-extrabold text-heading">Skor uraian — {selected.name || selected.code}</h2>
           {['pre', 'post'].map((kind) => {
             const rows = selected.answers.filter((a) => a.kind === kind)
             return (

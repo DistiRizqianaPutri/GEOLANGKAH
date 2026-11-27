@@ -41,7 +41,8 @@ Aplikasi web *mobile-first* (Chrome Android) untuk belajar **keliling & luas per
 - Gambar: SVG + Pointer Events, `touch-action: none` di area seret.
 
 ## Privasi & keamanan
-- Siswa hanya dikenal lewat kode (S01, S02; akun uji T01). Jangan menulis nama siswa/sekolah di kode, data contoh, log, atau prompt AI. Nama panggilan opsional hanya di `localStorage`.
+- Siswa masuk dengan **Nama lengkap + Kelas** (VII/VIII/IX) lewat Supabase anonymous sign-in. Nama & kelas **boleh disimpan** di tabel `students` (RLS: siswa hanya baris sendiri, peneliti membaca semua) dan tampil di halaman peneliti. Nama **tidak pernah** dikirim ke AI (DeepSeek), tidak ditulis di log/`step_logs`, dan tidak masuk CSV ekspor. Akun lama berkode (S001, T01) tetap berlaku; `code` boleh kosong.
+- Jangan menulis nama siswa/sekolah asli di kode, data contoh, tes, atau prompt AI.
 - Rahasia (`DEEPSEEK_API_KEY`, Supabase `service_role`) hanya di server/Vercel, tidak pernah berawalan `VITE_`. RLS aktif di semua tabel.
 
 ## Gaya kode
