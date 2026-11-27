@@ -13,7 +13,11 @@
       "Bash(py -m pip install --user -q pytest)",
       "Bash(py -m pytest analysis api/_shared -q)",
       "Bash(npm ls *)",
-      "PowerShell(Set-Location 'C:\\\\proyek\\\\geolangkah'; $w = Join-Path $env:TEMP 'gl_head'; cmd /c rmdir \\(Join-Path $w 'node_modules'\\); Test-Path node_modules\\\\vitest; git worktree remove --force $w; git worktree prune; git add api analysis src supabase/migrations/0002_m7.sql vercel.json docs; git status --short)"
+      "PowerShell(Set-Location 'C:\\\\proyek\\\\geolangkah'; $w = Join-Path $env:TEMP 'gl_head'; cmd /c rmdir \\(Join-Path $w 'node_modules'\\); Test-Path node_modules\\\\vitest; git worktree remove --force $w; git worktree prune; git add api analysis src supabase/migrations/0002_m7.sql vercel.json docs; git status --short)",
+      "PowerShell(pytest analysis api/_shared -q 2>&1)",
+      "PowerShell(python -m pytest analysis api/_shared -q 2>&1)",
+      "PowerShell(py -m pytest analysis api/_shared -q 2>&1)",
+      "PowerShell(npx oxlint 2>&1)"
     ]
   }
 }

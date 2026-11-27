@@ -171,11 +171,13 @@ Tes (`geometry.test.js`): semua kunci jawaban di `KONTEN.md`, setiap kode kesala
 
 *(M7, 27-11-2026)* `supabase/migrations/0002_m7.sql`: kolom `test_answers.stage_scores jsonb` (skor tiap tahap rubrik, mis. `[1,2,1,0,1]`; `score` = jumlahnya), CHECK `score` 0–6, dan *grant update* peneliti diperluas ke `stage_scores`. Kiriman tes/Leppink memakai *upsert ignore-duplicates* dengan target `student_id,kind,item_id` / `student_id,meeting`, jadi kiriman kedua diabaikan (terkunci).
 
+*(27-11-2026)* Kode siswa boleh 2 atau 3 angka: `^[ST][0-9]{2,3}$` (S001–S150 dari `buat-akun-siswa.mjs`; T01 tetap berlaku). CHECK `students.code` diubah langsung di SQL Editor Supabase. Pola yang sama dipakai di aplikasi (`STUDENT_CODE` di `src/lib/supabase.js`) dan analisis (`is_research_code` di `api/_shared/scoring.py`, hanya S). Email teknis = kode huruf kecil + `@<VITE_STUDENT_EMAIL_DOMAIN>`.
+
 ```sql
--- Siswa: satu baris per akun. Akun dibuat peneliti (email teknis: s01@<VITE_STUDENT_EMAIL_DOMAIN>)
+-- Siswa: satu baris per akun. Akun dibuat peneliti (email teknis: s001@<VITE_STUDENT_EMAIL_DOMAIN>)
 create table students (
   id uuid primary key references auth.users(id) on delete cascade,
-  code text unique not null check (code ~ '^[ST][0-9]{2}$'),  -- S = penelitian, T = uji coba
+  code text unique not null check (code ~ '^[ST][0-9]{2,3}$'),  -- S = penelitian (S001–S150), T = uji coba (T01)
   created_at timestamptz default now()
 );
 
@@ -244,7 +246,7 @@ create table progress (
 
 ## 5. Masuk (login)
 
-- Peneliti membuat akun siswa di dasbor Supabase (*Add user* → centang *Auto Confirm User*, sehingga tidak ada email yang dikirim): email teknis `s01@<VITE_STUDENT_EMAIL_DOMAIN>`, kata sandi = PIN 6 digit, lalu menambah baris `students`.
+- Peneliti membuat akun siswa di dasbor Supabase (*Add user* → centang *Auto Confirm User*, sehingga tidak ada email yang dikirim): email teknis `s001@<VITE_STUDENT_EMAIL_DOMAIN>`, kata sandi = PIN 6 digit, lalu menambah baris `students`.
 - Domain email teknis: **`siswa.geolangkah.test`** (alamat palsu, tidak pernah dipakai mengirim email; diputuskan 26-11-2026). Jika di M6 Supabase menolak domain `.test`, Claude Code mengusulkan pengganti lalu memperbarui bagian ini.
 - Layar Masuk meminta **Kode** + **PIN**, aplikasi mengubah kode menjadi email teknis lalu memanggil `signInWithPassword`.
   - *(M6)* Setelah `signInWithPassword` berhasil, aplikasi membaca baris `students` milik pengguna; bila tidak ada atau kodenya beda → "Akun belum terdaftar". `localStorage` `geolangkah:session` → `{code, nickname, userId}` (tanpa PIN). Pesan gagal: PIN/kode salah, belum ada sinyal, belum terdaftar.

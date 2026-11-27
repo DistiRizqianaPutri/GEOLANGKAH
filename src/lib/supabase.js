@@ -8,7 +8,10 @@ const domain = import.meta.env.VITE_STUDENT_EMAIL_DOMAIN || 'siswa.geolangkah.te
 
 export const supabase = url && key ? createClient(url, key) : null
 
-/** Kode siswa → email teknis: "T01" → "t01@siswa.geolangkah.test". */
+/** Kode siswa: S/T + 2–3 angka (S001–S150; akun uji T01). Sama dengan CHECK di tabel students. */
+export const STUDENT_CODE = /^[ST][0-9]{2,3}$/
+
+/** Kode siswa → email teknis: "S001" → "s001@siswa.geolangkah.test". */
 export function codeToEmail(code, emailDomain = domain) {
   return `${code.toLowerCase()}@${emailDomain}`
 }

@@ -65,6 +65,8 @@ def test_kode_penelitian():
     assert is_research_code("S01")
     assert not is_research_code("T01")
     assert is_research_code("T01", include_test=True)
+    assert is_research_code("S001") and is_research_code("S150") and is_research_code(" s001 ")
+    assert not is_research_code("S1") and not is_research_code("S0001") and not is_research_code("SX1")
 
 
 def lep(code, meeting, il, el, gl):

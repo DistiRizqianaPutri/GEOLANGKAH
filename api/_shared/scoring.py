@@ -7,9 +7,10 @@ sehingga keduanya pasti memberi angka yang sama. Hanya pustaka standar.
 - Nilai = skor / 24 x 100.
 - N-gain = (post - pre) / (24 - pre); tidak terdefinisi bila pre = 24.
 - Leppink: IL = rata-rata il1-il3, EL = rata-rata el1-el3, GL = rata-rata gl1-gl4.
-- Hanya kode berawalan S yang diolah; akun uji T.. ikut bila include_test=True.
+- Hanya kode S + 2-3 angka (S01, S001-S150) yang diolah; akun uji T.. ikut bila include_test=True.
 """
 
+import re
 from statistics import mean
 
 ITEM_IDS = ("b1", "b2", "b3", "b4")
@@ -48,7 +49,8 @@ def _mean(values):
 
 def is_research_code(code, include_test=False):
     code = (code or "").strip().upper()
-    return code.startswith("S") or (include_test and code.startswith("T"))
+    pattern = r"[ST]\d{2,3}" if include_test else r"S\d{2,3}"
+    return re.fullmatch(pattern, code) is not None
 
 
 def total_score(rows, code, kind):

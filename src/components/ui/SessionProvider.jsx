@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { isAuthRetryableFetchError } from '@supabase/supabase-js'
 import { createLogQueue, queueKey, startAutoSync, supabaseSender } from '../../lib/logQueue.js'
-import { codeToEmail, supabase } from '../../lib/supabase.js'
+import { STUDENT_CODE, codeToEmail, supabase } from '../../lib/supabase.js'
 import { SessionContext } from './sessionContext.js'
 
 // Sesi siswa (ARSITEKTUR §5). Masuk = Kode + PIN → signInWithPassword ke email teknis.
@@ -12,7 +12,7 @@ const KEY = 'geolangkah:session'
 function readSession() {
   try {
     const s = JSON.parse(localStorage.getItem(KEY))
-    return s && /^[ST]\d{2}$/.test(s.code) && s.userId ? s : null
+    return s && STUDENT_CODE.test(s.code) && s.userId ? s : null
   } catch {
     return null
   }

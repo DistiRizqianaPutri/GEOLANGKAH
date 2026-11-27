@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router'
 import PrimaryButton from '../components/ui/PrimaryButton.jsx'
 import TextButton from '../components/ui/TextButton.jsx'
 import useSession from '../components/ui/useSession.js'
+import { STUDENT_CODE } from '../lib/supabase.js'
 
 // Layar Pembuka + Masuk (layar luar, DESIGN.md §4.1). Ilustrasi orisinal menyusul di M9.
 // M6: Kode + PIN diverifikasi Supabase (ARSITEKTUR §5). PIN tidak disimpan aplikasi.
-const CODE = /^[ST]\d{2}$/
 const PIN = /^\d{6}$/
 
 const SIGN_IN_ERROR = {
@@ -29,7 +29,7 @@ export default function Welcome() {
     e.preventDefault()
     if (busy) return
     const c = code.trim().toUpperCase()
-    if (!CODE.test(c)) return setError('Kode siswa terdiri dari huruf S atau T dan 2 angka, misalnya S01.')
+    if (!STUDENT_CODE.test(c)) return setError('Kode siswa terdiri dari huruf S atau T dan 2–3 angka, misalnya S001.')
     if (!PIN.test(pin)) return setError('PIN terdiri dari 6 angka.')
     setError('')
     setBusy(true)
@@ -72,8 +72,8 @@ export default function Welcome() {
               onChange={(e) => setCode(e.target.value)}
               autoComplete="off"
               autoCapitalize="characters"
-              maxLength={3}
-              placeholder="S01"
+              maxLength={4}
+              placeholder="S001"
               className="mt-1 h-12 w-full rounded-button border-2 border-surface-border bg-white px-3 font-extrabold uppercase focus:border-heading focus:outline-none"
             />
           </label>
