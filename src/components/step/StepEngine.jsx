@@ -12,6 +12,7 @@ import {
   stepLogItem,
   unqueuedKeys,
 } from '../../lib/stepEngine.js'
+import PHASE_LABEL from '../../content/phases.json'
 import useSession from '../ui/useSession.js'
 import FormulaCard from '../hint/FormulaCard.jsx'
 import Icon from '../ui/Icon.jsx'
@@ -111,6 +112,7 @@ export default function StepEngine({ meeting, stationName, code, userId }) {
     <div className="flex min-h-dvh flex-col">
       <TopBar title={stationName} index={state.index} total={steps.length} onBack={back} />
       <main className="mx-auto w-full max-w-md flex-1 space-y-3 p-4">
+        {PHASE_LABEL[step.phase] && <p className="font-extrabold text-text-muted">{PHASE_LABEL[step.phase]}</p>}
         <StepView
           key={`${step.id}-${state.figureReset}`}
           step={step}

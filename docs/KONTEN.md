@@ -9,13 +9,30 @@
 
 Alur mengikuti tiga fase *Rigorous Mathematical Thinking* (Kinard & Kozulin), ditampilkan ke siswa dengan nama sederhana:
 
-| Fase (RMT) | Nama di aplikasi | Isi | Prinsip CLT |
-|---|---|---|---|
-| 1. Pengembangan kognitif | **Kenali** | Mengamati, membandingkan, memberi label unsur dengan gambar interaktif | Unsur diperkenalkan satu per satu |
-| 2. Konten sebagai proses | **Bangun** | Menurunkan rumus/strategi langkah demi langkah dari bangun yang sudah dikenal | Segmentasi, contoh terurai |
-| 3. Praktik konstruksi konseptual | **Latih** | Contoh lengkap → contoh memudar → soal mandiri → soal konteks | *Fading*, umpan balik spesifik |
+| Fase (RMT, `RMT.md` §2) | Langkah RMT | Nama di aplikasi (label layar) | Isi | Prinsip CLT |
+|---|---|---|---|---|
+| I. Pengembangan kognitif | 1–2 | **Kenali** ("Fase 1 · Kenali") | Mengamati, membandingkan, memberi label unsur pada gambar yang bisa digeser; alat = petak satuan, garis tinggi tegak lurus | Unsur diperkenalkan satu per satu |
+| II. Konten sebagai proses | 3–5 | **Bangun** ("Fase 2 · Bangun") | Dari bahasa sehari-hari (pagar = keliling, karpet = luas) → menemukan pola/rumus → alat khusus matematika (rumus, tabel Diketahui/Ditanya, Pythagoras) | Segmentasi, contoh terurai |
+| III. Praktik konstruksi konseptual | 6 | **Latih** ("Fase 3 · Latih") dan **Tantangan Pos** ("Fase 3 · Tantangan Pos") | Contoh lengkap → contoh memudar → soal mandiri → Tantangan Pos → soal cerita | *Fading*, umpan balik spesifik |
 
-Petunjuk bertingkat berperan sebagai **mediator** (pertanyaan pemantik dulu, jawaban terakhir).
+Label fase tampil kecil di atas setiap layar langkah (`src/content/phases.json`). Petunjuk bertingkat dan Tutor AI berperan sebagai **mediator** (pertanyaan pemantik dulu, jawaban terakhir).
+
+### 1.1 Pemetaan RMT → GeoLangkah (`RMT.md` §6)
+
+| RMT | Wujud di GeoLangkah |
+|---|---|
+| Fase I, langkah 1–2 | **Kenali**: amati dan beri label unsur (sisi sejajar, tinggi, kaki) pada gambar yang bisa digeser; alat = petak satuan, garis tinggi tegak lurus |
+| Fase II, langkah 3 | **Bangun**: mulai dari bahasa sehari-hari (pagar = keliling, rumput/karpet = luas) |
+| Fase II, langkah 4 | Menemukan pola: 2 trapesium → jajargenjang → L = ½ × (a + b) × t; tinggi tetap saat titik digeser (konservasi konstansi) |
+| Fase II, langkah 5 | Alat khusus matematika: rumus, tabel Diketahui/Ditanya, segitiga siku-siku (Pythagoras) |
+| Fase III, langkah 6 | **Latih**: contoh memudar → soal mandiri → Tantangan Pos → soal cerita |
+| MLE intensionalitas | Petunjuk L1 berupa pertanyaan pemantik; Tutor AI hanya bertanya, tidak memberi jawaban |
+| MLE transendensi | Pertanyaan "Mengapa?" dan ringkasan "Yang kamu temukan hari ini" |
+| MLE makna | Konteks desa (kebun, sawah, taman, pasar) |
+| Metakognisi | Pertanyaan cek kewajaran; tutor meminta siswa menjelaskan langkah dan menamai cara berpikirnya |
+| Penilaian dinamis | Pretest → Pos 1–5 → posttest |
+
+**Tutor AI** (setelah petunjuk L2 dibuka; maks. 5 pertanyaan per soal): Kenali → arahkan pengamatan/label; Bangun → ajak menemukan pola; Latih/Tantangan → ajak memakai alat dan mengecek kewajaran. Maksimal 2 kalimat, selalu bertanya, tidak pernah menyebut jawaban akhir.
 
 **Aturan langkah memudar** (kotak kosong ▢ pada rumus):
 - **Memudar 1:** satu angka yang dimasukkan ke rumus dikosongkan.

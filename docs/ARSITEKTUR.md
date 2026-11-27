@@ -132,7 +132,7 @@ formatAnswer(v, unit)            // "52 cm²", "24 kg", "Rp4.950.000"
 
 **`localStorage`:** `geolangkah:session` → `{code, nickname}`. **PIN tidak pernah disimpan.** `geolangkah:progress:<kode>:m<n>` → `{index, records, finished, figureReset}`.
 
-Komponen `src/components/figure/` (`FigureCanvas`, `DragHandle`, `layers/*`) hanya menggambar hasil fungsi di atas. Halaman uji `/lab` (`src/pages/Lab.jsx`) sementara aktif juga di produksi agar bisa dicoba di HP; disembunyikan lagi di M10.
+Komponen `src/components/figure/` (`FigureCanvas`, `DragHandle`, `layers/*`) hanya menggambar hasil fungsi di atas. Halaman uji `/lab` (`src/pages/Lab.jsx`) hanya ada di mode pengembangan (`import.meta.env.DEV`), tidak ikut build produksi.
 
 `offsetX` melempar error untuk jenis selain `isosceles`/`right`.
 
@@ -295,9 +295,11 @@ Kunci `service_role` Supabase **tidak pernah** ada di repo maupun di frontend.
 
 ## 9. Tutor AI (P1) — `api/tutor.py`
 
-- Menerima: `step_id`, soal (angka saja), jawaban siswa, level petunjuk yang sudah dibuka. **Tidak** menerima kode/nama siswa.
-- *System prompt* tutor: berbahasa Indonesia sederhana, maksimal 2 kalimat, menjawab dengan **pertanyaan pemantik**, **tidak memberi jawaban akhir**, memakai istilah sesuai `KONTEN.md`.
-- Batas: 5 pertanyaan per soal; jika API gagal, tampilkan petunjuk L2 biasa.
+- `POST /api/tutor` menerima: `step_id`, `phase`, `title`, `prompt` (teks soal), `problem` (angka), `answer` (kunci, hanya untuk menyaring), `student_answer`, `hint_level`, `question`, `asked`. Kunci lain dibuang; **tidak** menerima kode/nama siswa.
+- Memanggil `https://api.deepseek.com/chat/completions` (format OpenAI); `DEEPSEEK_MODEL` dan `DEEPSEEK_API_KEY` hanya dari env Vercel. Kunci jawaban tidak dikirim ke model.
+- *System prompt* tutor = mediator RMT (`RMT.md` §7): Bahasa Indonesia sederhana, maksimal 2 kalimat, menjawab dengan **pertanyaan pemantik** sesuai fase langkah (Kenali/Bangun/Latih), **tidak memberi jawaban akhir**, istilah sesuai `KONTEN.md`.
+- Penjaga: balasan dipotong ke 2 kalimat; bila memuat angka jawaban akhir → dibuang. Balasan `{reply}` atau `{fallback: true}` (env kosong, API gagal, bocor) → frontend menampilkan petunjuk L2.
+- Batas: 5 pertanyaan per soal (hitungan di `localStorage` `geolangkah:tutor:<stepId>`, server juga menolak `asked ≥ 5` / `hint_level < 2`). Inti di `api/_shared/tutor_core.py` (dites `pytest`), frontend `src/lib/tutor.js` + `components/hint/TutorPanel.jsx`.
 
 ## 10. Analisis data (`analysis/process_data.py`)
 

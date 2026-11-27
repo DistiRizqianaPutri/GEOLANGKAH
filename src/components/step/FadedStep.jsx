@@ -39,7 +39,7 @@ export default function FadedStep({ step, record, onAttempt, onHint }) {
         </>
       )}
       <AnswerFeedback step={step} record={record} result={result} revealText={formatAnswer(step.answer.value, step.answer.unit)} />
-      <StepTools hints={step.hints} record={record} onHint={onHint} />
+      <StepTools hints={step.hints} record={record} onHint={onHint} step={step} />
       {!done && (
         <PrimaryButton onClick={check} disabled={parseAnswer(raw, unit) === null}>
           Cek jawaban

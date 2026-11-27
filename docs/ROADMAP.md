@@ -131,10 +131,12 @@ Legenda: ☐ belum · ☑ selesai
 *Selesai 27-11-2026 (kode):* 591 tes Vitest lulus, lint bersih, build sukses; `pytest analysis api/_shared` 13 lulus; `process_data.py` jalan pada `analysis/sample_data`; teks kunci tidak ditemukan di `dist/`. Ringkasan API = `process_data.py` dijamin oleh fungsi `summarize()` yang sama + tes bolak-balik CSV. **Belum diuji (manual, setelah deploy):** jalankan `0002_m7.sql`, buat akun peneliti, alur T01 penuh, isi skor, unduh CSV dari `/api/export`. Catatan Windows: jalankan `npm test` dari folder berhuruf drive besar (`C:\…`); dari `c:\…` Vitest gagal memuat semua suite.
 
 ## M8 — Tutor AI *(P1)*
-- [ ] `api/tutor.py` sesuai `ARSITEKTUR.md` §9
-- [ ] Tombol "Tanya tutor" muncul setelah petunjuk L2 dibuka
+- [x] `api/tutor.py` sesuai `ARSITEKTUR.md` §9
+- [x] Tombol "Tanya tutor" muncul setelah petunjuk L2 dibuka
+- [x] Tutor = mediator RMT (`RMT.md` §7); label fase "Fase n · …" di layar langkah; pemetaan RMT di `KONTEN.md` §1.1
 
 **Cek selesai:** tutor tidak pernah menyebut jawaban akhir pada 10 percobaan uji; kunci API tidak terlihat di *bundle* frontend.
+*Selesai 27-11-2026 (kode):* 612 tes Vitest lulus (tes `tutor.js`, tombol tutor hanya setelah L2, label fase), lint bersih, build sukses; `pytest analysis api/_shared` 26 lulus (validasi, prompt per fase, kunci asing dibuang, penyaring angka jawaban, potong 2 kalimat). `deepseek` dan halaman `/lab` tidak ada di `dist/`. **Belum diuji (setelah deploy):** 10 percobaan tutor nyata dengan kunci di Vercel.
 
 ## M9 — PWA & penghalusan tema *(P1)*
 - [ ] Font Nunito (400 & 800) di-*host* sendiri; ilustrasi pembuka orisinal (SVG ≤ 30 KB) — `DESIGN.md` §2.5
@@ -149,5 +151,5 @@ Legenda: ☐ belum · ☑ selesai
 - [ ] Buat akun `S01`, `S02` (dan `T01` untuk uji)
 - [ ] Pastikan proyek Supabase aktif (tidak dijeda) sebelum setiap pertemuan
 - [ ] Uji coba kering (*dry run*) satu pertemuan oleh pengembang di HP
-- [ ] Sembunyikan lagi halaman uji `/lab` dari build produksi (kembalikan syarat `import.meta.env.DEV` di `src/App.jsx`)
+- [x] Sembunyikan lagi halaman uji `/lab` dari build produksi (kembalikan syarat `import.meta.env.DEV` di `src/App.jsx`)
 - [ ] Bekukan versi (tag `v1.0-ujicoba`) — tidak ada perubahan konten selama 5 pertemuan uji coba

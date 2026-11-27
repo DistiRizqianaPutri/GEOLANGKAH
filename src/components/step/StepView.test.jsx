@@ -3,6 +3,7 @@
 import { renderToString } from 'react-dom/server'
 import { describe, expect, it } from 'vitest'
 import MEETINGS from '../../content/meetings.js'
+import PHASE_LABEL from '../../content/phases.json'
 import { flattenSteps } from '../../lib/stepEngine.js'
 import { askedKey } from '../../lib/story.js'
 import StepView from './StepView.jsx'
@@ -26,6 +27,24 @@ describe.each([1, 2, 3, 4, 5])('Pertemuan %i', (n) => {
       const html = renderToString(<StepView step={step} records={{}} onAttempt={noop} onHint={noop} />)
       expect(html, step.id).not.toMatch(/\p{Extended_Pictographic}/u)
     }
+  })
+})
+
+describe('Tanya Tutor (M8)', () => {
+  const solve = allSteps(3).find((s) => s.id === 'm3-latih-02')
+  const html = (rec) => renderToString(<StepView step={solve} records={{ [solve.id]: rec }} onAttempt={noop} onHint={noop} />)
+  it('belum tampil sebelum petunjuk L2 dibuka', () => {
+    expect(html({ attempts: 0, max_hint_level: 1 })).not.toContain('Tanya Tutor')
+  })
+  it('tampil setelah L2, hilang setelah soal selesai', () => {
+    expect(html({ attempts: 0, max_hint_level: 2 })).toContain('Tanya Tutor')
+    expect(html({ attempts: 1, max_hint_level: 2, done: true, is_correct: true })).not.toContain('Tanya Tutor')
+  })
+})
+
+describe('label fase RMT', () => {
+  it('setiap fase punya label "Fase n · …"', () => {
+    for (const n of [1, 2, 3, 4, 5]) for (const { phase } of MEETINGS[n].phases) expect(PHASE_LABEL[phase]).toMatch(/^Fase [123] · /)
   })
 })
 

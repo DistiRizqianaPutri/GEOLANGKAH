@@ -44,7 +44,7 @@ export default function IdentifyStep({ step, record, onAttempt, onHint, isChalle
         isChallenge={isChallenge}
         revealText={step.answer.map((k) => NAME[k]).join(' dan ')}
       />
-      <StepTools hints={step.hints} record={record} onHint={onHint} />
+      <StepTools hints={step.hints} record={record} onHint={onHint} step={step} />
       {!done && (
         <PrimaryButton onClick={check} disabled={selected.length === 0}>
           Cek jawaban

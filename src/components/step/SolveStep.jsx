@@ -49,7 +49,7 @@ export default function SolveStep({ step, record, onAttempt, onHint, isChallenge
             isChallenge={isChallenge}
             revealText={formatAnswer(step.answer.value, step.answer.unit)}
           />
-          <StepTools hints={step.hints} record={record} onHint={onHint} />
+          <StepTools hints={step.hints} record={record} onHint={onHint} step={step} />
           {!done && (
             <PrimaryButton onClick={check} disabled={parseAnswer(raw, unit) === null}>
               Cek jawaban

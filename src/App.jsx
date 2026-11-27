@@ -9,9 +9,8 @@ import ResultPage from './pages/ResultPage.jsx'
 import TestPage from './pages/TestPage.jsx'
 import Welcome from './pages/Welcome.jsx'
 
-// Halaman uji gambar sementara aktif juga di produksi agar bisa dicoba di HP
-// lewat Vercel. Sembunyikan lagi di M10 (kembalikan syarat import.meta.env.DEV).
-const Lab = lazy(() => import('./pages/Lab.jsx'))
+// Halaman uji gambar hanya di mode pengembangan (tidak ikut build produksi).
+const Lab = import.meta.env.DEV ? lazy(() => import('./pages/Lab.jsx')) : null
 // Halaman peneliti dimuat terpisah agar tidak memperberat aplikasi siswa.
 const Dashboard = lazy(() => import('./pages/researcher/Dashboard.jsx'))
 
@@ -70,14 +69,16 @@ export default function App() {
               </Suspense>
             }
           />
-          <Route
-            path="/lab"
-            element={
-              <Suspense fallback={null}>
-                <Lab />
-              </Suspense>
-            }
-          />
+          {Lab && (
+            <Route
+              path="/lab"
+              element={
+                <Suspense fallback={null}>
+                  <Lab />
+                </Suspense>
+              }
+            />
+          )}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>

@@ -2,6 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [{ "source": "/((?!api/).*)", "destination": "/index.html" }],
   "functions": {
-    "api/export.py": { "includeFiles": "api/_shared/**" }
+    "api/export.py": { "includeFiles": "api/_shared/**" },
+    "api/tutor.py": { "includeFiles": "api/_shared/**" }
   }
 }
