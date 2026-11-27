@@ -3,7 +3,17 @@
     "allow": [
       "Bash(npm run *)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" --retry 5 --retry-connrefused --retry-delay 1 http://localhost:5173/)",
-      "Bash(grep -iE \"^\\(jsdom|happy-dom|@testing-library\\)$\")"
+      "Bash(grep -iE \"^\\(jsdom|happy-dom|@testing-library\\)$\")",
+      "Bash(python -)",
+      "Bash(py --version)",
+      "Read(//c/Users/smuly/AppData/Local/Programs/Python/**)",
+      "Bash(git -C /c/proyek/geolangkah diff .claude/settings.json)",
+      "Bash(py -)",
+      "Bash(sed -i 's|sys.path.insert\\(0, os.path.join\\(HERE, \"..\", \"api\"\\)\\)|sys.path.insert\\(0, os.path.normpath\\(os.path.join\\(HERE, \"..\", \"api\"\\)\\)\\)|' analysis/process_data.py)",
+      "Bash(py -m pip install --user -q pytest)",
+      "Bash(py -m pytest analysis api/_shared -q)",
+      "Bash(npm ls *)",
+      "PowerShell(Set-Location 'C:\\\\proyek\\\\geolangkah'; $w = Join-Path $env:TEMP 'gl_head'; cmd /c rmdir \\(Join-Path $w 'node_modules'\\); Test-Path node_modules\\\\vitest; git worktree remove --force $w; git worktree prune; git add api analysis src supabase/migrations/0002_m7.sql vercel.json docs; git status --short)"
     ]
   }
 }
