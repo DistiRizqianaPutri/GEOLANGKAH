@@ -1,6 +1,18 @@
-import { useEffect, useMemo, useReducer } from 'react'
+import { useEffect, useMemo, useReducer, useRef } from 'react'
 import { useNavigate } from 'react-router'
-import { canAdvance, createStepReducer, flattenSteps, loadProgress, saveProgress } from '../../lib/stepEngine.js'
+import { newId } from '../../lib/logQueue.js'
+import {
+  canAdvance,
+  createStepReducer,
+  flattenSteps,
+  loadProgress,
+  logKeys,
+  progressItem,
+  saveProgress,
+  stepLogItem,
+  unqueuedKeys,
+} from '../../lib/stepEngine.js'
+import useSession from '../ui/useSession.js'
 import FormulaCard from '../hint/FormulaCard.jsx'
 import Icon from '../ui/Icon.jsx'
 import PrimaryButton from '../ui/PrimaryButton.jsx'
@@ -14,23 +26,86 @@ const resettable = (step) => step.figure && (step.figure.draggable || step.actio
 /**
  * Mesin langkah (F-04): satu langkah per layar, Lanjut / Kembali / Ulangi,
  * tanpa timer dan tanpa auto-lanjut. Progres disimpan di HP setiap berubah.
+ * M6: saat Lanjut pertama kali, catatan langkah diberi client_id lalu masuk antrian log
+ * (ARSITEKTUR §6). Durasi = waktu layar terlihat (bukan penghitung yang tampil ke siswa).
  */
-export default function StepEngine({ meeting, stationName, code }) {
+export default function StepEngine({ meeting, stationName, code, userId }) {
   const navigate = useNavigate()
+  const { queue } = useSession()
   const n = meeting.meeting
   const steps = useMemo(() => flattenSteps(meeting, `${code}-m${n}`), [meeting, code, n])
   const reducer = useMemo(() => createStepReducer(steps), [steps])
   const [state, dispatch] = useReducer(reducer, null, () => loadProgress(localStorage, code, n))
+  const step = steps[Math.min(state.index, steps.length - 1)]
+  const record = state.records[step.id]
 
-  useEffect(() => saveProgress(localStorage, code, n, state), [state, code, n])
+  // Waktu aktif: dihitung sejak layar langkah tampil; berhenti saat tab disembunyikan.
+  const shownAt = useRef(null)
+  const takeElapsed = () => {
+    const now = Date.now()
+    const ms = shownAt.current === null ? 0 : now - shownAt.current
+    shownAt.current = document.hidden ? null : now
+    return ms
+  }
+  useEffect(() => {
+    shownAt.current = document.hidden ? null : Date.now()
+  }, [state.index])
+  useEffect(() => {
+    const onVisibility = () => {
+      if (document.hidden) {
+        dispatch({ type: 'ADD_TIME', stepId: step.id, ms: takeElapsed() })
+        queue?.flush()
+      } else {
+        shownAt.current = Date.now()
+      }
+    }
+    document.addEventListener('visibilitychange', onVisibility)
+    return () => document.removeEventListener('visibilitychange', onVisibility)
+  }, [step.id, queue])
+
+  // Badan efek selalu pakai { } agar tidak ada nilai yang dikembalikan ke React sebagai cleanup.
+  useEffect(() => {
+    saveProgress(localStorage, code, n, state)
+  }, [state, code, n])
+
+  // Catatan ber-client_id yang belum masuk antrian → antrian (aman diulang: client_id sama = satu item/baris).
+  useEffect(() => {
+    if (!queue) return
+    const keys = unqueuedKeys(state.records)
+    for (const key of keys) {
+      queue.enqueue(stepLogItem(key, state.records[key], { studentId: userId, meeting: n }))
+      dispatch({ type: 'MARK_QUEUED', key })
+    }
+    if (keys.length) queue.flush()
+  }, [state.records, queue, userId, n])
+
+  // Posisi langkah & selesai → tabel progress (item lama yang belum terkirim diganti).
+  useEffect(() => {
+    if (!queue) return
+    queue.enqueue(progressItem(state, steps, { studentId: userId, meeting: n, clientId: newId() }))
+    queue.flush()
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- hanya saat posisi/selesai berubah
+  }, [state.index, state.finished, queue, userId, n, steps])
+
   useEffect(() => {
     if (state.finished) navigate(`/hasil/${n}`, { replace: true })
   }, [state.finished, n, navigate])
-  useEffect(() => window.scrollTo(0, 0), [state.index])
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [state.index])
 
-  const step = steps[Math.min(state.index, steps.length - 1)]
-  const record = state.records[step.id]
-  const back = () => (state.index === 0 ? navigate('/peta') : dispatch({ type: 'BACK' }))
+  const next = () => {
+    const clientIds = Object.fromEntries(logKeys(step, state.records).map((k) => [k, newId()]))
+    dispatch({ type: 'NEXT', clientIds, elapsedMs: takeElapsed(), now: Date.now() })
+  }
+  const back = () => {
+    if (state.index === 0) {
+      dispatch({ type: 'ADD_TIME', stepId: step.id, ms: takeElapsed() })
+      navigate('/peta')
+    } else {
+      dispatch({ type: 'BACK', elapsedMs: takeElapsed() })
+    }
+  }
 
   return (
     <div className="flex min-h-dvh flex-col">
@@ -55,7 +130,7 @@ export default function StepEngine({ meeting, stationName, code }) {
       </main>
       {canAdvance(step, record) && (
         <div className="sticky bottom-0 mx-auto w-full max-w-md bg-bg-to/95 p-4 pt-2">
-          <PrimaryButton onClick={() => dispatch({ type: 'NEXT' })}>Lanjut</PrimaryButton>
+          <PrimaryButton onClick={next}>Lanjut</PrimaryButton>
         </div>
       )}
     </div>

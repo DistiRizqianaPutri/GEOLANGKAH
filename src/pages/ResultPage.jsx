@@ -12,7 +12,9 @@ export default function ResultPage() {
   const meeting = MEETINGS[n]
   const progress = meeting ? loadProgress(localStorage, session.code, n) : null
 
-  if (!meeting || !progress.finished) return <Navigate to="/peta" replace />
+  if (!meeting) return <Navigate to="/peta" replace />
+  // Selesai di HP lain: Meeting membangun ulang progres dari server lalu kembali ke sini.
+  if (!progress.finished) return <Navigate to={`/pertemuan/${n}`} replace />
 
   const steps = flattenSteps(meeting, `${session.code}-m${n}`)
   const { correct, total, hintsUsed } = challengeSummary(steps, progress.records)

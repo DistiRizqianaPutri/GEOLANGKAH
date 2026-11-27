@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" --retry 5 --retry-connrefused --retry-delay 1 http://localhost:5173/)",
+      "Bash(grep -iE \"^\\(jsdom|happy-dom|@testing-library\\)$\")"
+    ]
+  }
+}

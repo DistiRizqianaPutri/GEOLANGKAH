@@ -5,9 +5,16 @@ import TextButton from '../components/ui/TextButton.jsx'
 import useSession from '../components/ui/useSession.js'
 
 // Layar Pembuka + Masuk (layar luar, DESIGN.md §4.1). Ilustrasi orisinal menyusul di M9.
-// M4: Kode & PIN hanya dicek formatnya; PIN tidak disimpan. Verifikasi ke Supabase di M6.
+// M6: Kode + PIN diverifikasi Supabase (ARSITEKTUR §5). PIN tidak disimpan aplikasi.
 const CODE = /^[ST]\d{2}$/
 const PIN = /^\d{6}$/
+
+const SIGN_IN_ERROR = {
+  wrong: 'Kode atau PIN salah. Coba lagi.',
+  offline: 'Belum ada sinyal. Coba lagi sebentar.',
+  unregistered: 'Akun belum terdaftar. Hubungi guru.',
+  config: 'Aplikasi belum tersambung ke server. Hubungi guru.',
+}
 
 export default function Welcome() {
   const navigate = useNavigate()
@@ -16,14 +23,25 @@ export default function Welcome() {
   const [pin, setPin] = useState('')
   const [nickname, setNickname] = useState('')
   const [error, setError] = useState('')
+  const [busy, setBusy] = useState(false)
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault()
+    if (busy) return
     const c = code.trim().toUpperCase()
     if (!CODE.test(c)) return setError('Kode siswa terdiri dari huruf S atau T dan 2 angka, misalnya S01.')
     if (!PIN.test(pin)) return setError('PIN terdiri dari 6 angka.')
-    signIn(c, nickname)
-    navigate('/peta')
+    setError('')
+    setBusy(true)
+    try {
+      await signIn(c, pin, nickname)
+      navigate('/peta')
+    } catch (err) {
+      setError(SIGN_IN_ERROR[err.reason] ?? SIGN_IN_ERROR.offline)
+      setPin('')
+    } finally {
+      setBusy(false)
+    }
   }
 
   return (
@@ -87,7 +105,9 @@ export default function Welcome() {
               ! {error}
             </p>
           )}
-          <PrimaryButton type="submit">Mulai Petualangan 🚀</PrimaryButton>
+          <PrimaryButton type="submit" disabled={busy}>
+            {busy ? 'Memeriksa…' : 'Mulai Petualangan 🚀'}
+          </PrimaryButton>
         </form>
       )}
     </main>

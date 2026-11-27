@@ -121,7 +121,9 @@ formatAnswer(v, unit)            // "52 cm²", "24 kg", "Rp4.950.000"
 | `lib/feedback.js` | `feedbackText(code, {ask, unit})` dari `content/feedback.json` (varian `convert` untuk kg/Rp, M5) |
 | `lib/figureSpec.js` | `figureModel(figure)`: `figure` di JSON → model FigureCanvas (termasuk `triangle`, M5); `measureText` (label atau `t = ?`) |
 | `lib/story.js` *(M5)* | mode baca soal cerita: `splitSegment`, `moveToKnown`, `rejectResult`, `missingKnown`, `storyComplete`, `storyResult`, `askedKey` |
-| `lib/stepEngine.js` | `flattenSteps`, reducer (`ATTEMPT`, `OPEN_HINT`, `NEXT`, `BACK`, `RESET_FIGURE`), `canAdvance`, `challengeSummary`, simpan/muat progres |
+| `lib/stepEngine.js` | `flattenSteps`, reducer (`ATTEMPT`, `OPEN_HINT`, `NEXT`, `BACK`, `RESET_FIGURE`; M6: `ADD_TIME`, `MARK_QUEUED`), `canAdvance`, `challengeSummary`, simpan/muat progres; M6: `logKeys`, `stepLogItem`, `progressItem`, `resumeFromServer` |
+| `lib/logQueue.js` *(M6)* | `createLogQueue`, `supabaseSender`, `startAutoSync`, `newId` (§6) |
+| `lib/remote.js` *(M6)* | `fetchProgress`, `fetchStepLogs` (baca data milik siswa) |
 | `components/figure/labelFit.js`, `hitTest.js` | penempatan label di dalam gambar; segmen terdekat untuk ketuk unsur |
 
 **Catatan per langkah** (`records[step_id]` di progres) memakai nama kolom `step_logs`: `attempts`, `is_correct`, `max_hint_level`, `error_code`, `answer`, ditambah `first_error_code`, `done`, dan `revealed`. Di M6 catatan ini dikirim lewat `logQueue`. Langkah yang sudah `done` tidak menerima percobaan baru (tombol Kembali tidak me-reset).
@@ -163,7 +165,9 @@ Data yang tidak tertulis di soal dilengkapi otomatis jika bisa diturunkan. Conto
 
 Tes (`geometry.test.js`): semua kunci jawaban di `KONTEN.md`, setiap kode kesalahan di §7, kunci dan pengecoh Tantangan Pos §10, dan kasus tidak wajar (s ≤ x). *(M5)* `content/content.test.js` membandingkan setiap `answer` di `meeting-*.json` langsung dengan `solveProblem()`, termasuk nilai kotak memudar, angka gambar, akhir pembahasan L3, dan info penting soal cerita.
 
-## 4. Skema database (draf `supabase/migrations/0001_init.sql`)
+## 4. Skema database (`supabase/migrations/0001_init.sql`)
+
+*(M6, 26-11-2026)* File migrasi adalah acuan akhir. Bedanya dari draf di bawah: `step_logs.first_error_code` (kode kesalahan percobaan pertama; `error_code` = percobaan terakhir) dan `duration_sec >= 0`; CHECK 0–10 tiap kolom Leppink; indeks `step_logs(student_id, meeting)`; *trigger* `progress_keep_completed` (pertemuan yang sudah `completed_at` tidak bisa dimundurkan HP lain); `anon` tidak punya hak apa pun, `authenticated` hanya hak yang dibutuhkan; fungsi `is_researcher()` (`security definer`) untuk kebijakan peneliti.
 
 ```sql
 -- Siswa: satu baris per akun. Akun dibuat peneliti (email teknis: s01@<VITE_STUDENT_EMAIL_DOMAIN>)
@@ -241,8 +245,10 @@ create table progress (
 - Peneliti membuat akun siswa di dasbor Supabase (*Add user* → centang *Auto Confirm User*, sehingga tidak ada email yang dikirim): email teknis `s01@<VITE_STUDENT_EMAIL_DOMAIN>`, kata sandi = PIN 6 digit, lalu menambah baris `students`.
 - Domain email teknis: **`siswa.geolangkah.test`** (alamat palsu, tidak pernah dipakai mengirim email; diputuskan 26-11-2026). Jika di M6 Supabase menolak domain `.test`, Claude Code mengusulkan pengganti lalu memperbarui bagian ini.
 - Layar Masuk meminta **Kode** + **PIN**, aplikasi mengubah kode menjadi email teknis lalu memanggil `signInWithPassword`.
-  - *Sementara (M4–M5):* belum ada Supabase. Format Kode (`^[ST]\d{2}$`) dan PIN (6 angka) hanya dicek bentuknya. PIN tidak disimpan dan tidak diverifikasi. Hanya kode + nama panggilan yang disimpan di `localStorage`. Verifikasi sungguhan dikerjakan di M6.
-- Sesi disimpan Supabase di perangkat → siswa tidak perlu masuk ulang setiap pertemuan.
+  - *(M6)* Setelah `signInWithPassword` berhasil, aplikasi membaca baris `students` milik pengguna; bila tidak ada atau kodenya beda → "Akun belum terdaftar". `localStorage` `geolangkah:session` → `{code, nickname, userId}` (tanpa PIN). Pesan gagal: PIN/kode salah, belum ada sinyal, belum terdaftar.
+  - Pendaftaran mandiri **dimatikan** di Supabase (*Allow new users to sign up* = off); akun hanya dibuat peneliti.
+- Sesi disimpan Supabase di perangkat → siswa tidak perlu masuk ulang setiap pertemuan. Saat offline dengan token kedaluwarsa siswa tetap bisa belajar; log menunggu sinyal dan token diperbarui otomatis saat online.
+- *(M6)* Progres: pos selesai = selesai di HP ini **atau** `progress.completed_at` di server. HP baru (progres lokal kosong) → progres dibangun ulang dari `step_logs` + `progress` milik siswa (`resumeFromServer`); langkah yang sudah tercatat terkunci sehingga tidak tercatat dua kali.
 - **Nama panggilan** (opsional) hanya disimpan di `localStorage` untuk sapaan; tidak pernah dikirim ke Supabase atau ke tutor AI.
 - Peneliti masuk dengan email pribadinya di `/peneliti`.
 
@@ -254,11 +260,19 @@ create table progress (
 4. Berhasil → hapus dari antrian. Indikator kecil "Tersimpan ✓ / Menunggu sinyal…" di TopBar.
 5. Status langkah yang sedang dikerjakan juga disimpan ke `localStorage` setiap berubah, karena Chrome Android bisa menutup tab di latar belakang pada HP ber-RAM kecil.
 
+*Rincian M6 (26-11-2026):*
+- Kunci antrian per akun: `geolangkah:queue:<userId>` → log tidak pernah dikirim atas nama akun lain. Keluar dengan antrian belum kosong → konfirmasi; data tetap di HP dan terkirim saat akun itu masuk lagi.
+- **Kapan log dibuat:** satu baris per langkah saat siswa **pertama kali** menekan Lanjut (juga langkah penjelasan, `attempts = 0`). Sub-catatan `<step_id>#pilih` (PG Tantangan) dan `<step_id>#ditanya-n` (soal cerita) dicatat sebagai baris sendiri dengan `step_id` tersebut. `client_id` dibuat saat itu dan disimpan di catatan langkah, jadi muat ulang/kirim ulang memakai id yang sama.
+- **`duration_sec`** = waktu layar langkah terlihat sampai Lanjut pertama (tab tersembunyi tidak dihitung; Kembali ke langkah lama tidak menambah).
+- `progress` dikirim lewat antrian yang sama (`upsert` `onConflict: 'student_id,meeting'`); item progres yang belum terkirim diganti yang terbaru.
+- Kesalahan data/constraint (SQLSTATE 22xxx/23xxx) tidak diulang selamanya: item dipindah ke `geolangkah:queue:<userId>:failed` (tetap di HP untuk diperiksa).
+- Inti `createLogQueue({storage, key, send})` murni; dites di `logQueue.test.js` (offline → online, respons hilang, flush bersamaan, muat ulang tab).
+
 ## 7. Variabel lingkungan (`.env.example`)
 
 ```
 VITE_SUPABASE_URL=
-VITE_SUPABASE_ANON_KEY=        # boleh di frontend (dilindungi RLS)
+VITE_SUPABASE_ANON_KEY=        # anon ATAU publishable key (sb_publishable_…); boleh di frontend (dilindungi RLS)
 VITE_STUDENT_EMAIL_DOMAIN=siswa.geolangkah.test   # domain email teknis akun siswa (palsu, tanpa kirim email)
 DEEPSEEK_API_KEY=              # HANYA di server (Vercel), jangan pakai awalan VITE_
 DEEPSEEK_MODEL=                # cek nama model terbaru di dokumentasi DeepSeek

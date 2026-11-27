@@ -109,12 +109,13 @@ Legenda: ☐ belum · ☑ selesai
 **Belum dicek:** tampilan 360 × 640 dan HP Android asli (sesi tanpa peramban). Pengembang memainkan P3 → P5 di Vercel. Fokus: chip & tabel soal cerita, label `t = ?`, segitiga di `/lab`, dan templat memudar panjang P4/P5 yang harus terbungkus rapi di 360 px.
 
 ## M6 — Supabase: masuk, progres, log, offline
-- [ ] Migrasi `0001_init.sql` + kebijakan RLS
-- [ ] Halaman Masuk (Kode + PIN) dan Peta Pertemuan dengan kunci berurutan
-- [ ] Simpan progres (lanjut dari langkah terakhir)
-- [ ] `logQueue.js` + tes (simulasi offline → online, tanpa data ganda)
+- [x] Migrasi `0001_init.sql` + kebijakan RLS
+- [x] Halaman Masuk (Kode + PIN) dan Peta Pertemuan dengan kunci berurutan
+- [x] Simpan progres (lanjut dari langkah terakhir)
+- [x] `logQueue.js` + tes (simulasi offline → online, tanpa data ganda)
 
 **Cek selesai:** matikan data seluler di tengah pertemuan → lanjutkan → nyalakan lagi → log masuk ke Supabase **tepat satu kali**.
+*Selesai 27-11-2026:* 580 tes lulus (17 tes `logQueue`: offline → online, respons hilang, flush bersamaan, muat ulang tab), lint bersih, build sukses. Migrasi dijalankan; akses tanpa login ditolak di semua tabel; pendaftaran mandiri mati. Akun T01 (domain `.test` diterima): PIN salah → pesan error; Pos 1 dimainkan sampai Hasil → `step_logs` 14 baris, `progress` tercatat. Variabel `VITE_*` diisi di Vercel. Perbaikan: `useEffect` ringkas di StepEngine diubah ke blok `{ }` + tes `src/effects.test.js`.
 
 ## M7 — Instrumen penelitian & halaman peneliti
 - [ ] `TestPage` (pretest di awal Pertemuan 1, posttest di akhir Pertemuan 5; terkunci setelah dikirim)
