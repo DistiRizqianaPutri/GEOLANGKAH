@@ -1,0 +1,68 @@
+{
+  "title": "TES LITERASI MATEMATIS",
+  "maxScore": 24,
+  "instructions": "Tuliskan langkah-langkah pengerjaanmu untuk setiap soal.",
+  "items": [
+    {
+      "id": "b1",
+      "number": 1,
+      "competency": "Mathematical Reasoning",
+      "max": 6,
+      "title": "Memilih Kebun",
+      "question": "Pak Joko memiliki 40 meter kawat untuk memagari kebun. Ada dua pilihan kebun. Kebun A berbentuk persegi panjang dengan panjang 12 m dan lebar 8 m. Kebun B berbentuk trapesium siku-siku dengan sisi sejajar 12 m dan 6 m, tinggi 8 m, dan sisi miring 10 m. Pak Joko ingin kebun yang bisa dipagari seluruhnya dengan kawatnya dan luasnya paling besar. Kebun mana yang sebaiknya dipilih Pak Joko? Jelaskan alasanmu!",
+      "stages": [
+        { "label": "Memahami masalah", "max": 1 },
+        { "label": "Menghitung keliling dan luas", "max": 2 },
+        { "label": "Membandingkan", "max": 1 },
+        { "label": "Memutuskan", "max": 1 },
+        { "label": "Memberi alasan", "max": 1 }
+      ]
+    },
+    {
+      "id": "b2",
+      "number": 2,
+      "competency": "Formulating Situations Mathematically",
+      "max": 6,
+      "title": "Menanam Rumput",
+      "question": "Halaman rumah Bu Sinta berbentuk trapesium dengan sisi sejajar 10 m dan 6 m serta tinggi 4 m. Seluruh halaman akan ditanami rumput dengan harga Rp20.000 per m². Bu Sinta mempunyai uang Rp700.000. Ubahlah situasi tersebut menjadi model matematika untuk menentukan apakah uang Bu Sinta cukup, kemudian selesaikan!",
+      "stages": [
+        { "label": "Menuliskan informasi", "max": 1 },
+        { "label": "Membuat model", "max": 1 },
+        { "label": "Menghitung luas", "max": 1 },
+        { "label": "Menghitung biaya", "max": 1 },
+        { "label": "Membandingkan", "max": 1 },
+        { "label": "Menyimpulkan", "max": 1 }
+      ]
+    },
+    {
+      "id": "b3",
+      "number": 3,
+      "competency": "Employing Mathematical Concepts, Facts, and Procedures",
+      "max": 6,
+      "title": "Kolam Ikan",
+      "question": "Sebuah kolam ikan berbentuk persegi panjang dengan panjang 10 m dan lebar 5 m. Di sekeliling kolam akan dipasang pagar dengan biaya Rp10.000 per meter, dan dasar kolam akan dilapisi terpal dengan biaya Rp5.000 per m². Berapa total biaya yang diperlukan? Tunjukkan langkah perhitunganmu!",
+      "stages": [
+        { "label": "Memilih konsep", "max": 1 },
+        { "label": "Biaya pagar", "max": 2 },
+        { "label": "Biaya terpal", "max": 2 },
+        { "label": "Menyimpulkan", "max": 1 }
+      ]
+    },
+    {
+      "id": "b4",
+      "number": 4,
+      "competency": "Interpreting, Applying, and Evaluating Mathematical Outcomes",
+      "max": 6,
+      "title": "Pupuk Ladang",
+      "question": "Sebuah ladang berbentuk trapesium dengan sisi sejajar 10 m dan 6 m serta tinggi 5 m. Setiap 1 m² ladang memerlukan 1 kg pupuk. Rina menghitung luas ladang: (10 + 6) × 5 = 80 m², sehingga ia membeli 80 kg pupuk. Apakah kamu setuju dengan perhitungan Rina? Tentukan banyak pupuk yang seharusnya dibeli dan jelaskan alasanmu!",
+      "stages": [
+        { "label": "Menilai kewajaran", "max": 1 },
+        { "label": "Menemukan kesalahan", "max": 1 },
+        { "label": "Menghitung luas", "max": 1 },
+        { "label": "Menghitung pupuk", "max": 1 },
+        { "label": "Mengevaluasi", "max": 1 },
+        { "label": "Menyimpulkan", "max": 1 }
+      ]
+    }
+  ]
+}

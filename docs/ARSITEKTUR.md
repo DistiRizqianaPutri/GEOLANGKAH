@@ -169,6 +169,8 @@ Tes (`geometry.test.js`): semua kunci jawaban di `KONTEN.md`, setiap kode kesala
 
 *(M6, 26-11-2026)* File migrasi adalah acuan akhir. Bedanya dari draf di bawah: `step_logs.first_error_code` (kode kesalahan percobaan pertama; `error_code` = percobaan terakhir) dan `duration_sec >= 0`; CHECK 0–10 tiap kolom Leppink; indeks `step_logs(student_id, meeting)`; *trigger* `progress_keep_completed` (pertemuan yang sudah `completed_at` tidak bisa dimundurkan HP lain); `anon` tidak punya hak apa pun, `authenticated` hanya hak yang dibutuhkan; fungsi `is_researcher()` (`security definer`) untuk kebijakan peneliti.
 
+*(M7, 27-11-2026)* `supabase/migrations/0002_m7.sql`: kolom `test_answers.stage_scores jsonb` (skor tiap tahap rubrik, mis. `[1,2,1,0,1]`; `score` = jumlahnya), CHECK `score` 0–6, dan *grant update* peneliti diperluas ke `stage_scores`. Kiriman tes/Leppink memakai *upsert ignore-duplicates* dengan target `student_id,kind,item_id` / `student_id,meeting`, jadi kiriman kedua diabaikan (terkunci).
+
 ```sql
 -- Siswa: satu baris per akun. Akun dibuat peneliti (email teknis: s01@<VITE_STUDENT_EMAIL_DOMAIN>)
 create table students (
@@ -285,7 +287,9 @@ Kunci `service_role` Supabase **tidak pernah** ada di repo maupun di frontend.
 - Menerima `Authorization: Bearer <JWT peneliti>` dan meneruskannya ke Supabase REST bersama anon key, sehingga **RLS tetap berlaku**. Tidak memakai `service_role`.
 - `GET /api/export?table=step_logs|test_answers|leppink` → CSV. Bawaan hanya kode `S..`; `&include_test=1` ikut menyertakan akun uji `T..`.
 - `GET /api/export?summary=1` → JSON: skor pretest & posttest, N-gain, rata-rata IL/EL/GL per siswa per pertemuan.
-- Hanya pustaka standar Python (`csv`, `json`, `statistics`, `urllib`) agar *cold start* cepat. Logika hitung ada di `api/_shared/scoring.py` (dites `pytest`) dan juga diimpor oleh `analysis/process_data.py`.
+- `GET /api/export?key=1` → JSON kunci jawaban & pedoman umum penskoran dari `api/_shared/test_key.json` *(M7)*. Kunci sengaja **tidak** ada di `src/` agar tidak ikut bundle yang bisa diunduh siswa; hanya halaman `/peneliti` yang memintanya.
+- Setiap permintaan dicek dulu lewat RPC `is_researcher` (bukan peneliti → 403). CSV memakai kolom `student_code` (dari relasi `students`), tanpa UUID, dengan BOM agar rapi di Excel.
+- Hanya pustaka standar Python (`csv`, `json`, `statistics`, `urllib`) agar *cold start* cepat. Logika hitung ada di `api/_shared/scoring.py`, format CSV di `api/_shared/export_core.py` (keduanya dites `pytest`) dan juga diimpor oleh `analysis/process_data.py`. `vercel.json` menyertakan `api/_shared/**` ke fungsi. Variabel server: `SUPABASE_URL`/`SUPABASE_ANON_KEY`, bila kosong memakai `VITE_SUPABASE_URL`/`VITE_SUPABASE_ANON_KEY`.
 
 ## 9. Tutor AI (P1) — `api/tutor.py`
 

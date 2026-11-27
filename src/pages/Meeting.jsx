@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Navigate, useParams } from 'react-router'
 import StepEngine from '../components/step/StepEngine.jsx'
+import useInstrumentStatus from '../components/ui/useInstrumentStatus.js'
 import useSession from '../components/ui/useSession.js'
 import MEETINGS from '../content/meetings.js'
 import stations from '../content/stations.json'
+import { gateBefore } from '../lib/instruments.js'
 import { fetchProgress, fetchStepLogs } from '../lib/remote.js'
 import { flattenSteps, isFreshProgress, isMeetingDone, loadProgress, resumeFromServer, saveProgress } from '../lib/stepEngine.js'
 import { supabase } from '../lib/supabase.js'
@@ -35,13 +37,14 @@ async function prepare(n, session) {
 }
 
 // Menjalankan fase Kenali → Bangun → Latih → Tantangan satu pertemuan.
-// Pretest (P1) dan Skala Leppink menyusul di M7.
+// M7: Pos 1 diawali pretest; setelah selesai, Hasil Pos mengarahkan ke Leppink/posttest.
 export default function Meeting() {
   const n = Number(useParams().n)
   const { session } = useSession()
   const meeting = MEETINGS[n]
   const station = stations.find((s) => s.meeting === n)
   const [status, setStatus] = useState({ n: null, value: 'loading' })
+  const instruments = useInstrumentStatus()
 
   useEffect(() => {
     if (!meeting) return
@@ -53,7 +56,7 @@ export default function Meeting() {
   }, [n, meeting, session])
 
   if (!meeting || !station) return <Navigate to="/peta" replace />
-  if (status.n !== n) {
+  if (status.n !== n || !instruments) {
     return (
       <main className="mx-auto flex min-h-dvh max-w-md items-center justify-center p-4">
         <p className="text-text-muted">Memuat…</p>
@@ -61,5 +64,7 @@ export default function Meeting() {
     )
   }
   if (status.value === 'locked') return <Navigate to="/peta" replace />
+  const gate = gateBefore(n, instruments)
+  if (gate) return <Navigate to={gate} replace />
   return <StepEngine key={n} meeting={meeting} stationName={station.name} code={session.code} userId={session.userId} />
 }

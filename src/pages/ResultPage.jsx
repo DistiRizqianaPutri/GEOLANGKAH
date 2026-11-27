@@ -1,7 +1,9 @@
 import { Navigate, useNavigate, useParams } from 'react-router'
 import PrimaryButton from '../components/ui/PrimaryButton.jsx'
+import useInstrumentStatus from '../components/ui/useInstrumentStatus.js'
 import useSession from '../components/ui/useSession.js'
 import MEETINGS from '../content/meetings.js'
+import { gateAfter } from '../lib/instruments.js'
 import { challengeSummary, flattenSteps, loadProgress } from '../lib/stepEngine.js'
 
 // Hasil Pos (layar luar, DESIGN.md §4.6). Tanpa bintang, poin, atau peringkat (§2.5).
@@ -11,10 +13,15 @@ export default function ResultPage() {
   const { session } = useSession()
   const meeting = MEETINGS[n]
   const progress = meeting ? loadProgress(localStorage, session.code, n) : null
+  const instruments = useInstrumentStatus()
 
   if (!meeting) return <Navigate to="/peta" replace />
   // Selesai di HP lain: Meeting membangun ulang progres dari server lalu kembali ke sini.
   if (!progress.finished) return <Navigate to={`/pertemuan/${n}`} replace />
+  // M7: Leppink pos ini (dan posttest setelah Pos 5) dikerjakan sebelum Hasil Pos.
+  if (!instruments) return null
+  const gate = gateAfter(n, instruments)
+  if (gate) return <Navigate to={gate} replace />
 
   const steps = flattenSteps(meeting, `${session.code}-m${n}`)
   const { correct, total, hintsUsed } = challengeSummary(steps, progress.records)

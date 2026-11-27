@@ -118,15 +118,17 @@ Legenda: ☐ belum · ☑ selesai
 *Selesai 27-11-2026:* 580 tes lulus (17 tes `logQueue`: offline → online, respons hilang, flush bersamaan, muat ulang tab), lint bersih, build sukses. Migrasi dijalankan; akses tanpa login ditolak di semua tabel; pendaftaran mandiri mati. Akun T01 (domain `.test` diterima): PIN salah → pesan error; Pos 1 dimainkan sampai Hasil → `step_logs` 14 baris, `progress` tercatat. Variabel `VITE_*` diisi di Vercel. Perbaikan: `useEffect` ringkas di StepEngine diubah ke blok `{ }` + tes `src/effects.test.js`.
 
 ## M7 — Instrumen penelitian & halaman peneliti
-- [ ] `TestPage` (pretest di awal Pertemuan 1, posttest di akhir Pertemuan 5; terkunci setelah dikirim)
-- [ ] `LeppinkPage` (10 butir, tombol 0–10) di akhir setiap pertemuan
-- [ ] Peneliti mengisi `tests.json` dan `leppink.json` *(bukan Claude Code)*
-- [ ] `api/_shared/scoring.py` (skor, N-gain, rata-rata IL/EL/GL) + tes `pytest`
-- [ ] `api/export.py` (Python, Vercel) sesuai `ARSITEKTUR.md` §8 — CSV & ringkasan, memakai JWT peneliti
-- [ ] `/peneliti`: daftar siswa, progres, isi skor butir uraian, tombol unduh CSV (`step_logs`, `test_answers`, `leppink`) lewat `/api/export`
-- [ ] `analysis/process_data.py` (mengimpor `scoring.py`) + contoh data palsu untuk mengujinya
+- [x] `TestPage` (pretest di awal Pertemuan 1, posttest di akhir Pertemuan 5; terkunci setelah dikirim)
+- [x] `LeppinkPage` (10 butir, tombol 0–10) di akhir setiap pertemuan
+- [x] Peneliti mengisi `tests.json` dan `leppink.json` *(teks diberikan peneliti di prompt, disalin kata demi kata; kunci di `api/_shared/test_key.json`)*
+- [x] `api/_shared/scoring.py` (skor, N-gain, rata-rata IL/EL/GL) + tes `pytest`
+- [x] `api/export.py` (Python, Vercel) sesuai `ARSITEKTUR.md` §8 — CSV & ringkasan, memakai JWT peneliti
+- [x] `/peneliti`: daftar siswa, progres, isi skor butir uraian, tombol unduh CSV (`step_logs`, `test_answers`, `leppink`) lewat `/api/export`
+- [x] `analysis/process_data.py` (mengimpor `scoring.py`) + contoh data palsu untuk mengujinya
 
 **Cek selesai:** akun uji `T01` menyelesaikan seluruh alur; peneliti mengisi skor uraian; CSV terunduh dari `/api/export`; ringkasan `/api/export?summary=1` sama dengan hasil `process_data.py`; `pytest` hijau.
+
+*Selesai 27-11-2026 (kode):* 591 tes Vitest lulus, lint bersih, build sukses; `pytest analysis api/_shared` 13 lulus; `process_data.py` jalan pada `analysis/sample_data`; teks kunci tidak ditemukan di `dist/`. Ringkasan API = `process_data.py` dijamin oleh fungsi `summarize()` yang sama + tes bolak-balik CSV. **Belum diuji (manual, setelah deploy):** jalankan `0002_m7.sql`, buat akun peneliti, alur T01 penuh, isi skor, unduh CSV dari `/api/export`. Catatan Windows: jalankan `npm test` dari folder berhuruf drive besar (`C:\…`); dari `c:\…` Vitest gagal memuat semua suite.
 
 ## M8 — Tutor AI *(P1)*
 - [ ] `api/tutor.py` sesuai `ARSITEKTUR.md` §9

@@ -1,0 +1,18 @@
+{
+  "title": "SKALA LEPPINK",
+  "instructions": "Pilih angka 0 sampai 10 yang paling sesuai dengan yang kamu rasakan di pos ini. Tidak ada jawaban benar atau salah.",
+  "label0": "Sangat tidak setuju",
+  "label10": "Sangat setuju",
+  "items": [
+    { "id": "il1", "text": "Materi di pos ini sangat rumit bagiku." },
+    { "id": "il2", "text": "Rumus-rumus di pos ini sangat rumit bagiku." },
+    { "id": "il3", "text": "Istilah-istilah di pos ini (misalnya keliling, luas, sisi sejajar, tinggi) sangat rumit bagiku." },
+    { "id": "el1", "text": "Petunjuk dan penjelasan di pos ini sangat tidak jelas." },
+    { "id": "el2", "text": "Petunjuk dan penjelasan di pos ini tidak membantuku belajar." },
+    { "id": "el3", "text": "Petunjuk dan penjelasan di pos ini memakai kata-kata yang membingungkan." },
+    { "id": "gl1", "text": "Pos ini membuatku lebih paham materinya." },
+    { "id": "gl2", "text": "Pos ini membuatku lebih paham rumus-rumusnya." },
+    { "id": "gl3", "text": "Pos ini membuatku lebih paham istilah-istilahnya." },
+    { "id": "gl4", "text": "Pos ini menambah pemahamanku tentang keliling dan luas bangun datar." }
+  ]
+}

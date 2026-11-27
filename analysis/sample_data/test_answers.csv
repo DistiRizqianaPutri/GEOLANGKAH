@@ -1,0 +1,25 @@
+﻿student_code,kind,item_id,answer,score,stage_scores,scored_at,created_at
+S01,pre,b1,(contoh jawaban palsu),2,,2026-11-27T10:00:00+00:00,2026-11-20T08:00:00+00:00
+S01,pre,b2,(contoh jawaban palsu),2,,2026-11-27T10:00:00+00:00,2026-11-20T08:00:00+00:00
+S01,pre,b3,(contoh jawaban palsu),2,,2026-11-27T10:00:00+00:00,2026-11-20T08:00:00+00:00
+S01,pre,b4,(contoh jawaban palsu),2,,2026-11-27T10:00:00+00:00,2026-11-20T08:00:00+00:00
+S01,post,b1,(contoh jawaban palsu),5,,2026-11-28T10:00:00+00:00,2026-11-20T08:00:00+00:00
+S01,post,b2,(contoh jawaban palsu),5,,2026-11-28T10:00:00+00:00,2026-11-20T08:00:00+00:00
+S01,post,b3,(contoh jawaban palsu),5,,2026-11-28T10:00:00+00:00,2026-11-20T08:00:00+00:00
+S01,post,b4,(contoh jawaban palsu),5,,2026-11-28T10:00:00+00:00,2026-11-20T08:00:00+00:00
+S02,pre,b1,(contoh jawaban palsu),3,,2026-11-27T10:00:00+00:00,2026-11-20T08:00:00+00:00
+S02,pre,b2,(contoh jawaban palsu),3,,2026-11-27T10:00:00+00:00,2026-11-20T08:00:00+00:00
+S02,pre,b3,(contoh jawaban palsu),3,,2026-11-27T10:00:00+00:00,2026-11-20T08:00:00+00:00
+S02,pre,b4,(contoh jawaban palsu),3,,2026-11-27T10:00:00+00:00,2026-11-20T08:00:00+00:00
+S02,post,b1,(contoh jawaban palsu),6,,2026-11-28T10:00:00+00:00,2026-11-20T08:00:00+00:00
+S02,post,b2,(contoh jawaban palsu),5,,2026-11-28T10:00:00+00:00,2026-11-20T08:00:00+00:00
+S02,post,b3,(contoh jawaban palsu),5,,2026-11-28T10:00:00+00:00,2026-11-20T08:00:00+00:00
+S02,post,b4,(contoh jawaban palsu),4,,2026-11-28T10:00:00+00:00,2026-11-20T08:00:00+00:00
+S03,pre,b1,(contoh jawaban palsu),1,,2026-11-27T10:00:00+00:00,2026-11-20T08:00:00+00:00
+S03,pre,b2,(contoh jawaban palsu),2,,2026-11-27T10:00:00+00:00,2026-11-20T08:00:00+00:00
+S03,pre,b3,(contoh jawaban palsu),1,,2026-11-27T10:00:00+00:00,2026-11-20T08:00:00+00:00
+S03,pre,b4,(contoh jawaban palsu),0,,2026-11-27T10:00:00+00:00,2026-11-20T08:00:00+00:00
+T01,pre,b1,(contoh jawaban palsu),6,,2026-11-27T10:00:00+00:00,2026-11-20T08:00:00+00:00
+T01,pre,b2,(contoh jawaban palsu),6,,2026-11-27T10:00:00+00:00,2026-11-20T08:00:00+00:00
+T01,pre,b3,(contoh jawaban palsu),6,,2026-11-27T10:00:00+00:00,2026-11-20T08:00:00+00:00
+T01,pre,b4,(contoh jawaban palsu),6,,2026-11-27T10:00:00+00:00,2026-11-20T08:00:00+00:00

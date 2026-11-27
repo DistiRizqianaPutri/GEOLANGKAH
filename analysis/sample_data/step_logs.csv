@@ -1,0 +1,7 @@
+﻿student_code,meeting,step_id,answer,is_correct,attempts,max_hint_level,error_code,first_error_code,duration_sec,created_at
+S01,1,m1-kenali-01,24,true,1,0,,,40,2026-11-27T10:00:00+00:00
+S01,1,m1-bangun-01,20,true,2,1,,E_KL_TERTUKAR,40,2026-11-27T10:00:00+00:00
+S02,1,m1-bangun-01,20,true,3,2,,E_KL_TERTUKAR,40,2026-11-27T10:00:00+00:00
+S02,1,m1-bangun-02,10,false,2,1,E_SETENGAH_KELILING,E_SETENGAH_KELILING,40,2026-11-27T10:00:00+00:00
+S01,2,m2-kenali-01,30,true,1,0,,,40,2026-11-27T10:00:00+00:00
+T01,1,m1-kenali-01,1,false,5,3,E_LAIN,E_LAIN,40,2026-11-27T10:00:00+00:00

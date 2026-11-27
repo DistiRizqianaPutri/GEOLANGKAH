@@ -1,0 +1,10 @@
+{
+  "_note": "Kunci jawaban & pedoman penskoran (dari peneliti). HANYA dilayani /api/export?key=1 untuk peneliti; jangan diimpor frontend.",
+  "guide": "Skor penuh diberikan apabila siswa menunjukkan tahapan penyelesaian yang benar, menggunakan prosedur matematika yang tepat, dan memberikan kesimpulan sesuai konteks. Skor parsial tetap diberikan apabila siswa telah menunjukkan tahapan berpikir yang benar tetapi melakukan kesalahan hitung pada tahap berikutnya.",
+  "keys": {
+    "b1": "Kebun A: K = 2(12+8) = 40 m, L = 12x8 = 96 m2. Kebun B: K = 12+6+8+10 = 36 m, L = 1/2(12+6)x8 = 72 m2. Keduanya bisa dipagari dengan 40 m kawat; Kebun A lebih luas, jadi pilih Kebun A.",
+    "b2": "L = 1/2(10+6)x4 = 32 m2; biaya = 32 x Rp20.000 = Rp640.000; Rp700.000 - Rp640.000 = Rp60.000, jadi uang Bu Sinta cukup (sisa Rp60.000).",
+    "b3": "Pagar memakai keliling: K = 2(10+5) = 30 m, biaya 30 x Rp10.000 = Rp300.000. Terpal memakai luas: L = 10x5 = 50 m2, biaya 50 x Rp5.000 = Rp250.000. Total = Rp550.000.",
+    "b4": "Tidak setuju; Rina lupa mengalikan 1/2. L = 1/2(10+6)x5 = 40 m2, jadi pupuk yang seharusnya 40 kg; Rina kelebihan 40 kg."
+  }
+}

@@ -260,3 +260,30 @@ describe('stations & formulas', () => {
     expect(formulas.map((f) => f.formula)).toContain('L = ½ × (a + b) × t')
   })
 })
+
+// M7: instrumen penelitian (teks dari peneliti). Kunci jawaban tidak boleh ada di bundle siswa.
+describe('tests.json & leppink.json', async () => {
+  const tests = (await import('./tests.json')).default
+  const leppink = (await import('./leppink.json')).default
+  const { LEPPINK_IDS } = await import('../lib/instruments.js')
+
+  it('4 butir uraian, maks tahap = 6 per butir, total 24', () => {
+    expect(tests.items.map((i) => i.id)).toEqual(['b1', 'b2', 'b3', 'b4'])
+    for (const item of tests.items) {
+      expect(item.stages.reduce((s, st) => s + st.max, 0)).toBe(item.max)
+      expect(item.max).toBe(6)
+    }
+    expect(tests.items.reduce((s, i) => s + i.max, 0)).toBe(tests.maxScore)
+  })
+
+  it('tidak memuat kunci jawaban atau pedoman skor', () => {
+    const text = JSON.stringify(tests).toLowerCase()
+    expect(text).not.toMatch(/kunci|"key"|pedoman|rina lupa|pilih kebun a/)
+  })
+
+  it('Leppink: 10 butir, id = kolom tabel leppink_responses', () => {
+    expect(leppink.items.map((i) => i.id)).toEqual(LEPPINK_IDS)
+    expect(leppink.label0).toBeTruthy()
+    expect(leppink.label10).toBeTruthy()
+  })
+})

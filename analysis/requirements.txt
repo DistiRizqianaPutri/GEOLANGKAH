@@ -1,1 +1,3 @@
-# Dependensi analisis data (pandas, dll.) — diisi di M7.
+# Dependensi analisis data (M7). Rumus hitung memakai pustaka standar (api/_shared/scoring.py).
+pytest>=8          # tes: pytest analysis api/_shared
+matplotlib>=3.8    # opsional: grafik garis IL/EL/GL (dilewati bila tidak terpasang)

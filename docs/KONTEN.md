@@ -301,8 +301,9 @@ Aturan petunjuk:
 
 | File | Isi | Catatan |
 |---|---|---|
-| `src/content/tests.json` | 4 butir pretest/posttest dari instrumen literasi matematis peneliti, kunci, pedoman skor | Claude Code hanya membuat **struktur kosong + contoh format**, isinya diketik peneliti |
-| `src/content/leppink.json` | 10 butir (IL 3, EL 3, GL 4), skala 0–10, label ujung skala | Gunakan terjemahan yang dipakai di penelitian (Leppink dkk., 2013) |
+| `src/content/tests.json` | 4 butir pretest/posttest dari instrumen literasi matematis peneliti: petunjuk, soal, tahap skor (maks 6/butir, total 24) | *(M7)* Diisi dengan teks yang diberikan peneliti, kata demi kata. **Tanpa kunci** |
+| `api/_shared/test_key.json` | Kunci jawaban tiap butir + pedoman umum penskoran | *(M7)* Teks dari peneliti. Hanya dikirim ke halaman peneliti lewat `/api/export?key=1`; tidak pernah masuk aplikasi siswa |
+| `src/content/leppink.json` | 10 butir (IL 3, EL 3, GL 4), skala 0–10, label ujung skala | *(M7)* Diisi dengan teks yang diberikan peneliti, kata demi kata |
 
 ---
 

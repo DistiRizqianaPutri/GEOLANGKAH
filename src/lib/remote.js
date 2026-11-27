@@ -10,6 +10,22 @@ export async function fetchProgress(client, userId) {
   return Object.fromEntries(data.map((r) => [r.meeting, r]))
 }
 
+/** Instrumen yang sudah terkirim (M7) → { pre, post, leppink: { [meeting]: true } } */
+export async function fetchInstrumentStatus(client, userId) {
+  const [tests, lep] = await Promise.all([
+    client.from('test_answers').select('kind').eq('student_id', userId),
+    client.from('leppink_responses').select('meeting').eq('student_id', userId),
+  ])
+  if (tests.error) throw new Error(tests.error.message)
+  if (lep.error) throw new Error(lep.error.message)
+  const kinds = new Set(tests.data.map((r) => r.kind))
+  return {
+    pre: kinds.has('pre'),
+    post: kinds.has('post'),
+    leppink: Object.fromEntries(lep.data.map((r) => [r.meeting, true])),
+  }
+}
+
 /** Log langkah satu pertemuan, untuk membangun ulang progres di HP baru. */
 export async function fetchStepLogs(client, userId, meeting) {
   const { data, error } = await client
